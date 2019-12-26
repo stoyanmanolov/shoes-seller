@@ -1,6 +1,9 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const express = require("express");
-require("../db/mongoose");
-const Shoe = require("../models/Shoe");
+const Shoe = require("../../models/Shoe");
 
 const router = new express.Router();
 
