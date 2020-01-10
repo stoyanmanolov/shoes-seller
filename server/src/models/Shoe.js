@@ -2,7 +2,11 @@ const mongoose = require("mongoose");
 
 const shoeSchema = new mongoose.Schema(
   {
-    name: {
+    brand: {
+      type: String,
+      required: true
+    },
+    model: {
       type: String,
       required: true
     },

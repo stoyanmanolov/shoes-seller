@@ -1,13 +1,10 @@
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
-
 const express = require("express");
 const Shoe = require("../../models/Shoe");
+const { adminAuth } = require("../../middleware/auth");
 
 const router = new express.Router();
 
-router.post("/shoes", async (req, res) => {
+router.post("/shoes", adminAuth, async (req, res) => {
   try {
     const shoe = new Shoe(req.body);
     await shoe.save();
@@ -39,7 +36,7 @@ router.get("/shoes/:id", async (req, res) => {
   }
 });
 
-router.patch("/shoes/:id", async (req, res) => {
+router.patch("/shoes/:id", adminAuth, async (req, res) => {
   try {
     const _id = req.params.id;
     const updates = Object.keys(req.body);
@@ -54,7 +51,7 @@ router.patch("/shoes/:id", async (req, res) => {
   }
 });
 
-router.delete("/shoes/:id", async (req, res) => {
+router.delete("/shoes/:id", adminAuth, async (req, res) => {
   try {
     const _id = req.params.id;
     const deletedShoe = await Shoe.findOneAndDelete({ _id });

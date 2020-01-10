@@ -13,6 +13,9 @@ export const Nav = styled.nav`
   background-color: white;
   align-items: center;
   border-bottom: 1px solid ${lightgrey};
+  button {
+    display: flex;
+  }
   img {
     grid-area: logo;
     margin: auto;
@@ -34,12 +37,12 @@ export const DrawerToggler = styled.button`
   align-self: stretch;
   display: inline-block;
   padding: 0 20px;
+  min-width: 59px;
   border: 0;
   background: none;
 `;
 
 export const Search = styled.button`
-  display: inline-block;
   align-self: stretch;
   padding: 0 20px;
   border: 0;
@@ -47,7 +50,6 @@ export const Search = styled.button`
 `;
 
 export const Cart = styled.button`
-  display: inline-block;
   align-self: stretch;
   padding: 0 20px;
   border: 0;
@@ -56,15 +58,6 @@ export const Cart = styled.button`
 
 export const SearchForm = styled.form`
   display: none;
-  padding: 10px 10px;
-  background-color: ${lightgrey};
-  input {
-    padding: 15px 0;
-    width: 100%;
-    text-indent: 15px;
-    border-radius: 1px;
-    border: 1px solid ${lightgrey};
-  }
 `;
 
 export const Drawer = styled.div`
@@ -90,6 +83,9 @@ export const MenuList = styled.ul`
 
 export const ListItem = styled.li`
   width: 100%;
+  a:hover {
+    text-decoration: none;
+  }
   a {
     cursor: pointer;
     text-decoration: none;

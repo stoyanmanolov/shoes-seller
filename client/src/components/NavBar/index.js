@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Nav,
   DrawerToggler,
@@ -8,7 +9,7 @@ import {
   SearchForm,
   MenuList,
   ListItem
-} from "./styles";
+} from "./NavBar-styles";
 import Logo from "./images/Logo.png";
 
 class NavBar extends React.Component {
@@ -24,14 +25,17 @@ class NavBar extends React.Component {
     return (
       <Nav>
         <DrawerToggler onClick={e => this.toggleDrawer(e)}>
-          {// If the Drawer is on the Toggler will turn into an X
-          this.state.drawerOn ? (
+          {/* If the Drawer is on the Toggler will turn into an X */}
+          {this.state.drawerOn ? (
             <i className="fas fa-times"></i>
           ) : (
             <i className="fas fa-bars"></i>
           )}
         </DrawerToggler>
-        <img src={Logo} alt="Logo" />
+        <Link to="/">
+          <img src={Logo} alt="Logo" />
+        </Link>
+        {/* Grouping the search and cart buttons together */}
         <div className="search-cart">
           <Cart>
             <i className="fas fa-shopping-cart"></i>
@@ -46,29 +50,29 @@ class NavBar extends React.Component {
         <Drawer open={this.state.drawerOn}>
           <MenuList>
             <ListItem>
-              <a href="#home">
+              <Link to="/men">
                 <p>Men</p>
-              </a>
+              </Link>
             </ListItem>
             <ListItem>
-              <a href="#home">
+              <Link to="/women">
                 <p>Women</p>
-              </a>
+              </Link>
             </ListItem>
             <ListItem>
-              <a href="#home">
-                <p>Children</p>
-              </a>
+              <Link to="/kids">
+                <p>Kids</p>
+              </Link>
             </ListItem>
             <ListItem>
-              <a href="#home">
+              <Link to="/login">
                 <p>Log in</p>
-              </a>
+              </Link>
             </ListItem>
             <ListItem>
-              <a href="#home">
+              <Link to="/register">
                 <p>Sign up</p>
-              </a>
+              </Link>
             </ListItem>
           </MenuList>
         </Drawer>
