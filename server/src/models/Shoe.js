@@ -22,15 +22,22 @@ const shoeSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    outOfStock: {
-      type: Boolean,
-      default: false
+    amount: {
+      type: Number,
+      default: 1
     },
-    // Men, Women, Kids
-    forWho: {
+    sizes: {
+      type: Array,
+      required: true
+    },
+    gender: {
       type: String,
       required: true,
-      enum: ["Men", "Women", "Kids"]
+      enum: ["Male", "Female"]
+    },
+    forKids: {
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true }

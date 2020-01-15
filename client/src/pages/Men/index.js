@@ -1,12 +1,14 @@
 import React from "react";
 import NavBar from "../../components/NavBar";
-import SideBar from "../../components/SideBar";
+import TopBar from "../../components/TopBar";
+import FilterMenu from "../../components/FilterMenu";
 
 const Men = () => {
   return (
     <>
       <NavBar />
-      <SideBar />
+      <TopBar />
+      <FilterMenu />
     </>
   );
 };

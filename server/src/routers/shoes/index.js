@@ -1,6 +1,7 @@
 const express = require("express");
 const Shoe = require("../../models/Shoe");
 const { adminAuth } = require("../../middleware/auth");
+const { findFieldResults } = require("./helpers");
 
 const router = new express.Router();
 
@@ -16,8 +17,21 @@ router.post("/shoes", adminAuth, async (req, res) => {
 
 router.get("/shoes", async (req, res) => {
   try {
-    await Shoe.find((err, docs) => {
-      res.status(200).send(docs);
+    await Shoe.find((err, shoes) => {
+      res.status(200).send(shoes);
+    });
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+
+// Search for the unique values of a field of the Shoe model and how many times it was met.
+// Example: GET/shoes/category => Output: [{ category: 'Sneakers', count: 12 }]
+router.get("/shoes/:field", async (req, res) => {
+  try {
+    await Shoe.find((err, shoes) => {
+      const results = findFieldResults(shoes, req.params.field);
+      res.status(200).send(results);
     });
   } catch (e) {
     res.status(400).send(e);
@@ -62,4 +76,5 @@ router.delete("/shoes/:id", adminAuth, async (req, res) => {
     res.sendStatus(404);
   }
 });
+
 module.exports = router;
