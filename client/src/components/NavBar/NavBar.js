@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { logoutUser } from "../../redux/actions/authActions";
+import { connect } from "react-redux";
 import {
   Nav,
   DrawerToggler,
@@ -19,6 +21,57 @@ class NavBar extends React.Component {
     if (!this.state.drawerOn) {
       this.setState({ drawerOn: true });
     } else this.setState({ drawerOn: false });
+  };
+
+  renderNavItems = () => {
+    const renderStatic = () => {
+      const listItems = [
+        { title: "Men", route: "/men" },
+        { title: "Women", route: "/women" },
+        { title: "Kids", route: "/kids" }
+      ];
+
+      return listItems.map(({ title, route }) => {
+        return (
+          <ListItem>
+            <Link to={route}>
+              <p>{title}</p>
+            </Link>
+          </ListItem>
+        );
+      });
+    };
+
+    const renderAuth = () => {
+      const { isLoggedIn } = this.props;
+
+      let listItems = [
+        { title: "Log in", route: "/login", auth: false },
+        { title: "Sign up", route: "/register", auth: false },
+        { title: "Log out", route: "/", auth: true }
+      ];
+
+      listItems = listItems.filter(({ auth }) => {
+        return (isLoggedIn && auth) || (!isLoggedIn && !auth);
+      });
+
+      return listItems.map(({ title, route }) => {
+        return (
+          <ListItem>
+            <Link to={route}>
+              <p>{title}</p>
+            </Link>
+          </ListItem>
+        );
+      });
+    };
+
+    return (
+      <MenuList>
+        {renderStatic()}
+        {renderAuth()}
+      </MenuList>
+    );
   };
 
   render() {
@@ -47,38 +100,12 @@ class NavBar extends React.Component {
         <SearchForm>
           <input type="text" placeholder="Search"></input>
         </SearchForm>
-        <Drawer open={this.state.drawerOn}>
-          <MenuList>
-            <ListItem>
-              <Link to="/men">
-                <p>Men</p>
-              </Link>
-            </ListItem>
-            <ListItem>
-              <Link to="/women">
-                <p>Women</p>
-              </Link>
-            </ListItem>
-            <ListItem>
-              <Link to="/kids">
-                <p>Kids</p>
-              </Link>
-            </ListItem>
-            <ListItem>
-              <Link to="/login">
-                <p>Log in</p>
-              </Link>
-            </ListItem>
-            <ListItem>
-              <Link to="/register">
-                <p>Sign up</p>
-              </Link>
-            </ListItem>
-          </MenuList>
-        </Drawer>
+        <Drawer open={this.state.drawerOn}>{this.renderNavItems()}</Drawer>
       </Nav>
     );
   }
 }
 
-export default NavBar;
+export default connect(({ auth }) => ({ isLoggedIn: auth.isLoggedIn }), {
+  logoutUser
+})(NavBar);

@@ -9,7 +9,7 @@ const verifyToken = (req, res) => {
     if (!requestToken) return res.status(401).send("Please provide a token!");
 
     const decoded = jwt.verify(requestToken, process.env.JWT_SECRET);
-    if (!decoded) throw new Error("Invalid token!");
+    if (!decoded) throw new Error("Invalid token! Please login.");
 
     return decoded;
   } catch (error) {

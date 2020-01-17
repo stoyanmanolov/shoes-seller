@@ -47,10 +47,14 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
-    if (!user) res.sendStatus(404);
+    if (!user) return res.sendStatus(404);
 
     const correctPass = await bcrypt.compare(req.body.password, user.password);
-    if (!correctPass) res.status(401).send("Incorrect password!");
+    if (!correctPass) return res.status(401).send("Incorrect password!");
+
+    // Remove the password from the response.
+    const userObject = user.toObject();
+    const { password, ...responseUser } = userObject;
 
     jwt.sign(
       { id: user.id },
@@ -58,7 +62,7 @@ router.post("/login", async (req, res) => {
       { expiresIn: 3600 },
       (err, token) => {
         if (err) throw err;
-        res.send({ token, user });
+        res.send({ token, user: responseUser });
       }
     );
   } catch (error) {

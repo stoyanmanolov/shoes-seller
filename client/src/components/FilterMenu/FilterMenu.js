@@ -6,13 +6,13 @@ import { FilterList, FilterItem, FilterOption } from "./FilterMenu-styles";
 class FilterMenu extends React.Component {
   state = {
     items: [
-      { title: "Category" },
-      { title: "Brand" },
-      { title: "Model" },
-      { title: "Price" },
-      { title: "Size" }
+      { title: "category" },
+      { title: "brand" },
+      { title: "model" },
+      { title: "price" },
+      { title: "size" }
     ],
-    itemsClicked: [],
+    itemsClicked: ["category", "brand"],
     itemsData: {}
   };
 
@@ -20,13 +20,12 @@ class FilterMenu extends React.Component {
     const itemsData = {};
     // Don't call the API for Price and Size
     const filteredItems = this.state.items.filter(
-      item => item.title !== "Price" && item.title !== "Size"
+      item => item.title !== "price" && item.title !== "size"
     );
 
     // Get all the unique brands, categories etc. and how many times they were found in the database.
-    filteredItems.forEach(item => {
-      item.title = item.title.toLowerCase();
-      axios.get(`/shoes/${item.title}`).then(response => {
+    filteredItems.forEach(async item => {
+      await axios.get(`/shoes/${item.title}`).then(response => {
         itemsData[item.title] = response.data;
       });
 
@@ -56,6 +55,8 @@ class FilterMenu extends React.Component {
 
   renderItems = () => {
     const { items, itemsClicked, itemsData } = this.state;
+
+    console.log(itemsClicked);
 
     const handleClick = (e, title) => {
       e.preventDefault();
@@ -92,7 +93,7 @@ class FilterMenu extends React.Component {
               </>
             )}
           </FilterItem>
-          {clicked ? this.renderOptions(itemData, item.title, clicked) : null}
+          {clicked ? this.renderOptions(itemData, item.title) : null}
         </React.Fragment>
       );
     });
