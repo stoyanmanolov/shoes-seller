@@ -1,6 +1,7 @@
-import { LOGIN_USER, LOGOUT_USER } from "../actions/types";
+import { LOGIN_USER, LOGOUT_USER, REGISTER_USER } from "../actions/types";
 
 const initialState = {
+  registeredInfo: null,
   token: null,
   user: null,
   isLoggedIn: null
@@ -8,6 +9,11 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
+    case REGISTER_USER:
+      return {
+        ...state,
+        registeredInfo: action.payload
+      };
     case LOGIN_USER:
       return {
         ...state,

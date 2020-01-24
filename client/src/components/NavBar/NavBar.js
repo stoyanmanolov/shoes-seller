@@ -31,9 +31,9 @@ class NavBar extends React.Component {
         { title: "Kids", route: "/kids" }
       ];
 
-      return listItems.map(({ title, route }) => {
+      return listItems.map(({ title, route }, index) => {
         return (
-          <ListItem>
+          <ListItem key={index}>
             <Link to={route}>
               <p>{title}</p>
             </Link>
@@ -45,25 +45,39 @@ class NavBar extends React.Component {
     const renderAuth = () => {
       const { isLoggedIn } = this.props;
 
-      let listItems = [
-        { title: "Log in", route: "/login", auth: false },
-        { title: "Sign up", route: "/register", auth: false },
-        { title: "Log out", route: "/", auth: true }
-      ];
-
-      listItems = listItems.filter(({ auth }) => {
-        return (isLoggedIn && auth) || (!isLoggedIn && !auth);
-      });
-
-      return listItems.map(({ title, route }) => {
-        return (
-          <ListItem>
-            <Link to={route}>
-              <p>{title}</p>
-            </Link>
-          </ListItem>
-        );
-      });
+      return (
+        <>
+          {isLoggedIn ? (
+            <>
+              {this.props.user.role === "admin" ? (
+                <ListItem>
+                  <Link to="/shoes/add">
+                    <p>Add shoes</p>
+                  </Link>
+                </ListItem>
+              ) : null}
+              <ListItem onClick={e => this.props.logoutUser()}>
+                <Link to="/">
+                  <p>Log out</p>
+                </Link>
+              </ListItem>
+            </>
+          ) : (
+            <>
+              <ListItem>
+                <Link to="/login">
+                  <p>Login</p>
+                </Link>
+              </ListItem>
+              <ListItem>
+                <Link to="/register">
+                  <p>Sign up</p>
+                </Link>
+              </ListItem>
+            </>
+          )}
+        </>
+      );
     };
 
     return (
@@ -106,6 +120,9 @@ class NavBar extends React.Component {
   }
 }
 
-export default connect(({ auth }) => ({ isLoggedIn: auth.isLoggedIn }), {
-  logoutUser
-})(NavBar);
+export default connect(
+  ({ auth }) => ({ user: auth.user, isLoggedIn: auth.isLoggedIn }),
+  {
+    logoutUser
+  }
+)(NavBar);

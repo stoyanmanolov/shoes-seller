@@ -7,7 +7,7 @@ const Men = () => {
   return (
     <>
       <NavBar />
-      <TopBar />
+      <TopBar shoesFor="Men's" />
       <FilterMenu />
     </>
   );

@@ -1,5 +1,23 @@
-import { LOGIN_USER, AUTH_ERROR, LOGOUT_USER, CLEAR_AUTH_ERROR } from "./types";
+import {
+  LOGIN_USER,
+  AUTH_ERROR,
+  LOGOUT_USER,
+  CLEAR_AUTH_ERROR,
+  REGISTER_USER
+} from "./types";
 import axios from "axios";
+
+export const registerUser = signupData => {
+  return async dispatch => {
+    await axios
+      .post("/register", signupData)
+      .then(response => {
+        dispatch({ type: CLEAR_AUTH_ERROR });
+        dispatch({ type: REGISTER_USER, payload: response.data });
+      })
+      .catch(error => dispatch({ type: AUTH_ERROR, payload: error }));
+  };
+};
 
 export const loginUser = loginData => {
   return async dispatch => {

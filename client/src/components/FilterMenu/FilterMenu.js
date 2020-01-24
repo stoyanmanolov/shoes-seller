@@ -1,5 +1,6 @@
 import React from "react";
-import axios from "axios";
+import { connect } from "react-redux";
+import { fetchFilterOptions } from "../../redux/actions/shoesActions";
 import { Checkbox } from "semantic-ui-react";
 import { FilterList, FilterItem, FilterOption } from "./FilterMenu-styles";
 
@@ -12,25 +13,16 @@ class FilterMenu extends React.Component {
       { title: "price" },
       { title: "size" }
     ],
-    itemsClicked: ["category", "brand"],
-    itemsData: {}
+    itemsClicked: ["category", "brand"]
   };
 
   componentDidMount = () => {
-    const itemsData = {};
-    // Don't call the API for Price and Size
     const filteredItems = this.state.items.filter(
       item => item.title !== "price" && item.title !== "size"
     );
 
     // Get all the unique brands, categories etc. and how many times they were found in the database.
-    filteredItems.forEach(async item => {
-      await axios.get(`/shoes/${item.title}`).then(response => {
-        itemsData[item.title] = response.data;
-      });
-
-      this.setState({ itemsData });
-    });
+    this.props.fetchFilterOptions(filteredItems);
   };
 
   renderOptions = (itemData, title) => {
@@ -54,9 +46,7 @@ class FilterMenu extends React.Component {
   };
 
   renderItems = () => {
-    const { items, itemsClicked, itemsData } = this.state;
-
-    console.log(itemsClicked);
+    const { items, itemsClicked } = this.state;
 
     const handleClick = (e, title) => {
       e.preventDefault();
@@ -74,7 +64,7 @@ class FilterMenu extends React.Component {
     };
 
     return items.map((item, index) => {
-      const itemData = itemsData[item.title];
+      const itemData = this.props.filterOptions[item.title];
       const clicked = itemsClicked.includes(item.title);
 
       return (
@@ -100,8 +90,14 @@ class FilterMenu extends React.Component {
   };
 
   render() {
+    if (!this.props.filterOptions) {
+      return null;
+    }
     return <FilterList>{this.renderItems()}</FilterList>;
   }
 }
 
-export default FilterMenu;
+export default connect(
+  ({ shoes }) => ({ filterOptions: shoes.filterOptions }),
+  { fetchFilterOptions }
+)(FilterMenu);

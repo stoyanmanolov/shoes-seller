@@ -1,45 +1,94 @@
 import React from "react";
+import { registerUser } from "../../redux/actions/authActions";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import validate from "./validate";
 import { Container } from "./SignupForm-styles";
-import { Form, Button } from "semantic-ui-react";
-import axios from "axios";
+import { Form, Button, Message } from "semantic-ui-react";
 
-const SignupForm = () => {
-  const handleSubmit = e => {
+class SignupForm extends React.Component {
+  state = { errors: [] };
+
+  handleSubmit = e => {
     e.preventDefault();
+    const { registerUser } = this.props;
     const formData = new FormData(e.target);
-    const sendData = {
+    const signupData = {
       email: formData.get("email"),
       username: formData.get("username"),
       password: formData.get("password")
     };
-    axios
-      .post("/register", sendData)
-      .then(response => console.log(response))
-      .catch(e => console.log(e.response));
+    const errors = validate(signupData);
+    this.setState({ errors });
+
+    if (!errors) registerUser(signupData);
   };
 
-  return (
-    <>
+  renderInput = () => {
+    const fields = [
+      {
+        label: "Email",
+        input: <input name="email" type="text" placeholder="Email" />
+      },
+      {
+        label: "Username",
+        input: <input name="username" type="text" placeholder="Username" />
+      },
+      {
+        label: "Password",
+        input: <input name="password" type="password" placeholder="Password" />
+      }
+    ];
+
+    return fields.map((field, index) => {
+      const { errors } = this.state;
+      const { label, input } = field;
+
+      return (
+        <Form.Field key={index}>
+          {errors[label.toLowerCase()] ? (
+            <Message
+              negative
+              size="tiny"
+              header={errors[label.toLowerCase()]}
+            />
+          ) : null}
+          <label>{label}</label>
+          {input}
+        </Form.Field>
+      );
+    });
+  };
+
+  render() {
+    const { registeredInfo } = this.props;
+
+    if (registeredInfo) {
+      return (
+        <Container>
+          <h3>Registration successful.</h3>
+          <p>{registeredInfo.email}</p>
+          <p>{registeredInfo.username}</p>
+          <Link to="/login">
+            <Button>Login</Button>
+          </Link>
+        </Container>
+      );
+    }
+
+    return (
       <Container>
         <h3>CREATE AN ACCOUNT</h3>
-        <Form onSubmit={e => handleSubmit(e)}>
-          <Form.Field>
-            <label>Email</label>
-            <input name="email" type="text" placeholder="Email" />
-          </Form.Field>
-          <Form.Field>
-            <label>Username</label>
-            <input name="username" type="text" placeholder="Username" />
-          </Form.Field>
-          <Form.Field>
-            <label>Password</label>
-            <input name="password" type="password" placeholder="Password" />
-          </Form.Field>
+        <Form onSubmit={e => this.handleSubmit(e)}>
+          {this.renderInput()}
           <Button type="submit">Create</Button>
         </Form>
       </Container>
-    </>
-  );
-};
+    );
+  }
+}
 
-export default SignupForm;
+export default connect(
+  ({ auth }) => ({ registeredInfo: auth.registeredInfo }),
+  { registerUser }
+)(SignupForm);

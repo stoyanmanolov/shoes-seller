@@ -1,14 +1,14 @@
 import React from "react";
 import NavBar from "../../components/NavBar";
-import TopBar from "../../components/TopBar";
+import ShoesForm from "../../components/ShoesForm";
 
-const Kids = () => {
+const AddShoes = () => {
   return (
     <>
       <NavBar />
-      <TopBar shoesFor="Kids'" />
+      <ShoesForm />
     </>
   );
 };
 
-export default Kids;
+export default AddShoes;

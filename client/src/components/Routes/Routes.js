@@ -5,10 +5,11 @@ import Home from "../../pages/Home";
 import Men from "../../pages/Men";
 import Women from "../../pages/Women";
 import Kids from "../../pages/Kids";
+import AddShoes from "../../pages/AddShoes";
 import Signup from "../../pages/Signup";
 import Login from "../../pages/Login";
 
-class Routes extends React.Component {
+export class Routes extends React.Component {
   render() {
     return (
       <BrowserRouter>
@@ -17,6 +18,13 @@ class Routes extends React.Component {
           <Route exact path="/men" component={Men} />
           <Route exact path="/women" component={Women} />
           <Route exact path="/kids" component={Kids} />
+          <Route exact path="/shoes/add">
+            {this.props.isLoggedIn && this.props.user.role === "admin" ? (
+              <AddShoes />
+            ) : (
+              <Redirect to="/" />
+            )}
+          </Route>
           <Route exact path="/register">
             {this.props.isLoggedIn ? <Redirect to="/" /> : <Signup />}
           </Route>
@@ -29,4 +37,7 @@ class Routes extends React.Component {
   }
 }
 
-export default connect(({ auth }) => ({ isLoggedIn: auth.isLoggedIn }))(Routes);
+export default connect(({ auth }) => ({
+  isLoggedIn: auth.isLoggedIn,
+  user: auth.user
+}))(Routes);
