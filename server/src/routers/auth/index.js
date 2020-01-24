@@ -8,22 +8,24 @@ const router = new express.Router();
 
 router.post("/register", async (req, res) => {
   try {
-    let errors = [];
+    let errors = {};
     let { email, username, password } = req.body;
 
     // Checking for email and username availability
     let available = await isAvailable({ email });
     if (!available) {
-      errors.push("Email not available!");
+      errors["email"] = "Email not available!";
     }
 
     available = await isAvailable({ username });
     if (!available) {
-      errors.push("Username not available!");
+      errors["username"] = "Username not available!";
     }
 
+    const notEmpty =
+      Object.entries(errors).length !== 0 && errors.constructor === Object;
     // If not available throw the errors.
-    if (errors.length !== 0) {
+    if (notEmpty) {
       throw errors;
     }
 

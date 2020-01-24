@@ -6,8 +6,8 @@ const validate = data => {
   if (!validator.isEmail(email)) {
     errors["email"] = "Please enter a correct email address!";
   }
-  if (password.length < 8) {
-    errors["password"] = "Please enter a password with 8 or more characters!";
+  if (password.length < 6) {
+    errors["password"] = "Please enter a password with 6 or more characters!";
   }
   return errors;
 };

@@ -16,11 +16,11 @@ class LoginForm extends React.Component {
   };
 
   render() {
-    const { error } = this.props;
+    const { authErrors } = this.props;
 
     // Login Failed.
-    if (error) {
-      window.alert(this.props.error.response.data);
+    if (authErrors) {
+      window.alert(authErrors);
     }
 
     return (
@@ -44,6 +44,9 @@ class LoginForm extends React.Component {
   }
 }
 
-export default connect(({ auth, errors }) => ({ auth, error: errors.auth }), {
-  loginUser
-})(LoginForm);
+export default connect(
+  ({ auth, errors }) => ({ auth, authErrors: errors.auth }),
+  {
+    loginUser
+  }
+)(LoginForm);

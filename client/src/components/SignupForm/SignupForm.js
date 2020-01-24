@@ -1,5 +1,8 @@
 import React from "react";
-import { registerUser } from "../../redux/actions/authActions";
+import {
+  registerUser,
+  clearRegisteredInfo
+} from "../../redux/actions/authActions";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import validate from "./validate";
@@ -7,54 +10,77 @@ import { Container } from "./SignupForm-styles";
 import { Form, Button, Message } from "semantic-ui-react";
 
 class SignupForm extends React.Component {
-  state = { errors: [] };
+  state = { validationErrors: {} };
 
   handleSubmit = e => {
     e.preventDefault();
     const { registerUser } = this.props;
+
     const formData = new FormData(e.target);
     const signupData = {
       email: formData.get("email"),
       username: formData.get("username"),
       password: formData.get("password")
     };
-    const errors = validate(signupData);
-    this.setState({ errors });
 
-    if (!errors) registerUser(signupData);
+    const validationErrors = validate(signupData);
+    this.setState({ validationErrors });
+
+    const noValidationErrors =
+      Object.entries(validationErrors).length === 0 &&
+      validationErrors.constructor === Object;
+    if (noValidationErrors) {
+      registerUser(signupData);
+    }
+  };
+
+  componentWillUnmount = () => {
+    this.props.clearRegisteredInfo();
   };
 
   renderInput = () => {
     const fields = [
       {
         label: "Email",
-        input: <input name="email" type="text" placeholder="Email" />
+        inputProps: { name: "email", type: "text", placeholder: "Email" }
       },
       {
         label: "Username",
-        input: <input name="username" type="text" placeholder="Username" />
+        inputProps: { name: "username", type: "text", placeholder: "Username" }
       },
       {
         label: "Password",
-        input: <input name="password" type="password" placeholder="Password" />
+        inputProps: {
+          name: "password",
+          type: "password",
+          placeholder: "Password"
+        }
       }
     ];
 
+    const renderError = name => {
+      const { validationErrors } = this.state;
+      const { authErrors } = this.props;
+
+      if (validationErrors[name]) {
+        return <Message negative size="tiny" header={validationErrors[name]} />;
+      } else if (authErrors) {
+        if (authErrors.data[name])
+          return (
+            <Message negative size="tiny" header={authErrors.data[name]} />
+          );
+      }
+    };
+
     return fields.map((field, index) => {
-      const { errors } = this.state;
-      const { label, input } = field;
+      const { label, inputProps } = field;
+      const name = label.toLowerCase();
 
       return (
         <Form.Field key={index}>
-          {errors[label.toLowerCase()] ? (
-            <Message
-              negative
-              size="tiny"
-              header={errors[label.toLowerCase()]}
-            />
-          ) : null}
+          {renderError(name)}
           <label>{label}</label>
-          {input}
+          <input {...inputProps}></input>
         </Form.Field>
       );
     });
@@ -62,13 +88,12 @@ class SignupForm extends React.Component {
 
   render() {
     const { registeredInfo } = this.props;
-
     if (registeredInfo) {
       return (
         <Container>
           <h3>Registration successful.</h3>
-          <p>{registeredInfo.email}</p>
-          <p>{registeredInfo.username}</p>
+          <p>{`Email: ${registeredInfo.email}`}</p>
+          <p>{`Username: ${registeredInfo.username}`}</p>
           <Link to="/login">
             <Button>Login</Button>
           </Link>
@@ -89,6 +114,9 @@ class SignupForm extends React.Component {
 }
 
 export default connect(
-  ({ auth }) => ({ registeredInfo: auth.registeredInfo }),
-  { registerUser }
+  ({ auth, errors }) => ({
+    registeredInfo: auth.registeredInfo,
+    authErrors: errors.auth
+  }),
+  { registerUser, clearRegisteredInfo }
 )(SignupForm);

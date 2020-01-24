@@ -3,7 +3,8 @@ import {
   AUTH_ERROR,
   LOGOUT_USER,
   CLEAR_AUTH_ERROR,
-  REGISTER_USER
+  REGISTER_USER,
+  CLEAR_REGISTERED_INFO
 } from "./types";
 import axios from "axios";
 
@@ -15,7 +16,13 @@ export const registerUser = signupData => {
         dispatch({ type: CLEAR_AUTH_ERROR });
         dispatch({ type: REGISTER_USER, payload: response.data });
       })
-      .catch(error => dispatch({ type: AUTH_ERROR, payload: error }));
+      .catch(error => dispatch({ type: AUTH_ERROR, payload: error.response }));
+  };
+};
+
+export const clearRegisteredInfo = () => {
+  return {
+    type: CLEAR_REGISTERED_INFO
   };
 };
 
@@ -27,7 +34,7 @@ export const loginUser = loginData => {
         dispatch({ type: CLEAR_AUTH_ERROR });
         dispatch({ type: LOGIN_USER, payload: response.data });
       })
-      .catch(error => dispatch({ type: AUTH_ERROR, payload: error }));
+      .catch(error => dispatch({ type: AUTH_ERROR, payload: error.response }));
   };
 };
 

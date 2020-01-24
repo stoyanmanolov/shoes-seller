@@ -1,4 +1,9 @@
-import { LOGIN_USER, LOGOUT_USER, REGISTER_USER } from "../actions/types";
+import {
+  LOGIN_USER,
+  LOGOUT_USER,
+  REGISTER_USER,
+  CLEAR_REGISTERED_INFO
+} from "../actions/types";
 
 const initialState = {
   registeredInfo: null,
@@ -13,6 +18,11 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         registeredInfo: action.payload
+      };
+    case CLEAR_REGISTERED_INFO:
+      return {
+        ...state,
+        registeredInfo: null
       };
     case LOGIN_USER:
       return {
