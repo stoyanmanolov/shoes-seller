@@ -66,7 +66,7 @@ class NavBar extends React.Component {
             <>
               <ListItem>
                 <Link to="/login">
-                  <p>Login</p>
+                  <p>Log in</p>
                 </Link>
               </ListItem>
               <ListItem>

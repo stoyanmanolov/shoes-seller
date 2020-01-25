@@ -37,6 +37,7 @@ describe("ShoesForm", () => {
 
       wrapper.find("Form").simulate("submit", fakeEvent);
     };
+
     it("creates errors for empty inputs", () => {
       let values = {
         description: ""

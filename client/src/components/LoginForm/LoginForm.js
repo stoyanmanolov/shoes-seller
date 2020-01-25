@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { loginUser } from "../../redux/actions/authActions";
+import { loginUser, clearAuthErrors } from "../../redux/actions/authActions";
 import { Container } from "./LoginForm-styles";
 import { Form, Button } from "semantic-ui-react";
 
@@ -15,12 +15,15 @@ class LoginForm extends React.Component {
     this.props.loginUser(loginData);
   };
 
+  componentWillUnmount = () => {
+    this.props.clearAuthErrors();
+  };
+
   render() {
     const { authErrors } = this.props;
 
-    // Login Failed.
     if (authErrors) {
-      window.alert(authErrors);
+      window.alert(authErrors.data);
     }
 
     return (
@@ -45,8 +48,9 @@ class LoginForm extends React.Component {
 }
 
 export default connect(
-  ({ auth, errors }) => ({ auth, authErrors: errors.auth }),
+  ({ auth, errors }) => ({ auth, authErrors: errors.auth.login }),
   {
-    loginUser
+    loginUser,
+    clearAuthErrors
   }
 )(LoginForm);

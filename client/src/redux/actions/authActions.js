@@ -1,8 +1,9 @@
 import {
   LOGIN_USER,
-  AUTH_ERROR,
+  LOGIN_AUTH_ERROR,
+  REGISTER_AUTH_ERROR,
   LOGOUT_USER,
-  CLEAR_AUTH_ERROR,
+  CLEAR_AUTH_ERRORS,
   REGISTER_USER,
   CLEAR_REGISTERED_INFO
 } from "./types";
@@ -13,10 +14,12 @@ export const registerUser = signupData => {
     await axios
       .post("/register", signupData)
       .then(response => {
-        dispatch({ type: CLEAR_AUTH_ERROR });
+        dispatch({ type: CLEAR_AUTH_ERRORS });
         dispatch({ type: REGISTER_USER, payload: response.data });
       })
-      .catch(error => dispatch({ type: AUTH_ERROR, payload: error.response }));
+      .catch(error =>
+        dispatch({ type: REGISTER_AUTH_ERROR, payload: error.response })
+      );
   };
 };
 
@@ -31,16 +34,24 @@ export const loginUser = loginData => {
     await axios
       .post("/login", loginData)
       .then(response => {
-        dispatch({ type: CLEAR_AUTH_ERROR });
+        dispatch({ type: CLEAR_AUTH_ERRORS });
         dispatch({ type: LOGIN_USER, payload: response.data });
       })
-      .catch(error => dispatch({ type: AUTH_ERROR, payload: error.response }));
+      .catch(error =>
+        dispatch({ type: LOGIN_AUTH_ERROR, payload: error.response })
+      );
   };
 };
 
 export const logoutUser = () => {
   return {
     type: LOGOUT_USER
+  };
+};
+
+export const clearAuthErrors = () => {
+  return {
+    type: CLEAR_AUTH_ERRORS
   };
 };
 

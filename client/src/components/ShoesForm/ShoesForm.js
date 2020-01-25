@@ -24,6 +24,7 @@ class ShoesForm extends React.Component {
       forKids: formData.get("forKids")
     };
     this.setState({ data: shoesData });
+
     const errors = validate(shoesData);
     this.setState({ errors });
   };
