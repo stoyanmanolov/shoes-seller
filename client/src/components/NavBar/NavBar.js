@@ -5,14 +5,14 @@ import { connect } from "react-redux";
 import {
   Nav,
   DrawerToggler,
-  Search,
-  Cart,
   Drawer,
+  Logo,
+  SearchCart,
   SearchForm,
   MenuList,
   ListItem
 } from "./NavBar-styles";
-import Logo from "./images/Logo.png";
+import LogoImage from "./images/Logo.png";
 
 class NavBar extends React.Component {
   state = { drawerOn: false };
@@ -99,22 +99,23 @@ class NavBar extends React.Component {
             <i className="fas fa-bars"></i>
           )}
         </DrawerToggler>
-        <Link to="/">
-          <img src={Logo} alt="Logo" />
-        </Link>
-        {/* Grouping the search and cart buttons together */}
-        <div className="search-cart">
-          <Cart>
-            <i className="fas fa-shopping-cart"></i>
-          </Cart>
-          <Search>
+        <Drawer open={this.state.drawerOn}>{this.renderNavItems()}</Drawer>
+        <Logo>
+          <Link to="/">
+            <img src={LogoImage} alt="Logo" />
+          </Link>
+        </Logo>
+        <SearchCart>
+          <button className="search">
             <i className="fas fa-search"></i>
-          </Search>
-        </div>
+          </button>
+          <button className="cart">
+            <i className="fas fa-shopping-cart"></i>
+          </button>
+        </SearchCart>
         <SearchForm>
           <input type="text" placeholder="Search"></input>
         </SearchForm>
-        <Drawer open={this.state.drawerOn}>{this.renderNavItems()}</Drawer>
       </Nav>
     );
   }

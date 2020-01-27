@@ -34,6 +34,7 @@ export const TextOverlay = styled.div`
     rgba(0, 0, 0, 0.5)
   );
   h1 {
+    text-align: center;
     font-size: 42px;
     color: white;
   }

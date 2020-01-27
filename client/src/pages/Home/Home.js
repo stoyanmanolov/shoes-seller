@@ -8,7 +8,7 @@ const Home = () => {
     <>
       <NavBar />
       <HeaderCarousel />
-      <Collections />
+      {/*<Collections />*/}
     </>
   );
 };

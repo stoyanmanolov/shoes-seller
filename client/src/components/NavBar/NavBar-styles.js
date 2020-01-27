@@ -4,65 +4,53 @@ let lightgrey = "#f3f3f3";
 let darkgrey = "#575757";
 
 export const Nav = styled.nav`
+  height: 60px;
   width: 100%;
-  display: grid;
-  grid-template-columns: min-content 1fr min-content;
-  grid-template-areas:
-    "button logo search-cart"
-    "drawer drawer drawer";
+  position: relative;
+  display: flex;
   background-color: white;
+  justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${lightgrey};
   button {
-    display: flex;
-  }
-  img {
-    grid-area: logo;
-    margin: auto;
+    display: inherit;
+    border: 0;
+    background: none;
   }
   i {
-    font-size: 22px;
+    font-size: 20px;
     color: black;
   }
-  .search-cart {
-    grid-area: search-cart;
-    align-self: stretch;
-    display: flex;
-    flex-direction: row;
+`;
+
+export const SearchCart = styled.div`
+  margin-right: 20px;
+  display: flex;
+  flex-direction: row;
+  .search {
+    margin-right: 10px;
   }
+  .cart {
+    margin-left: 10px;
+  }
+`;
+
+export const Logo = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
 `;
 
 export const DrawerToggler = styled.button`
-  grid-area: button;
-  align-self: stretch;
   display: inline-block;
-  padding: 0 20px;
-  min-width: 59px;
-  border: 0;
-  background: none;
-`;
-
-export const Search = styled.button`
-  align-self: stretch;
-  padding: 0 20px;
-  border: 0;
-  background: none;
-`;
-
-export const Cart = styled.button`
-  align-self: stretch;
-  padding: 0 20px;
-  border: 0;
-  background: none;
-`;
-
-export const SearchForm = styled.form`
-  display: none;
+  margin-left: 20px;
 `;
 
 export const Drawer = styled.div`
-  grid-area: drawer;
-  align-self: flex-start;
+  position: absolute;
+  top: 100%;
+  background-color: white;
+  z-index: 1;
   ${props =>
     props.open
       ? css`
@@ -96,4 +84,8 @@ export const ListItem = styled.li`
       border-bottom: 1px solid ${lightgrey};
     }
   }
+`;
+
+export const SearchForm = styled.form`
+  display: none;
 `;
