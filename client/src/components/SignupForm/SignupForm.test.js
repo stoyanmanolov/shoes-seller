@@ -115,9 +115,6 @@ describe("SignupForm", () => {
     });
     describe("Authentication errors", () => {
       let mockRegisterUser;
-      const fakeEvent = {
-        preventDefault: jest.fn()
-      };
 
       beforeEach(() => {
         mockRegisterUser = jest.fn();
@@ -149,9 +146,6 @@ describe("SignupForm", () => {
     });
     describe("Registration successful", () => {
       let mockRegisterUser;
-      const fakeEvent = {
-        preventDefault: jest.fn()
-      };
 
       beforeEach(() => {
         mockRegisterUser = jest.fn();

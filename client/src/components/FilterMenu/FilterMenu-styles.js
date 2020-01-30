@@ -9,7 +9,7 @@ export const FilterList = styled.ul`
   }
 `;
 
-export const FilterItem = styled.li`
+export const FilterSection = styled.li`
   display: grid;
   align-items: center;
   justify-content: space-between;
@@ -26,11 +26,9 @@ export const FilterItem = styled.li`
     font-size: 16px;
     font-weight: 700;
   }
-
   .chevron {
     grid-area: icon;
   }
-
   :last-child {
     border: 0;
   }
@@ -38,8 +36,10 @@ export const FilterItem = styled.li`
 
 export const FilterOption = styled.li`
   display: flex;
-  p {
-    margin-bottom: 0;
-    margin-left: 10px;
+  .title {
+    margin: 0 10px;
+  }
+  .count {
+    color: #575757;
   }
 `;

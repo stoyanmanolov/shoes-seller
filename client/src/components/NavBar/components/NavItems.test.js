@@ -8,9 +8,11 @@ describe("NavItems", () => {
     const renderNavItemsMock = jest.fn();
     wrapper = shallow(<NavItems>{renderNavItemsMock()}</NavItems>);
     wrapper.find("#toggler").simulate("click");
+
     it("the drawer icon turns into a font-awesome X", () => {
       expect(wrapper.find(".fa-times").exists()).toBe(true);
     });
+
     it("the function to render the navigation items gets called", () => {
       expect(renderNavItemsMock).toBeCalledTimes(1);
     });
