@@ -2,25 +2,24 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 const verifyToken = (req, res) => {
-  try {
-    const { username, password } = req.body;
+  const requestToken = req.get("X-Auth-Token");
+  if (!requestToken) return new Error("Please provide a token!");
 
-    const requestToken = req.header("X-Auth-Token");
-    if (!requestToken) return res.status(401).send("Please provide a token!");
+  const decoded = jwt.verify(requestToken, process.env.JWT_SECRET);
+  if (!decoded) return new Error("Invalid token! Please login.");
 
-    const decoded = jwt.verify(requestToken, process.env.JWT_SECRET);
-    if (!decoded) throw new Error("Invalid token! Please login.");
-
-    return decoded;
-  } catch (error) {
-    res.status(401).send(error);
-  }
+  return decoded;
 };
 
 const userAuth = async (req, res, next) => {
-  const decodedToken = verifyToken(req, res);
-  req.user = decodedToken;
-  next();
+  try {
+    const decodedToken = verifyToken(req, res);
+
+    req.user = decodedToken;
+    next();
+  } catch (error) {
+    res.send(error);
+  }
 };
 
 const adminAuth = async (req, res, next) => {
@@ -37,7 +36,7 @@ const adminAuth = async (req, res, next) => {
         .status(401)
         .send("Access denied. Only admins can access this.");
   } catch (error) {
-    res.status(500).send(error);
+    res.send(error);
   }
 };
 

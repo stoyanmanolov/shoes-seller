@@ -54,18 +54,3 @@ export const clearAuthErrors = () => {
     type: CLEAR_AUTH_ERRORS
   };
 };
-
-export const tokenConfig = getState => {
-  const token = getState().auth.token;
-  let config = {};
-
-  if (token) {
-    config = {
-      headers: {
-        "x-auth-token": token
-      }
-    };
-  }
-
-  return config;
-};

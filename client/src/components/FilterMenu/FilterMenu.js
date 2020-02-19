@@ -11,6 +11,7 @@ export class FilterMenu extends React.Component {
       { title: "category" },
       { title: "brand" },
       { title: "model" },
+      { title: "colors" },
       { title: "price" },
       { title: "sizes" }
     ],

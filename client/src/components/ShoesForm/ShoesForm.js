@@ -1,32 +1,76 @@
 import React from "react";
-import validate from "./validate";
+import axios from "axios";
+import _ from "lodash";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { validateForm, validateImages } from "./validate";
 import { Form, Button, Message } from "semantic-ui-react";
 import { Container } from "./ShoesForm-styles";
+import FileUploads from "./components/FileUploads";
 
-class ShoesForm extends React.Component {
-  state = { data: {}, errors: null };
+export class ShoesForm extends React.Component {
+  state = {
+    shoeData: {},
+    errors: {},
+    submissionError: null
+  };
 
   handleSubmit = e => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const shoesData = {
+
+    const validatedImages = validateImages(formData.getAll("images"));
+    const firstImage = validatedImages[0];
+    const restOfImages = [];
+    validatedImages.forEach((image, index) => {
+      if (index !== 0) return restOfImages.push(image);
+    });
+
+    const shoeData = {
       brand: formData.get("brand"),
       model: formData.get("model"),
       category: formData.get("category"),
       price: formData.get("price"),
       description: formData.get("description"),
       amount: formData.get("amount"),
+      colors: formData
+        .get("colors")
+        .split(", ")
+        .map(color => color.trim()),
       sizes: formData
         .get("sizes")
         .split(", ")
         .map(size => size.trim()),
+      frontImage: firstImage,
+      images: restOfImages,
       gender: formData.get("gender"),
       forKids: formData.get("forKids")
     };
-    this.setState({ data: shoesData });
 
-    const errors = validate(shoesData);
+    const errors = validateForm(shoeData);
     this.setState({ errors });
+
+    if (_.isEmpty(errors)) {
+      const submitData = new FormData();
+      Object.keys(shoeData).forEach(key => {
+        if (key === "images") {
+          shoeData[key].forEach((image, index) => {
+            submitData.append("images" + index, image);
+          });
+        } else submitData.append(key, shoeData[key]);
+      });
+
+      axios
+        .post("/shoes", submitData, {
+          headers: {
+            "X-Auth-Token": this.props.token
+          }
+        })
+        .then(response => {
+          this.setState({ shoeData: response });
+        })
+        .catch(submissionError => this.setState({ submissionError }));
+    }
   };
 
   renderFormFields = () => {
@@ -64,6 +108,17 @@ class ShoesForm extends React.Component {
         )
       },
       {
+        name: "colors",
+        label: "Colors:",
+        items: (
+          <input
+            name="colors"
+            type="text"
+            placeholder="e.g. Black, White, Grey"
+          />
+        )
+      },
+      {
         name: "amount",
         label: "Amount of shoes:",
         items: <input name="amount" type="number" placeholder="Amount" />
@@ -74,6 +129,11 @@ class ShoesForm extends React.Component {
         items: <input name="sizes" type="text" placeholder="e.g. 42, 41, 45" />
       },
       {
+        name: "images",
+        label: "Images: (The first will be chosen as a front image)",
+        items: <FileUploads />
+      },
+      {
         name: "gender",
         label: "Gender:",
         items: (
@@ -82,6 +142,8 @@ class ShoesForm extends React.Component {
             <p>Male</p>
             <input name="gender" type="radio" value="Female" />
             <p>Female</p>
+            <input name="gender" type="radio" value="Both" />
+            <p>Both</p>
           </>
         )
       },
@@ -104,14 +166,14 @@ class ShoesForm extends React.Component {
       const { errors } = this.state;
       let error = [];
 
-      if (errors) {
+      if (!_.isEmpty(errors)) {
         error = Object.keys(errors).filter(err => {
           return err === name;
         });
       }
 
       return (
-        <Form.Field key={index}>
+        <Form.Field name={name} key={index}>
           <label>{label}</label>
           {error.length !== 0 ? (
             <Message negative size="tiny" header={errors[name]} />
@@ -123,16 +185,37 @@ class ShoesForm extends React.Component {
   };
 
   render() {
+    if (this.state.submissionError) {
+      window.alert(this.state.submissionError.response.data);
+    }
     return (
       <Container>
-        <h3>ADD SHOES TO THE DATABASE</h3>
-        <Form onSubmit={e => this.handleSubmit(e)}>
-          {this.renderFormFields()}
-          <Button type="submit">Add</Button>
-        </Form>
+        {!_.isEmpty(this.state.shoeData) ? (
+          <>
+            <Message positive size="big" header={"Shoe added succesfully!"} />
+            <Link
+              onClick={e => this.setState({ shoeData: {} })}
+              to="/shoes/add"
+            >
+              Go back.
+            </Link>
+          </>
+        ) : (
+          <>
+            <h3>ADD SHOES TO THE DATABASE</h3>
+            <Form
+              type="POST"
+              onSubmit={e => this.handleSubmit(e)}
+              encType="multipart/form-data"
+            >
+              {this.renderFormFields()}
+              <Button type="submit">Add</Button>
+            </Form>
+          </>
+        )}
       </Container>
     );
   }
 }
 
-export default ShoesForm;
+export default connect(({ auth }) => ({ token: auth.token }))(ShoesForm);

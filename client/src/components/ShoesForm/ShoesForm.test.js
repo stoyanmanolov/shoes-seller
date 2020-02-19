@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
-import ShoesForm from "./ShoesForm";
+import { ShoesForm } from "./ShoesForm";
 
 describe("ShoesForm", () => {
   let wrapper = shallow(<ShoesForm />);
@@ -13,8 +13,10 @@ describe("ShoesForm", () => {
         category: "",
         price: "",
         description: "",
+        colors: "",
         amount: "",
         sizes: "",
+        images: [],
         gender: null,
         forKids: null
       };
@@ -24,8 +26,12 @@ describe("ShoesForm", () => {
       });
 
       function FormDataMock() {
-        this.get = jest.fn(x => {
-          if (x) return outputValues[x];
+        this.get = jest.fn(value => {
+          if (value) return outputValues[value];
+          else return "";
+        });
+        this.getAll = jest.fn(value => {
+          if (value) return outputValues[value];
           else return "";
         });
       }
@@ -48,7 +54,7 @@ describe("ShoesForm", () => {
     });
 
     it("handles size errors correctly", () => {
-      let incorrectArray = [
+      const incorrectArray = [
         {
           sizes: "43, 123"
         },
@@ -65,7 +71,7 @@ describe("ShoesForm", () => {
         expect(wrapper.state().errors.sizes).toBeTruthy();
       });
 
-      let correctArray = [
+      const correctArray = [
         {
           sizes: "43"
         },
@@ -84,7 +90,7 @@ describe("ShoesForm", () => {
     });
 
     it("handles price errors correctly", () => {
-      let incorrectArray = [
+      const incorrectArray = [
         {
           price: "432, 45123"
         },
@@ -101,7 +107,7 @@ describe("ShoesForm", () => {
         expect(wrapper.state().errors.price).toBeTruthy();
       });
 
-      let correctArray = [
+      const correctArray = [
         {
           price: "432"
         },

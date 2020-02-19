@@ -22,6 +22,10 @@ const shoeSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    colors: {
+      type: Array,
+      required: true
+    },
     amount: {
       type: Number,
       default: 1
@@ -33,11 +37,19 @@ const shoeSchema = new mongoose.Schema(
     gender: {
       type: String,
       required: true,
-      enum: ["Male", "Female"]
+      enum: ["Male", "Female", "Both"]
     },
     forKids: {
       type: Boolean,
       default: false
+    },
+    frontImage: {
+      type: String,
+      required: true
+    },
+    images: {
+      type: Array,
+      required: true
     }
   },
   { timestamps: true }

@@ -15,7 +15,7 @@ const findFieldResults = (shoes, field) => {
 
   shoes.forEach(shoe => {
     let shoeData = shoe[field];
-    if (field === "sizes") {
+    if (field === "sizes" || field === "colors") {
       shoeData.map(size => {
         findUniqueResults(size, field, results);
       });
