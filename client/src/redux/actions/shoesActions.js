@@ -6,9 +6,14 @@ export const fetchFilterOptions = items => {
     let data = {};
 
     const fetchItems = async item => {
-      await axios.get(`/shoes/${item.title}`).then(response => {
-        data = { ...data, [item.title]: response.data };
-      });
+      if (item.title === "price") {
+        await axios.get(`/shoes/${item.title}/boundries`).then(response => {
+          data = { ...data, [item.title]: response.data };
+        });
+      } else
+        await axios.get(`/shoes/${item.title}`).then(response => {
+          data = { ...data, [item.title]: response.data };
+        });
     };
 
     for (let item of items) {

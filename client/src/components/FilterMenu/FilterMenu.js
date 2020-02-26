@@ -19,12 +19,8 @@ export class FilterMenu extends React.Component {
   };
 
   componentDidMount = () => {
-    const filteredSections = this.state.sections.filter(
-      section => section.title !== "price"
-    );
-
     // Get all the unique brands, categories etc. and how many times they were found in the database.
-    this.props.fetchFilterOptions(filteredSections);
+    this.props.fetchFilterOptions(this.state.sections);
   };
 
   renderFilterOptions = title => {
@@ -36,7 +32,7 @@ export class FilterMenu extends React.Component {
     return (
       <ul className="info">
         {title === "price" ? (
-          <PriceRange />
+          <PriceRange boundries={sectionData} />
         ) : (
           sectionData.map((data, index) => {
             return (

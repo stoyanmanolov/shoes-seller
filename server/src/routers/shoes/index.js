@@ -59,9 +59,33 @@ router.get("/shoes", async (req, res) => {
 router.get("/shoes/:field", async (req, res) => {
   try {
     await Shoe.find((err, shoes) => {
-      const results = findFieldResults(shoes, req.params.field);
+      const { field } = req.params;
+      const results = findFieldResults(shoes, field);
+      results.sort((a, b) =>
+        a[field] > b[field] ? 1 : b[field] > a[field] ? -1 : 0
+      );
       res.status(200).send(results);
     });
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+
+router.get("/shoes/price/boundries", async (req, res) => {
+  try {
+    let result = {};
+
+    const minPriceShoe = await Shoe.find({})
+      .sort({ price: 1 })
+      .limit(1);
+    result.minPrice = minPriceShoe[0].price;
+
+    const maxPriceShoe = await Shoe.find({})
+      .sort({ price: -1 })
+      .limit(1);
+    result.maxPrice = maxPriceShoe[0].price;
+
+    res.status(200).send(result);
   } catch (e) {
     res.status(400).send(e);
   }
@@ -92,7 +116,7 @@ router.patch("/shoes/:id", adminAuth, async (req, res) => {
     });
     await shoe.save();
     res.status(200).send(shoe);
-  } catch (error) {
+  } catch (e) {
     res.sendStatus(404);
   }
 });
