@@ -22,8 +22,8 @@ const shoeSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    colors: {
-      type: Array,
+    color: {
+      type: String,
       required: true
     },
     amount: {

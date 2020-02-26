@@ -13,7 +13,7 @@ describe("ShoesForm", () => {
         category: "",
         price: "",
         description: "",
-        colors: "",
+        color: "",
         amount: "",
         sizes: "",
         images: [],

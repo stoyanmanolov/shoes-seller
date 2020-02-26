@@ -14,22 +14,18 @@ export const validateForm = data => {
         errors[key] = "Please enter a currency!";
       }
     } else if (key === "sizes") {
-      value.forEach(size => {
-        if (size.length !== 2) {
-          errors[key] = "Please use the correct format!";
-        }
-      });
-    }
-    if (key === "sizes" || key === "colors") {
       if (value[0] === "") {
         errors[key] = "Please fill in the field!";
       } else {
         let duplicate = [];
 
-        value.forEach(item => {
-          if (!duplicate.includes(item)) {
-            duplicate.push(item);
-          } else if (duplicate.includes(item)) {
+        value.forEach(size => {
+          if (size.length !== 2) {
+            errors[key] = "Please use the correct format!";
+          }
+          if (!duplicate.includes(size)) {
+            duplicate.push(size);
+          } else if (duplicate.includes(size)) {
             errors[key] = "Please don't use duplicates!";
           }
         });

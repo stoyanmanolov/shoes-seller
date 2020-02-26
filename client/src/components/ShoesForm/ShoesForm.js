@@ -33,10 +33,7 @@ export class ShoesForm extends React.Component {
       price: formData.get("price"),
       description: formData.get("description"),
       amount: formData.get("amount"),
-      colors: formData
-        .get("colors")
-        .split(", ")
-        .map(color => color.trim()),
+      color: formData.get("color"),
       sizes: formData
         .get("sizes")
         .split(", ")
@@ -108,11 +105,11 @@ export class ShoesForm extends React.Component {
         )
       },
       {
-        name: "colors",
-        label: "Colors:",
+        name: "color",
+        label: "Color:",
         items: (
           <input
-            name="colors"
+            name="color"
             type="text"
             placeholder="e.g. Black, White, Grey"
           />

@@ -19,6 +19,9 @@ const findFieldResults = (shoes, field) => {
       shoeData.map(size => {
         findUniqueResults(size, field, results);
       });
+    } else if (field === "model") {
+      shoeData = shoe["brand"] + " " + shoeData;
+      findUniqueResults(shoeData, field, results);
     } else findUniqueResults(shoeData, field, results);
   });
 
