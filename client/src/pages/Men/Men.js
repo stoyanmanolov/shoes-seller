@@ -8,7 +8,7 @@ const Men = () => {
     <>
       <NavBar />
       <TopBar shoesFor="Men's" />
-      <FilterMenu />
+      <FilterMenu gender="Male" />
     </>
   );
 };

@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const Shoe = require("../../models/Shoe");
 const { adminAuth } = require("../../middleware/auth");
-const { findFieldResults } = require("./helpers");
+const { findFieldResults, getGender } = require("./helpers");
 
 const router = new express.Router();
 
@@ -25,11 +25,8 @@ var upload = multer({ storage: storage });
 
 router.post("/shoes", adminAuth, upload.any(), async (req, res) => {
   try {
-    req.body.sizes = req.body.sizes.split(",");
-    req.body.sizes = req.body.sizes.map(size => parseInt(size));
-    req.body.colors = req.body.colors.split(",");
-    console.log(req.files);
-    console.log(req.body);
+    req.body.sizes = req.body.sizes.split(",").map(size => parseInt(size));
+
     req.body.images = [];
     req.files.forEach(file => {
       if (file.fieldname === "frontImage") {
@@ -56,31 +53,43 @@ router.get("/shoes", async (req, res) => {
 
 // Search for the unique values of a field of the Shoe model and how many times it was met.
 // Example: GET/shoes/category => Output: [{ category: 'Sneakers', count: 12 }]
-router.get("/shoes/:field", async (req, res) => {
+router.get("/shoes/:gender/:field", async (req, res) => {
   try {
-    await Shoe.find((err, shoes) => {
-      const { field } = req.params;
-      const results = findFieldResults(shoes, field);
-      results.sort((a, b) =>
-        a[field] > b[field] ? 1 : b[field] > a[field] ? -1 : 0
-      );
-      res.status(200).send(results);
-    });
+    await Shoe.find(
+      {
+        gender: getGender(req.params.gender),
+        forKids: req.query.forKids
+      },
+      (err, shoes) => {
+        const { field } = req.params;
+        const results = findFieldResults(shoes, field);
+        results.sort((a, b) =>
+          a[field] > b[field] ? 1 : b[field] > a[field] ? -1 : 0
+        );
+        res.status(200).send(results);
+      }
+    );
   } catch (e) {
     res.status(400).send(e);
   }
 });
 
-router.get("/shoes/price/boundries", async (req, res) => {
+router.get("/shoes/:gender/price/boundries", async (req, res) => {
   try {
     let result = {};
 
-    const minPriceShoe = await Shoe.find({})
+    const minPriceShoe = await Shoe.find({
+      gender: getGender(req.params.gender),
+      forKids: req.query.forKids
+    })
       .sort({ price: 1 })
       .limit(1);
     result.minPrice = minPriceShoe[0].price;
 
-    const maxPriceShoe = await Shoe.find({})
+    const maxPriceShoe = await Shoe.find({
+      gender: getGender(req.params.gender),
+      forKids: req.query.forKids
+    })
       .sort({ price: -1 })
       .limit(1);
     result.maxPrice = maxPriceShoe[0].price;

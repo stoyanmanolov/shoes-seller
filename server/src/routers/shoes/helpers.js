@@ -28,4 +28,12 @@ const findFieldResults = (shoes, field) => {
   return results;
 };
 
-module.exports = { findFieldResults };
+const getGender = gender => {
+  if (gender === "Male" || gender === "Female") {
+    return { $in: [gender, "Both"] };
+  } else if (gender === "All") {
+    return { $in: ["Male", "Female", "Both"] };
+  }
+};
+
+module.exports = { findFieldResults, getGender };

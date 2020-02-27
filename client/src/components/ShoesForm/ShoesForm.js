@@ -17,6 +17,11 @@ export class ShoesForm extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
+
+    if (this.state.submissionError) {
+      this.setState({ submissionError: null });
+    }
+
     const formData = new FormData(e.target);
 
     const validatedImages = validateImages(formData.getAll("images"));
@@ -183,7 +188,7 @@ export class ShoesForm extends React.Component {
 
   render() {
     if (this.state.submissionError) {
-      window.alert(this.state.submissionError.response.data);
+      window.alert(this.state.submissionError);
     }
     return (
       <Container>

@@ -20,7 +20,11 @@ export class FilterMenu extends React.Component {
 
   componentDidMount = () => {
     // Get all the unique brands, categories etc. and how many times they were found in the database.
-    this.props.fetchFilterOptions(this.state.sections);
+    this.props.fetchFilterOptions(
+      this.props.gender,
+      this.props.forKids,
+      this.state.sections
+    );
   };
 
   renderFilterOptions = title => {
@@ -92,6 +96,11 @@ export class FilterMenu extends React.Component {
     return <FilterList>{this.renderFilterSections()}</FilterList>;
   }
 }
+
+FilterMenu.defaultProps = {
+  gender: "All",
+  forKids: false
+};
 
 export default connect(
   ({ shoes }) => ({ filterOptions: shoes.filterOptions }),
