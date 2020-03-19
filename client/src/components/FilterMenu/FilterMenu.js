@@ -93,7 +93,9 @@ export class FilterMenu extends React.Component {
   };
 
   render() {
-    return <FilterList>{this.renderFilterSections()}</FilterList>;
+    return (
+      <FilterList id="filter-menu">{this.renderFilterSections()}</FilterList>
+    );
   }
 }
 

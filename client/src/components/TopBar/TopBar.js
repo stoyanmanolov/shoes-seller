@@ -3,7 +3,7 @@ import { StyledTopBar } from "./TopBar-styles";
 
 const TopBar = props => {
   return (
-    <StyledTopBar>
+    <StyledTopBar id="topbar">
       <h3>{`${props.shoesFor} shoes`}</h3>
       <p>Filtered:</p>
     </StyledTopBar>

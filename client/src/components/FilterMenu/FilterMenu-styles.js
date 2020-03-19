@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const FilterList = styled.ul`
+  height: 100%;
   width: 300px;
   margin-left: 20px;
   padding: 10px;

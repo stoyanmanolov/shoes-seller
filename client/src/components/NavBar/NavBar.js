@@ -81,7 +81,7 @@ export class NavBar extends React.Component {
 
   render() {
     return (
-      <Nav>
+      <Nav id="navbar">
         <NavItems>{this.renderNavItems()}</NavItems>
         <Logo>
           <Link to="/">

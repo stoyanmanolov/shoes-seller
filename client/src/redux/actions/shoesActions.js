@@ -1,4 +1,4 @@
-import { FILTER_OPTIONS } from "./types";
+import { FILTER_OPTIONS, FETCH_SHOES_LIST } from "./types";
 import axios from "axios";
 
 export const fetchFilterOptions = (gender, forKids, items) => {
@@ -25,5 +25,13 @@ export const fetchFilterOptions = (gender, forKids, items) => {
     }
 
     dispatch({ type: FILTER_OPTIONS, payload: data });
+  };
+};
+
+export const fetchShoesList = numOfShoes => {
+  return async dispatch => {
+    await axios.get(`/shoes/numOfPages?limit=${numOfShoes}`).then(response => {
+      dispatch({ type: FETCH_SHOES_LIST, payload: response.data });
+    });
   };
 };

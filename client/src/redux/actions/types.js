@@ -6,3 +6,4 @@ export const CLEAR_AUTH_ERRORS = "clear_auth_errors";
 export const FILTER_OPTIONS = "filter_options";
 export const REGISTER_USER = "register_user";
 export const CLEAR_REGISTERED_INFO = "clear_registered_info";
+export const FETCH_SHOES_LIST = "fetch_shoes_list";
