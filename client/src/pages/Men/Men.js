@@ -3,16 +3,16 @@ import NavBar from "../../components/NavBar";
 import TopBar from "../../components/TopBar";
 import FilterMenu from "../../components/FilterMenu";
 import ShoesList from "../../components/ShoesList";
-import { StyledMen } from "./Men-styles";
+import { ProductsPage } from "../shared-styles/ProductsPage-styles";
 
 const Men = () => {
   return (
-    <StyledMen>
+    <ProductsPage>
       <NavBar id="navbar" />
       <TopBar shoesFor="Men's" />
       <FilterMenu gender="Male" />
       <ShoesList />
-    </StyledMen>
+    </ProductsPage>
   );
 };
 

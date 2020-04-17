@@ -18,7 +18,7 @@ export const Nav = styled.nav`
     font-size: 20px;
     color: black;
   }
-  @media (min-width: 1024px) {
+  @media (min-width: 992px) {
     height: 100px;
     grid-template-columns: 1fr 2fr 1fr;
     grid-template-areas:
@@ -57,7 +57,7 @@ export const MenuList = styled.ul`
   display: flex;
   flex-direction: column;
   list-style-type: none;
-  @media (min-width: 1024px) {
+  @media (min-width: 992px) {
     flex-direction: row;
     justify-content: center;
   }
@@ -78,7 +78,7 @@ export const ListItem = styled.li`
       border-bottom: 1px solid ${lightgrey};
     }
   }
-  @media (min-width: 1024px) {
+  @media (min-width: 992px) {
     width: initial;
     p {
       padding: 0;

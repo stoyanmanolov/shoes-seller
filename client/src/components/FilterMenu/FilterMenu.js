@@ -1,8 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { fetchFilterOptions } from "../../redux/actions/shoesActions";
-import { Checkbox } from "semantic-ui-react";
-import { FilterList, FilterSection, FilterOption } from "./FilterMenu-styles";
+import { Checkbox, Button } from "semantic-ui-react";
+import {
+  StyledFilterMenu,
+  FilterList,
+  FilterSection,
+  FilterOption,
+} from "./FilterMenu-styles";
 import PriceRange from "./components/PriceRange";
 
 export class FilterMenu extends React.Component {
@@ -13,9 +18,9 @@ export class FilterMenu extends React.Component {
       { title: "model" },
       { title: "color" },
       { title: "price" },
-      { title: "sizes" }
+      { title: "sizes" },
     ],
-    sectionsClicked: ["category", "brand"]
+    sectionsClicked: ["category", "brand"],
   };
 
   componentDidMount = () => {
@@ -27,7 +32,7 @@ export class FilterMenu extends React.Component {
     );
   };
 
-  renderFilterOptions = title => {
+  renderFilterOptions = (title) => {
     if (!this.props.filterOptions) {
       return null;
     }
@@ -76,7 +81,7 @@ export class FilterMenu extends React.Component {
         <React.Fragment key={index}>
           <FilterSection
             id={title}
-            onClick={e => handleClick(e, title)}
+            onClick={(e) => handleClick(e, title)}
             clicked={clicked}
           >
             <p className="title">{title.toUpperCase()}</p>
@@ -94,14 +99,19 @@ export class FilterMenu extends React.Component {
 
   render() {
     return (
-      <FilterList id="filter-menu">{this.renderFilterSections()}</FilterList>
+      <StyledFilterMenu id="filter-menu">
+        <FilterList id="filter-list">{this.renderFilterSections()}</FilterList>
+        <div className="button-wrapper">
+          <Button className="filter-button">Filter products</Button>
+        </div>
+      </StyledFilterMenu>
     );
   }
 }
 
 FilterMenu.defaultProps = {
   gender: "All",
-  forKids: false
+  forKids: false,
 };
 
 export default connect(

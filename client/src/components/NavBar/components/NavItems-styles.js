@@ -9,7 +9,7 @@ export const DrawerToggler = styled.button`
   border: 0;
   background: none;
   margin-left: 20px;
-  @media (min-width: 1024px) {
+  @media (min-width: 992px) {
     display: none;
   }
 `;
@@ -19,7 +19,7 @@ export const StyledNavItems = styled.div`
   top: 100%;
   background-color: white;
   z-index: 1;
-  ${props =>
+  ${(props) =>
     props.open
       ? css`
           width: 100%;
@@ -29,7 +29,7 @@ export const StyledNavItems = styled.div`
           display: none;
           width: 100%;
         `}
-  @media (min-width: 1024px) {
+  @media (min-width: 992px) {
     position: initial;
     grid-area: navigation;
     display: initial;

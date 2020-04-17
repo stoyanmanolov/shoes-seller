@@ -1,12 +1,34 @@
 import styled from "styled-components";
 
+export const StyledFilterMenu = styled.div`
+  .button-wrapper {
+    margin: 10px;
+  }
+  .filter-button {
+    margin: 0px;
+    width: 100%;
+  }
+  @media (min-width: 768px) {
+    .filter-button {
+      display: none;
+    }
+  }
+`;
+
 export const FilterList = styled.ul`
+  display: none;
   height: 100%;
-  width: 300px;
+  width: 200px;
   margin-left: 20px;
   padding: 10px;
   li {
     list-style-type: none;
+  }
+  @media (min-width: 768px) {
+    display: inherit;
+  }
+  @media (min-width: 992px) {
+    width: 300px;
   }
 `;
 
