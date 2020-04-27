@@ -10,8 +10,8 @@ class ShoesList extends React.Component {
     sortOptions: [
       { key: "most-recent", value: "most-recent", text: "Most recent" },
       { key: "high-to-low", value: "high-to-low", text: "Price: High-Low" },
-      { key: "low-to-high", value: "low-to-high", text: "Price: Low-High" }
-    ]
+      { key: "low-to-high", value: "low-to-high", text: "Price: Low-High" },
+    ],
   };
 
   componentDidMount = () => {
@@ -25,6 +25,7 @@ class ShoesList extends React.Component {
       <StyledShoesList id="shoes-list">
         <form id="filter-sort">
           <Dropdown
+            className="dropdown-list"
             options={this.state.sortOptions}
             defaultValue={this.state.sortOptions[0].value}
             selection
@@ -37,5 +38,5 @@ class ShoesList extends React.Component {
 }
 
 export default connect(({ shoes }) => ({ shoesList: shoes.shoesList }), {
-  fetchShoesList
+  fetchShoesList,
 })(ShoesList);

@@ -102,7 +102,7 @@ export class FilterMenu extends React.Component {
       <StyledFilterMenu id="filter-menu">
         <FilterList id="filter-list">{this.renderFilterSections()}</FilterList>
         <div className="button-wrapper">
-          <Button className="filter-button">Filter products</Button>
+          <Button className="filter-button">FILTERS</Button>
         </div>
       </StyledFilterMenu>
     );

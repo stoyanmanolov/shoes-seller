@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const StyledFilterMenu = styled.div`
   .button-wrapper {
-    margin: 10px;
+    margin: 10px 10px 0 10px;
   }
   .filter-button {
     margin: 0px;
