@@ -21,6 +21,7 @@ export class FilterMenu extends React.Component {
       { title: "sizes" },
     ],
     sectionsClicked: ["category", "brand"],
+    showOnSmallerScreens: false,
   };
 
   componentDidMount = () => {
@@ -98,12 +99,34 @@ export class FilterMenu extends React.Component {
   };
 
   render() {
+    const { showOnSmallerScreens } = this.state;
+
+    const handleClick = () => {
+      !showOnSmallerScreens
+        ? this.setState({ showOnSmallerScreens: true })
+        : this.setState({ showOnSmallerScreens: false });
+    };
+
     return (
-      <StyledFilterMenu id="filter-menu">
-        <FilterList id="filter-list">{this.renderFilterSections()}</FilterList>
+      <StyledFilterMenu
+        id="filter-menu"
+        showOnSmallerScreens={showOnSmallerScreens}
+      >
         <div className="button-wrapper">
-          <Button className="filter-button">FILTERS</Button>
+          <Button className="filter-button" onClick={() => handleClick()}>
+            FILTERS
+          </Button>
+          <div className="filter-topbar">
+            <h3>Filters</h3>
+            <i className="fas fa-times" onClick={() => handleClick()}></i>
+          </div>
         </div>
+        <FilterList
+          id="filter-list"
+          showOnSmallerScreens={showOnSmallerScreens}
+        >
+          {this.renderFilterSections()}
+        </FilterList>
       </StyledFilterMenu>
     );
   }
