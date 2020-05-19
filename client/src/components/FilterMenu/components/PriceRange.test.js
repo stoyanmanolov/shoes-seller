@@ -3,7 +3,9 @@ import { shallow } from "enzyme";
 import PriceRange from "./PriceRange";
 
 describe("PriceRange", () => {
-  let wrapper = shallow(<PriceRange />);
+  let wrapper = shallow(
+    <PriceRange boundries={{ minPrice: 11, maxPrice: 20 }} />
+  );
   it("renders a slider", () => {
     expect(wrapper.find("#slider").exists()).toBe(true);
   });

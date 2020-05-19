@@ -4,32 +4,28 @@ import { FilterMenu } from "./FilterMenu";
 import { FilterSection } from "./FilterMenu-styles";
 
 describe("FilterMenu", () => {
-  it("renders all the FilterSections", () => {
-    let props = { fetchFilterOptions: jest.fn() };
-    let wrapper = shallow(<FilterMenu {...props} />);
+  let fetchFilterOptions = jest.fn();
+  const props = { fetchFilterOptions };
+  const wrapper = shallow(<FilterMenu {...props} />);
 
+  it("renders all the FilterSections", () => {
     let expectedSections = [
       { title: "category" },
       { title: "brand" },
       { title: "model" },
+      { title: "color" },
       { title: "price" },
-      { title: "sizes" }
+      { title: "sizes" },
     ];
 
     expectedSections.forEach(({ title }) => {
-      expect(
-        wrapper
-          .find(FilterSection)
-          .find({ id: title })
-          .exists()
-      ).toBe(true);
+      expect(wrapper.find(FilterSection).find({ id: title }).exists()).toBe(
+        true
+      );
     });
   });
 
   it("renders an up or down chevron based on whether the section is clicked", () => {
-    let props = { fetchFilterOptions: jest.fn() };
-    let wrapper = shallow(<FilterMenu {...props} />);
-
     let clicked = "brand";
     let notClicked = "category";
     wrapper.setState({ sectionsClicked: [clicked] });
@@ -49,5 +45,9 @@ describe("FilterMenu", () => {
         .find(".fa-chevron-down")
         .exists()
     ).toBe(true);
+  });
+
+  it("calls the data fetching function for the filter options", () => {
+    expect(fetchFilterOptions).toBeCalledTimes(1);
   });
 });
