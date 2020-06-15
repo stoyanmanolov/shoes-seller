@@ -1,7 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { fetchFilterOptions } from "../../redux/actions/shoesActions";
-import { Checkbox, Button } from "semantic-ui-react";
+import {
+  fetchFilterOptions,
+  clearFilterOptions,
+} from "../../redux/actions/shoesActions";
+import { Checkbox, Button, Loader } from "semantic-ui-react";
 import {
   StyledFilterMenu,
   FilterList,
@@ -32,10 +35,13 @@ export class FilterMenu extends React.Component {
       this.state.sections
     );
   };
+  componentWillUnmount = () => {
+    this.props.clearFilterOptions();
+  };
 
   renderFilterOptions = (title) => {
     if (!this.props.filterOptions) {
-      return null;
+      return <Loader active inline size="small" />;
     }
     const sectionData = this.props.filterOptions[title];
 
@@ -143,5 +149,5 @@ FilterMenu.defaultProps = {
 
 export default connect(
   ({ shoes }) => ({ filterOptions: shoes.filterOptions }),
-  { fetchFilterOptions }
+  { fetchFilterOptions, clearFilterOptions }
 )(FilterMenu);

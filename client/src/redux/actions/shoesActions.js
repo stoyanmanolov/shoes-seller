@@ -1,21 +1,25 @@
-import { FILTER_OPTIONS, FETCH_SHOES_LIST } from "./types";
+import {
+  CLEAR_FILTER_OPTIONS,
+  FILTER_OPTIONS,
+  FETCH_SHOES_LIST,
+} from "./types";
 import axios from "axios";
 
 export const fetchFilterOptions = (gender, forKids, items) => {
-  return async dispatch => {
+  return async (dispatch) => {
     let data = {};
 
-    const fetchItems = async item => {
+    const fetchItems = async (item) => {
       if (item.title === "price") {
         await axios
           .get(`/shoes/${gender}/${item.title}/boundries?forKids=${forKids}`)
-          .then(response => {
+          .then((response) => {
             data = { ...data, [item.title]: response.data };
           });
       } else
         await axios
           .get(`/shoes/${gender}/${item.title}?forKids=${forKids}`)
-          .then(response => {
+          .then((response) => {
             data = { ...data, [item.title]: response.data };
           });
     };
@@ -23,15 +27,22 @@ export const fetchFilterOptions = (gender, forKids, items) => {
     for (let item of items) {
       await fetchItems(item);
     }
-
     dispatch({ type: FILTER_OPTIONS, payload: data });
   };
 };
 
-export const fetchShoesList = numOfShoes => {
-  return async dispatch => {
-    await axios.get(`/shoes/numOfPages?limit=${numOfShoes}`).then(response => {
-      dispatch({ type: FETCH_SHOES_LIST, payload: response.data });
-    });
+export const clearFilterOptions = () => {
+  return {
+    type: CLEAR_FILTER_OPTIONS,
+  };
+};
+
+export const fetchShoesList = (numOfShoes) => {
+  return async (dispatch) => {
+    await axios
+      .get(`/shoes/numOfPages?limit=${numOfShoes}`)
+      .then((response) => {
+        dispatch({ type: FETCH_SHOES_LIST, payload: response.data });
+      });
   };
 };
