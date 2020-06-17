@@ -10,7 +10,7 @@ var path = require("path");
 
 var storage = multer.diskStorage({
   destination: "src/images",
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     cb(
       null,
       file.originalname.split(".")[0] +
@@ -18,20 +18,20 @@ var storage = multer.diskStorage({
         Date.now() +
         path.extname(file.originalname)
     );
-  }
+  },
 });
 
 var upload = multer({ storage: storage });
 
 router.post("/shoes", adminAuth, upload.any(), async (req, res) => {
   try {
-    req.body.sizes = req.body.sizes.split(",").map(size => parseInt(size));
+    req.body.sizes = req.body.sizes.split(",").map((size) => parseInt(size));
 
     req.body.images = [];
-    req.files.forEach(file => {
+    req.files.forEach((file) => {
       if (file.fieldname === "frontImage") {
-        req.body.frontImage = process.cwd() + "\\" + file.path;
-      } else req.body.images.push(process.cwd() + "\\" + file.path);
+        req.body.frontImage = file.filename;
+      } else req.body.images.push(file.filename);
     });
     const shoe = new Shoe(req.body);
     await shoe.save();
@@ -77,7 +77,7 @@ router.get("/shoes/:gender/:field", async (req, res) => {
     await Shoe.find(
       {
         gender: getGender(req.params.gender),
-        forKids: req.query.forKids
+        forKids: req.query.forKids,
       },
       (err, shoes) => {
         const { field } = req.params;
@@ -99,7 +99,7 @@ router.get("/shoes/:gender/price/boundries", async (req, res) => {
 
     const minPriceShoe = await Shoe.find({
       gender: getGender(req.params.gender),
-      forKids: req.query.forKids
+      forKids: req.query.forKids,
     })
       .sort({ price: 1 })
       .limit(1);
@@ -107,7 +107,7 @@ router.get("/shoes/:gender/price/boundries", async (req, res) => {
 
     const maxPriceShoe = await Shoe.find({
       gender: getGender(req.params.gender),
-      forKids: req.query.forKids
+      forKids: req.query.forKids,
     })
       .sort({ price: -1 })
       .limit(1);
@@ -139,7 +139,7 @@ router.patch("/shoes/:id", adminAuth, async (req, res) => {
     const _id = req.params.id;
     const updates = Object.keys(req.body);
     const shoe = await Shoe.findById({ _id });
-    updates.forEach(update => {
+    updates.forEach((update) => {
       shoe[update] = req.body[update];
     });
     await shoe.save();

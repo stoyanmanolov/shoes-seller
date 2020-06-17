@@ -37,12 +37,19 @@ export const clearFilterOptions = () => {
   };
 };
 
-export const fetchShoesList = (numOfShoes) => {
+export const fetchShoesList = (numOfShoes, currentPage) => {
   return async (dispatch) => {
     await axios
-      .get(`/shoes/numOfPages?limit=${numOfShoes}`)
+      .get(
+        `/shoes/numOfPages?limit=${numOfShoes}&skip=${
+          (currentPage - 1) * numOfShoes
+        }`
+      )
       .then((response) => {
-        dispatch({ type: FETCH_SHOES_LIST, payload: response.data });
+        dispatch({
+          type: FETCH_SHOES_LIST,
+          payload: { currentPage, ...response.data },
+        });
       });
   };
 };

@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   filterOptions: null,
-  shoesList: { shoes: {}, numOfPages: null },
+  shoesList: { shoes: [], numOfPages: null },
 };
 
 const shoesReducer = (state = initialState, action) => {
@@ -21,6 +21,7 @@ const shoesReducer = (state = initialState, action) => {
         shoesList: {
           shoes: action.payload.shoes,
           numOfPages: action.payload.numOfPages,
+          currentPage: action.payload.currentPage,
         },
       };
     default:
