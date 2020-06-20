@@ -11,7 +11,7 @@ const Women = () => {
       <NavBar />
       <TopBar shoesFor="Women's" />
       <FilterMenu gender="Female" />
-      <ShoesList />
+      <ShoesList gender="Female" />
     </ProductsPage>
   );
 };
