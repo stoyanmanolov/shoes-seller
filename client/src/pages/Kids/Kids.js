@@ -11,7 +11,7 @@ const Kids = () => {
       <NavBar />
       <TopBar shoesFor="Kids'" />
       <FilterMenu forKids={true} />
-      <ShoesList />
+      <ShoesList forKids={true} />
     </ProductsPage>
   );
 };

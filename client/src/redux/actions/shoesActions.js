@@ -12,13 +12,15 @@ export const fetchFilterOptions = (gender, forKids, items) => {
     const fetchItems = async (item) => {
       if (item.title === "price") {
         await axios
-          .get(`/shoes/${gender}/${item.title}/boundries?forKids=${forKids}`)
+          .get(
+            `/shoes/fields/${gender}/${item.title}/boundries?forKids=${forKids}`
+          )
           .then((response) => {
             data = { ...data, [item.title]: response.data };
           });
       } else
         await axios
-          .get(`/shoes/${gender}/${item.title}?forKids=${forKids}`)
+          .get(`/shoes/fields/${gender}/${item.title}?forKids=${forKids}`)
           .then((response) => {
             data = { ...data, [item.title]: response.data };
           });
@@ -37,13 +39,13 @@ export const clearFilterOptions = () => {
   };
 };
 
-export const fetchShoesList = (numOfShoes, currentPage) => {
+export const fetchShoesList = (numOfShoes, currentPage, gender, forKids) => {
   return async (dispatch) => {
     await axios
       .get(
-        `/shoes/numOfPages?limit=${numOfShoes}&skip=${
+        `/shoes/${gender}/numOfPages/?limit=${numOfShoes}&skip=${
           (currentPage - 1) * numOfShoes
-        }`
+        }&forKids=${forKids}`
       )
       .then((response) => {
         dispatch({

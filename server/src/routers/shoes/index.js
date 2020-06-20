@@ -41,22 +41,29 @@ router.post("/shoes", adminAuth, upload.any(), async (req, res) => {
   }
 });
 
-router.get("/shoes/:numOfPages?", async (req, res) => {
+router.get("/shoes/:gender/:numOfPages?", async (req, res) => {
   try {
     let result = {};
     const skip = parseInt(req.query.skip);
     const limit = parseInt(req.query.limit);
-
+    const forKids = req.query.forKids || false;
     if (req.params.numOfPages) {
-      const count = await Shoe.countDocuments();
-
+      const count = await Shoe.countDocuments(
+        req.params.gender
+          ? { gender: getGender(req.params.gender), forKids }
+          : { forKids }
+      );
       if (limit) {
         result = { ...result, numOfPages: Math.ceil(count / limit) };
         //res.status(200).send({ numOfPages: Math.ceil(count / limit) });
-      } else res.status(400).send("Please specify a limit attribute.");
+      } else return res.status(400).send("Please specify a limit attribute.");
     }
 
-    await Shoe.find()
+    await Shoe.find(
+      req.params.gender
+        ? { gender: getGender(req.params.gender), forKids }
+        : { forKids }
+    )
       .skip(skip)
       .limit(limit)
       .exec((err, shoes) => {
@@ -71,8 +78,8 @@ router.get("/shoes/:numOfPages?", async (req, res) => {
 });
 
 // Search for the unique values of a field of the Shoe model and how many times it was met.
-// Example: GET/shoes/men/category => Output: [{ category: 'Sneakers', count: 12 }]
-router.get("/shoes/:gender/:field", async (req, res) => {
+// Example: GET/shoes/fields/men/category => Output: [{ category: 'Sneakers', count: 12 }]
+router.get("/shoes/fields/:gender/:field", async (req, res) => {
   try {
     await Shoe.find(
       {
@@ -93,7 +100,7 @@ router.get("/shoes/:gender/:field", async (req, res) => {
   }
 });
 
-router.get("/shoes/:gender/price/boundries", async (req, res) => {
+router.get("/shoes/fields/:gender/price/boundries", async (req, res) => {
   try {
     let result = {};
 

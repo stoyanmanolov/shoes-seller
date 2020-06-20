@@ -6,68 +6,81 @@ import { Card, CardImg, CardBody, CardTitle, CardSubtitle } from "reactstrap";
 import { Pagination } from "@material-ui/lab";
 import { fetchShoesList } from "../../redux/actions/shoesActions";
 
-class ShoesList extends React.Component {
+export class ShoesList extends React.Component {
   state = {
     shoesPerPage: 3,
     sortOptions: [
       { key: "most-recent", value: "most-recent", text: "Most recent" },
-      { key: "high-to-low", value: "high-to-low", text: "Price: High-Low" },
       { key: "low-to-high", value: "low-to-high", text: "Price: Low-High" },
+      { key: "high-to-low", value: "high-to-low", text: "Price: High-Low" },
     ],
   };
 
   componentDidMount = () => {
-    this.props.fetchShoesList(this.state.shoesPerPage, 1);
+    const currentPage = 1;
+    const { fetchShoesList, gender, forKids } = this.props;
+    const { shoesPerPage } = this.state;
+
+    fetchShoesList(shoesPerPage, currentPage, gender, forKids);
   };
 
   renderShoesList = () => {
-    if (this.props.shoesList.shoes.length === 0) return null;
-    console.log(this.props.shoesList);
+    const {
+      shoesList: { shoes },
+    } = this.props;
 
-    return this.props.shoesList.shoes.map(
-      ({ brand, model, price, frontImage }, index) => {
-        return (
-          <Card key={index}>
-            <CardImg
-              className="card-image"
-              top
-              src={"/images/" + frontImage}
-              alt="Shoes front image"
-            />
-            <CardBody>
-              <CardTitle>{brand + " " + model}</CardTitle>
-              <CardSubtitle>{"$" + price}</CardSubtitle>
-            </CardBody>
-          </Card>
-        );
-      }
-    );
+    if (shoes.length === 0) return null;
+
+    return shoes.map(({ brand, model, price, frontImage }, index) => {
+      return (
+        <Card key={index}>
+          <CardImg
+            className="card-image"
+            top
+            src={"/images/" + frontImage}
+            alt="Shoes front image"
+          />
+          <CardBody>
+            <CardTitle>{brand + " " + model}</CardTitle>
+            <CardSubtitle>{"$" + price}</CardSubtitle>
+          </CardBody>
+        </Card>
+      );
+    });
   };
 
   render() {
-    const { numOfPages } = this.props.shoesList;
+    const { shoesPerPage, sortOptions } = this.state;
+    const { shoesList, fetchShoesList, gender, forKids } = this.props;
 
     return (
       <StyledShoesList id="shoes-list">
         <form id="filter-sort">
           <Dropdown
             className="dropdown-list"
-            options={this.state.sortOptions}
-            defaultValue={this.state.sortOptions[0].value}
+            options={sortOptions}
+            defaultValue={sortOptions[0].value}
             selection
+            disabled={true}
           />
         </form>
         <List>{this.renderShoesList()}</List>
         <Pagination
-          count={numOfPages}
-          onChange={(event, page) =>
-            this.props.fetchShoesList(this.state.shoesPerPage, page)
+          id="pagination"
+          count={shoesList.numOfPages}
+          onChange={(e, page) =>
+            fetchShoesList(shoesPerPage, page, gender, forKids)
           }
         />
       </StyledShoesList>
     );
   }
 }
+
+ShoesList.defaultProps = {
+  gender: "All",
+  forKids: false,
+};
 
 export default connect(({ shoes }) => ({ shoesList: shoes.shoesList }), {
   fetchShoesList,

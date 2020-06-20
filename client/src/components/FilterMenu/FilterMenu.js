@@ -41,7 +41,7 @@ export class FilterMenu extends React.Component {
 
   renderFilterOptions = (title) => {
     if (!this.props.filterOptions) {
-      return <Loader active inline size="small" />;
+      return <Loader id="loader" active inline size="small" />;
     }
     const sectionData = this.props.filterOptions[title];
 

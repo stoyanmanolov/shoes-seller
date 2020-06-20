@@ -4,12 +4,12 @@ import { FilterMenu } from "./FilterMenu";
 import { FilterSection } from "./FilterMenu-styles";
 
 describe("FilterMenu", () => {
-  let fetchFilterOptions = jest.fn();
-  const props = { fetchFilterOptions };
-  const wrapper = shallow(<FilterMenu {...props} />);
+  const fetchFilterOptions = jest.fn();
+  let props = { fetchFilterOptions };
+  let wrapper = shallow(<FilterMenu {...props} />);
 
   it("renders all the FilterSections", () => {
-    let expectedSections = [
+    const expectedSections = [
       { title: "category" },
       { title: "brand" },
       { title: "model" },
@@ -26,8 +26,8 @@ describe("FilterMenu", () => {
   });
 
   it("renders an up or down chevron based on whether the section is clicked", () => {
-    let clicked = "brand";
-    let notClicked = "category";
+    const clicked = "brand";
+    const notClicked = "category";
     wrapper.setState({ sectionsClicked: [clicked] });
 
     expect(
@@ -49,5 +49,18 @@ describe("FilterMenu", () => {
 
   it("calls the data fetching function for the filter options", () => {
     expect(fetchFilterOptions).toBeCalledTimes(1);
+  });
+
+  it("renders a loader when there are no filter options", () => {
+    expect(wrapper.find({ id: "loader" }).exists()).toBe(true);
+  });
+
+  it("calls the clearing function when the component unmounts", () => {
+    const clearFilterOptions = jest.fn();
+    props = { clearFilterOptions, fetchFilterOptions };
+    wrapper = shallow(<FilterMenu {...props} />);
+
+    wrapper.unmount();
+    expect(clearFilterOptions).toBeCalledTimes(1);
   });
 });
