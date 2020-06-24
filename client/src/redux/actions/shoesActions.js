@@ -1,6 +1,6 @@
 import {
   CLEAR_FILTER_OPTIONS,
-  FILTER_OPTIONS,
+  FILTER_OPTIONS_NAMES,
   FETCH_SHOES_LIST,
 } from "./types";
 import axios from "axios";
@@ -29,7 +29,7 @@ export const fetchFilterOptions = (gender, forKids, items) => {
     for (let item of items) {
       await fetchItems(item);
     }
-    dispatch({ type: FILTER_OPTIONS, payload: data });
+    dispatch({ type: FILTER_OPTIONS_NAMES, payload: data });
   };
 };
 

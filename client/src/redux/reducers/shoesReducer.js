@@ -1,20 +1,29 @@
 import {
-  FILTER_OPTIONS,
+  FILTER_OPTIONS_NAMES,
   FETCH_SHOES_LIST,
   CLEAR_FILTER_OPTIONS,
 } from "../actions/types";
 
 const initialState = {
-  filterOptions: null,
+  filterOptions: { optionNames: null, selectedOptions: null },
   shoesList: { shoes: [], numOfPages: null },
 };
 
 const shoesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FILTER_OPTIONS:
-      return { ...state, filterOptions: { ...action.payload } };
+    case FILTER_OPTIONS_NAMES:
+      return {
+        ...state,
+        filterOptions: {
+          optionNames: { ...action.payload },
+          selectedOptions: {},
+        },
+      };
     case CLEAR_FILTER_OPTIONS:
-      return { ...state, filterOptions: null };
+      return {
+        ...state,
+        filterOptions: { optionNames: null, selectedOptions: null },
+      };
     case FETCH_SHOES_LIST:
       return {
         ...state,

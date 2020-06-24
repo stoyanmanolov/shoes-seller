@@ -40,12 +40,12 @@ export class FilterMenu extends React.Component {
   };
 
   renderFilterOptions = (title, clicked) => {
-    if (!this.props.filterOptions) {
+    if (!this.props.filterOptions.optionNames) {
       return this.state.sectionsClicked.includes(title) ? (
         <Loader id="loader" active inline size="small" />
       ) : null;
     }
-    const sectionData = this.props.filterOptions[title];
+    const sectionData = this.props.filterOptions.optionNames[title];
 
     return (
       <ul className="info">
@@ -55,7 +55,7 @@ export class FilterMenu extends React.Component {
           sectionData.map((data, index) => {
             return (
               <FilterOption clicked={clicked} key={index}>
-                <Checkbox></Checkbox>
+                <Checkbox />
                 <p className="title">{data[title]}</p>
                 <p className="count">{"(" + data.count + ")"}</p>
               </FilterOption>

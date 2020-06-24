@@ -5,7 +5,10 @@ import { FilterSection } from "./FilterMenu-styles";
 
 describe("FilterMenu", () => {
   const fetchFilterOptions = jest.fn();
-  let props = { fetchFilterOptions };
+  let props = {
+    fetchFilterOptions,
+    filterOptions: { optionNames: null, selectedOptions: null },
+  };
   let wrapper = shallow(<FilterMenu {...props} />);
 
   it("renders all the FilterSections", () => {
@@ -57,7 +60,7 @@ describe("FilterMenu", () => {
 
   it("calls the clearing function when the component unmounts", () => {
     const clearFilterOptions = jest.fn();
-    props = { clearFilterOptions, fetchFilterOptions };
+    props = { ...props, clearFilterOptions };
     wrapper = shallow(<FilterMenu {...props} />);
 
     wrapper.unmount();
