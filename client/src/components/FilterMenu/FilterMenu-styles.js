@@ -101,7 +101,7 @@ export const FilterSection = styled.li`
 `;
 
 export const FilterOption = styled.li`
-  display: flex;
+  display: ${(props) => (props.clicked ? "flex" : "none")};
   .title {
     margin: 0 10px;
   }

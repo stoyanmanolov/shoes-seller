@@ -3,7 +3,7 @@ import Slider from "@material-ui/core/Slider";
 import { Input } from "semantic-ui-react";
 import { StyledPriceRange } from "./PriceRange-styles";
 
-const PriceRange = props => {
+const PriceRange = (props) => {
   const { minPrice, maxPrice } = props.boundries;
 
   const [value, setValue] = React.useState([minPrice, maxPrice]);
@@ -27,7 +27,7 @@ const PriceRange = props => {
     }
   };
 
-  const setZeroesIfEmpty = value => {
+  const setZeroesIfEmpty = (value) => {
     let newValue = [];
     if (value[0] === "" && value[1] === "") {
       newValue = [0, 0];
@@ -41,7 +41,7 @@ const PriceRange = props => {
   };
 
   return (
-    <StyledPriceRange>
+    <StyledPriceRange {...props}>
       <Slider
         id="slider"
         className="slider"
@@ -57,7 +57,7 @@ const PriceRange = props => {
         name="0"
         className="min"
         type="number"
-        onChange={event =>
+        onChange={(event) =>
           handleInputChange(event.target.value, event.target.name)
         }
         value={value[0]}
@@ -68,7 +68,7 @@ const PriceRange = props => {
         name="1"
         className="max"
         type="number"
-        onChange={event =>
+        onChange={(event) =>
           handleInputChange(event.target.value, event.target.name)
         }
         value={value[1]}

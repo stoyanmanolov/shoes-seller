@@ -39,20 +39,22 @@ export class FilterMenu extends React.Component {
     this.props.clearFilterOptions();
   };
 
-  renderFilterOptions = (title) => {
+  renderFilterOptions = (title, clicked) => {
     if (!this.props.filterOptions) {
-      return <Loader id="loader" active inline size="small" />;
+      return this.state.sectionsClicked.includes(title) ? (
+        <Loader id="loader" active inline size="small" />
+      ) : null;
     }
     const sectionData = this.props.filterOptions[title];
 
     return (
       <ul className="info">
         {title === "price" ? (
-          <PriceRange boundries={sectionData} />
+          <PriceRange clicked={clicked} boundries={sectionData} />
         ) : (
           sectionData.map((data, index) => {
             return (
-              <FilterOption key={index}>
+              <FilterOption clicked={clicked} key={index}>
                 <Checkbox></Checkbox>
                 <p className="title">{data[title]}</p>
                 <p className="count">{"(" + data.count + ")"}</p>
@@ -98,7 +100,7 @@ export class FilterMenu extends React.Component {
               <i className="chevron fas fa-chevron-up"></i>
             )}
           </FilterSection>
-          {clicked ? this.renderFilterOptions(title) : null}
+          {this.renderFilterOptions(title, clicked)}
         </React.Fragment>
       );
     });
