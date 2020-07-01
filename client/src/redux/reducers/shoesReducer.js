@@ -2,11 +2,12 @@ import {
   FILTER_OPTIONS_NAMES,
   FETCH_SHOES_LIST,
   CLEAR_FILTER_OPTIONS,
+  CLEAR_SHOES_LIST,
 } from "../actions/types";
 
 const initialState = {
   filterOptions: { optionNames: null, selectedOptions: null },
-  shoesList: { shoes: [], numOfPages: null },
+  shoesList: { shoes: [], numOfPages: null, currentPage: null },
 };
 
 const shoesReducer = (state = initialState, action) => {
@@ -31,6 +32,15 @@ const shoesReducer = (state = initialState, action) => {
           shoes: action.payload.shoes,
           numOfPages: action.payload.numOfPages,
           currentPage: action.payload.currentPage,
+        },
+      };
+    case CLEAR_SHOES_LIST:
+      return {
+        ...state,
+        shoesList: {
+          shoes: [],
+          numOfPages: null,
+          currentPage: null,
         },
       };
     default:

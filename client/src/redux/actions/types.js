@@ -8,3 +8,4 @@ export const REGISTER_USER = "register_user";
 export const CLEAR_REGISTERED_INFO = "clear_registered_info";
 export const FETCH_SHOES_LIST = "fetch_shoes_list";
 export const CLEAR_FILTER_OPTIONS = "clear_filter_options";
+export const CLEAR_SHOES_LIST = "clear_shoes_list";

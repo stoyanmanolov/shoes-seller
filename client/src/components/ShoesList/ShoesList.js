@@ -1,10 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { StyledShoesList, List } from "./ShoesList-styles";
-import { Dropdown } from "semantic-ui-react";
+import { Dropdown, Loader } from "semantic-ui-react";
 import { Card, CardImg, CardBody, CardTitle, CardSubtitle } from "reactstrap";
 import { Pagination } from "@material-ui/lab";
-import { fetchShoesList } from "../../redux/actions/shoesActions";
+import {
+  fetchShoesList,
+  clearShoesList,
+} from "../../redux/actions/shoesActions";
 
 export class ShoesList extends React.Component {
   state = {
@@ -23,6 +26,9 @@ export class ShoesList extends React.Component {
 
     fetchShoesList(shoesPerPage, currentPage, gender, forKids);
   };
+  componentWillUnmount = () => {
+    this.props.clearShoesList();
+  };
 
   renderShoesList = () => {
     const {
@@ -33,7 +39,7 @@ export class ShoesList extends React.Component {
 
     return shoes.map(({ brand, model, price, frontImage }, index) => {
       return (
-        <Card key={index}>
+        <Card id={brand} key={index}>
           <CardImg
             className="card-image"
             top
@@ -42,7 +48,7 @@ export class ShoesList extends React.Component {
           />
           <CardBody>
             <CardTitle>{brand + " " + model}</CardTitle>
-            <CardSubtitle>{"$" + price}</CardSubtitle>
+            <CardSubtitle style={{ color: "grey" }}>{"$" + price}</CardSubtitle>
           </CardBody>
         </Card>
       );
@@ -64,14 +70,23 @@ export class ShoesList extends React.Component {
             disabled={true}
           />
         </form>
-        <List>{this.renderShoesList()}</List>
-        <Pagination
-          id="pagination"
-          count={shoesList.numOfPages}
-          onChange={(e, page) =>
-            fetchShoesList(shoesPerPage, page, gender, forKids)
-          }
-        />
+        {this.props.shoesList.shoes.length === 0 ? (
+          <div id="loader-container" className="loader-container">
+            <Loader active inline />
+          </div>
+        ) : (
+          <>
+            <List id="list">{this.renderShoesList()}</List>
+            <Pagination
+              id="pagination"
+              className="pagination"
+              count={shoesList.numOfPages}
+              onChange={(e, page) =>
+                fetchShoesList(shoesPerPage, page, gender, forKids)
+              }
+            />
+          </>
+        )}
       </StyledShoesList>
     );
   }
@@ -84,4 +99,5 @@ ShoesList.defaultProps = {
 
 export default connect(({ shoes }) => ({ shoesList: shoes.shoesList }), {
   fetchShoesList,
+  clearShoesList,
 })(ShoesList);
