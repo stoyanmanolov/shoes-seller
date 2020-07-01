@@ -81,9 +81,10 @@ export class ShoesList extends React.Component {
               id="pagination"
               className="pagination"
               count={shoesList.numOfPages}
-              onChange={(e, page) =>
-                fetchShoesList(shoesPerPage, page, gender, forKids)
-              }
+              onChange={(e, page) => {
+                this.props.clearShoesList();
+                fetchShoesList(shoesPerPage, page, gender, forKids);
+              }}
             />
           </>
         )}
