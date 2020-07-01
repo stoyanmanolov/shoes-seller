@@ -2,6 +2,7 @@ import {
   CLEAR_FILTER_OPTIONS,
   FILTER_OPTIONS_NAMES,
   FETCH_SHOES_LIST,
+  CLEAR_SHOES_LIST,
 } from "./types";
 import axios from "axios";
 
@@ -53,5 +54,11 @@ export const fetchShoesList = (numOfShoes, currentPage, gender, forKids) => {
           payload: { currentPage, ...response.data },
         });
       });
+  };
+};
+
+export const clearShoesList = () => {
+  return {
+    type: CLEAR_SHOES_LIST,
   };
 };

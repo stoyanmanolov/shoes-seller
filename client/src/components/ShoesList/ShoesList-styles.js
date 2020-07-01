@@ -5,6 +5,12 @@ export const StyledShoesList = styled.div`
   .dropdown-list {
     width: 100%;
   }
+  #loader {
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   @media (min-width: 768px) {
     margin-left: 20px;
     padding: 10px 0 10px 10px;
