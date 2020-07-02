@@ -40,7 +40,6 @@ const shoesReducer = (state = initialState, action) => {
         shoesList: {
           shoes: [],
           numOfPages: null,
-          currentPage: null,
         },
       };
     default:

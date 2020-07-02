@@ -31,10 +31,12 @@ describe("ShoesList", () => {
 
   describe("When there are shoes", () => {
     const fetchShoesList = jest.fn();
+    const clearShoesList = jest.fn();
 
     beforeAll(() => {
       props = {
         fetchShoesList,
+        clearShoesList,
         shoesList: {
           shoes: [{ brand: "Some Brand" }, { brand: "Other Brand" }],
         },
@@ -42,8 +44,9 @@ describe("ShoesList", () => {
       wrapper = shallow(<ShoesList {...props} />);
     });
 
-    it("calls the fetching function again when the pagination gets changed", () => {
+    it("clears the current page's shoes and calls the fetching function when the pagination changes", () => {
       wrapper.find({ id: "pagination" }).simulate("change");
+      expect(clearShoesList).toBeCalledTimes(1);
       expect(fetchShoesList).toBeCalledTimes(2);
     });
 
