@@ -40,15 +40,22 @@ export const clearFilterOptions = () => {
   };
 };
 
-export const fetchShoesList = (numOfShoes, currentPage, gender, forKids) => {
+export const fetchShoesList = (
+  numOfShoes,
+  currentPage,
+  gender,
+  forKids,
+  currentSort
+) => {
   return async (dispatch) => {
     await axios
       .get(
         `/shoes/${gender}/numOfPages/?limit=${numOfShoes}&skip=${
           (currentPage - 1) * numOfShoes
-        }&forKids=${forKids}`
+        }&forKids=${forKids}&sortOption=${currentSort}`
       )
       .then((response) => {
+        console.log(response.data);
         dispatch({
           type: FETCH_SHOES_LIST,
           payload: { currentPage, ...response.data },

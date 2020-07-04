@@ -13,18 +13,19 @@ export class ShoesList extends React.Component {
   state = {
     shoesPerPage: 3,
     sortOptions: [
-      { key: "most-recent", value: "most-recent", text: "Most recent" },
-      { key: "low-to-high", value: "low-to-high", text: "Price: Low-High" },
-      { key: "high-to-low", value: "high-to-low", text: "Price: High-Low" },
+      { key: "most-recent", value: '{ "createdAt": 1 }', text: "Most recent" },
+      { key: "low-to-high", value: '{ "price": 1 }', text: "Price: Low-High" },
+      { key: "high-to-low", value: '{ "price": -1 }', text: "Price: High-Low" },
     ],
+    currentSort: '{ "createdAt": 1 }',
   };
 
   componentDidMount = () => {
     const currentPage = 1;
     const { fetchShoesList, gender, forKids } = this.props;
-    const { shoesPerPage } = this.state;
+    const { shoesPerPage, currentSort } = this.state;
 
-    fetchShoesList(shoesPerPage, currentPage, gender, forKids);
+    fetchShoesList(shoesPerPage, currentPage, gender, forKids, currentSort);
   };
   componentWillUnmount = () => {
     this.props.clearShoesList();
@@ -56,18 +57,35 @@ export class ShoesList extends React.Component {
   };
 
   render() {
-    const { shoesPerPage, sortOptions } = this.state;
-    const { shoesList, fetchShoesList, gender, forKids } = this.props;
+    const { shoesPerPage, sortOptions, currentSort } = this.state;
+    const {
+      shoesList,
+      fetchShoesList,
+      clearShoesList,
+      gender,
+      forKids,
+    } = this.props;
 
     return (
       <StyledShoesList id="shoes-list">
         <form id="filter-sort">
           <Dropdown
+            id="dropdown"
             className="dropdown-list"
             options={sortOptions}
             defaultValue={sortOptions[0].value}
             selection
-            disabled={true}
+            onChange={(e, targeted) => {
+              this.setState({ currentSort: targeted.value });
+              clearShoesList();
+              fetchShoesList(
+                shoesPerPage,
+                shoesList.currentPage,
+                gender,
+                forKids,
+                targeted.value
+              );
+            }}
           />
         </form>
         {this.props.shoesList.shoes.length === 0 ? (
@@ -83,8 +101,14 @@ export class ShoesList extends React.Component {
               count={shoesList.numOfPages}
               page={shoesList.currentPage}
               onChange={(e, page) => {
-                this.props.clearShoesList();
-                fetchShoesList(shoesPerPage, page, gender, forKids);
+                clearShoesList();
+                fetchShoesList(
+                  shoesPerPage,
+                  page,
+                  gender,
+                  forKids,
+                  currentSort
+                );
               }}
             />
           </>

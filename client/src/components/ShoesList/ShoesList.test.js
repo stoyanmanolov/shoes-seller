@@ -45,9 +45,17 @@ describe("ShoesList", () => {
     });
 
     it("clears the current page's shoes and calls the fetching function when the pagination changes", () => {
-      wrapper.find({ id: "pagination" }).simulate("change");
+      wrapper.find({ id: "pagination" }).simulate("change", {}, { page: 1 });
       expect(clearShoesList).toBeCalledTimes(1);
       expect(fetchShoesList).toBeCalledTimes(2);
+    });
+
+    it("clears the current page's shoes and calls the fetching function when the dropdown changes", () => {
+      wrapper
+        .find({ id: "dropdown" })
+        .simulate("change", {}, { value: "value" });
+      expect(clearShoesList).toBeCalledTimes(2);
+      expect(fetchShoesList).toBeCalledTimes(3);
     });
 
     it("shows a card for each shoes", () => {
