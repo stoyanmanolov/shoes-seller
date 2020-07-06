@@ -8,6 +8,7 @@ import {
   fetchShoesList,
   clearShoesList,
 } from "../../redux/actions/shoesActions";
+import { Link } from "react-router-dom";
 
 export class ShoesList extends React.Component {
   state = {
@@ -39,20 +40,24 @@ export class ShoesList extends React.Component {
 
     if (shoes.length === 0) return null;
 
-    return shoes.map(({ brand, model, price, frontImage }, index) => {
+    return shoes.map(({ _id, brand, model, price, frontImage }, index) => {
       return (
-        <Card id={brand} key={index}>
-          <CardImg
-            className="card-image"
-            top
-            src={"/images/" + frontImage}
-            alt="Shoes front image"
-          />
-          <CardBody>
-            <CardTitle>{brand + " " + model}</CardTitle>
-            <CardSubtitle style={{ color: "grey" }}>{"$" + price}</CardSubtitle>
-          </CardBody>
-        </Card>
+        <Link id={_id.toString()} key={index} to={`/shoe/${_id}`}>
+          <Card id={brand}>
+            <CardImg
+              className="card-image"
+              top
+              src={"/images/" + frontImage}
+              alt="Shoes front image"
+            />
+            <CardBody>
+              <CardTitle>{brand + " " + model}</CardTitle>
+              <CardSubtitle style={{ color: "grey" }}>
+                {"$" + price}
+              </CardSubtitle>
+            </CardBody>
+          </Card>
+        </Link>
       );
     });
   };

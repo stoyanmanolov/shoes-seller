@@ -12,6 +12,7 @@ describe("Routes", () => {
       { path: "/men" },
       { path: "/women" },
       { path: "/kids" },
+      { path: "/shoe/:id" },
     ];
 
     routePaths.forEach((routePath) =>
@@ -37,7 +38,7 @@ describe("Routes", () => {
       ).toBe(true);
     });
 
-    it("redirects to AddShoes at /shoes/add if user is an admin", () => {
+    it("redirects to AddShoes at /shoes/add if the user is an admin", () => {
       let props = { isLoggedIn: true, user: { role: "admin" } };
       wrapper = shallow(<Routes {...props} />);
 
@@ -46,7 +47,7 @@ describe("Routes", () => {
       ).toBe(true);
     });
 
-    it("redirects to Home at /shoes/add if user is not an admin", () => {
+    it("redirects to Home at /shoes/add if the user is not an admin", () => {
       let props = { isLoggedIn: true, user: { role: "user" } };
       wrapper = shallow(<Routes {...props} />);
 

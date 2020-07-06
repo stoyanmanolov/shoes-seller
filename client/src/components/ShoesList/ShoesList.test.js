@@ -38,7 +38,10 @@ describe("ShoesList", () => {
         fetchShoesList,
         clearShoesList,
         shoesList: {
-          shoes: [{ brand: "Some Brand" }, { brand: "Other Brand" }],
+          shoes: [
+            { _id: 123, brand: "Some Brand" },
+            { _id: 12345, brand: "Other Brand" },
+          ],
         },
       };
       wrapper = shallow(<ShoesList {...props} />);
@@ -63,6 +66,17 @@ describe("ShoesList", () => {
         expect(
           wrapper.find({ id: "list" }).find({ id: shoe.brand }).exists()
         ).toBe(true);
+      });
+    });
+
+    it("renders a link that redirects to a specific shoe based on id", () => {
+      props.shoesList.shoes.forEach((shoe) => {
+        expect(
+          wrapper
+            .find({ id: "list" })
+            .find({ id: shoe._id.toString() })
+            .prop("to")
+        ).toBe("/shoe/" + shoe._id);
       });
     });
   });
