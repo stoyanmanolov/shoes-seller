@@ -3,26 +3,28 @@ import { Link } from "react-router-dom";
 
 import { StyledCollections, TextOverlay } from "./Collections-styles";
 
-const Collections = () => {
+export const Collections = () => {
   return (
     <StyledCollections>
       <h2>COLLECTIONS</h2>
       <ul>
-        <Link to="/men">
-          <li className="men">
+        <li id="men-wrapper" className="men">
+          <Link to="/men">
             <TextOverlay>Men</TextOverlay>
-          </li>
-        </Link>
-        <Link to="/women">
-          <li className="women">
+          </Link>
+        </li>
+
+        <li id="women-wrapper" className="women">
+          <Link to="/women">
             <TextOverlay>Women</TextOverlay>
-          </li>
-        </Link>
-        <Link to="/kids">
-          <li className="kids">
+          </Link>
+        </li>
+
+        <li id="kids-wrapper" className="kids">
+          <Link to="/kids">
             <TextOverlay>Kids</TextOverlay>
-          </li>
-        </Link>
+          </Link>
+        </li>
       </ul>
     </StyledCollections>
   );

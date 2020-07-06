@@ -7,18 +7,22 @@ export const StyledCollections = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 100px;
-  padding-bottom: 100px;
+  padding-top: 50px;
+  padding-bottom: 50px;
   ul {
     display: flex;
-    flex-direction: row;
-    a > li {
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    > li {
+      > a {
+        text-decoration: none;
+      }
       list-style-type: none;
-      position: relative;
-
+      margin: 20px;
       height: 300px;
       width: 300px;
-      margin: 20px;
     }
     .men {
       background-image: url(${Men});
@@ -35,6 +39,15 @@ export const StyledCollections = styled.div`
       background-size: cover;
       background-position: center;
     }
+    @media (min-width: 768px) {
+      width: 100%;
+      flex-direction: row;
+      padding-left: 20px;
+      padding-right: 20px;
+      > li {
+        max-width: 300px;
+      }
+    }
   }
 `;
 
@@ -43,10 +56,10 @@ export const TextOverlay = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: absolute;
   top: 0;
   height: 100%;
   width: 100%;
+  position: relative;
   background-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.25),

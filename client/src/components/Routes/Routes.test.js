@@ -11,10 +11,10 @@ describe("Routes", () => {
       { path: "/" },
       { path: "/men" },
       { path: "/women" },
-      { path: "/kids" }
+      { path: "/kids" },
     ];
 
-    routePaths.forEach(routePath =>
+    routePaths.forEach((routePath) =>
       expect(wrapper.find(routePath).exists()).toBe(true)
     );
   });
@@ -26,20 +26,14 @@ describe("Routes", () => {
     });
 
     it("redirects to Home at /login", () => {
-      expect(
-        wrapper
-          .find({ path: "/register" })
-          .find({ to: "/" })
-          .exists()
-      ).toBe(true);
+      expect(wrapper.find({ path: "/login" }).find({ to: "/" }).exists()).toBe(
+        true
+      );
     });
 
     it("redirects to Home at /register", () => {
       expect(
-        wrapper
-          .find({ path: "/register" })
-          .find({ to: "/" })
-          .exists()
+        wrapper.find({ path: "/register" }).find({ to: "/" }).exists()
       ).toBe(true);
     });
 
@@ -48,10 +42,7 @@ describe("Routes", () => {
       wrapper = shallow(<Routes {...props} />);
 
       expect(
-        wrapper
-          .find({ path: "/shoes/add" })
-          .find("AddShoes")
-          .exists()
+        wrapper.find({ path: "/shoes/add" }).find("AddShoes").exists()
       ).toBe(true);
     });
 
@@ -60,10 +51,7 @@ describe("Routes", () => {
       wrapper = shallow(<Routes {...props} />);
 
       expect(
-        wrapper
-          .find({ path: "/shoes/add" })
-          .find({ to: "/" })
-          .exists()
+        wrapper.find({ path: "/shoes/add" }).find({ to: "/" }).exists()
       ).toBe(true);
     });
   });
@@ -74,29 +62,20 @@ describe("Routes", () => {
     });
 
     it("redirects to Signup at /register", () => {
-      expect(
-        wrapper
-          .find({ path: "/register" })
-          .find("Signup")
-          .exists()
-      ).toBe(true);
+      expect(wrapper.find({ path: "/register" }).find("Signup").exists()).toBe(
+        true
+      );
     });
 
     it("redirects to Login at /login", () => {
-      expect(
-        wrapper
-          .find({ path: "/login" })
-          .find("Login")
-          .exists()
-      ).toBe(true);
+      expect(wrapper.find({ path: "/login" }).find("Login").exists()).toBe(
+        true
+      );
     });
 
     it("redirects to Home at /shoes/add", () => {
       expect(
-        wrapper
-          .find({ path: "/shoes/add" })
-          .find({ to: "/" })
-          .exists()
+        wrapper.find({ path: "/shoes/add" }).find({ to: "/" }).exists()
       ).toBe(true);
     });
   });
