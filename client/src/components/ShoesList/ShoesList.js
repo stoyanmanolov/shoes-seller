@@ -27,6 +27,7 @@ export class ShoesList extends React.Component {
 
     fetchShoesList(shoesPerPage, currentPage, gender, forKids, currentSort);
   };
+
   componentWillUnmount = () => {
     this.props.clearShoesList();
   };
@@ -78,9 +79,10 @@ export class ShoesList extends React.Component {
             onChange={(e, targeted) => {
               this.setState({ currentSort: targeted.value });
               clearShoesList();
+              const startingPage = 1;
               fetchShoesList(
                 shoesPerPage,
-                shoesList.currentPage,
+                startingPage,
                 gender,
                 forKids,
                 targeted.value

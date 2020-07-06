@@ -55,7 +55,6 @@ export const fetchShoesList = (
         }&forKids=${forKids}&sortOption=${currentSort}`
       )
       .then((response) => {
-        console.log(response.data);
         dispatch({
           type: FETCH_SHOES_LIST,
           payload: { currentPage, ...response.data },
