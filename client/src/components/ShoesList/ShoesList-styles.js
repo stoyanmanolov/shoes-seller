@@ -1,6 +1,14 @@
 import styled from "styled-components";
 
 export const StyledShoesList = styled.div`
+  a {
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+    }
+    text-decoration: none;
+    color: inherit;
+  }
   padding: 10px;
   .dropdown-list {
     width: 100%;

@@ -8,6 +8,7 @@ import Kids from "../../pages/Kids";
 import AddShoes from "../../pages/AddShoes";
 import Signup from "../../pages/Signup";
 import Login from "../../pages/Login";
+import Shoe from "../../pages/Shoe";
 
 export class Routes extends React.Component {
   render() {
@@ -25,6 +26,7 @@ export class Routes extends React.Component {
               <Redirect to="/" />
             )}
           </Route>
+          <Route exact path="/shoe/:id" component={Shoe} />
           <Route exact path="/register">
             {this.props.isLoggedIn ? <Redirect to="/" /> : <Signup />}
           </Route>
@@ -39,5 +41,5 @@ export class Routes extends React.Component {
 
 export default connect(({ auth }) => ({
   isLoggedIn: auth.isLoggedIn,
-  user: auth.user
+  user: auth.user,
 }))(Routes);
