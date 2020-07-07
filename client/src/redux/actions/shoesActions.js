@@ -3,6 +3,8 @@ import {
   FILTER_OPTIONS_NAMES,
   FETCH_SHOES_LIST,
   CLEAR_SHOES_LIST,
+  ADD_FILTER,
+  REMOVE_FILTER,
 } from "./types";
 import axios from "axios";
 
@@ -66,5 +68,19 @@ export const fetchShoesList = (
 export const clearShoesList = () => {
   return {
     type: CLEAR_SHOES_LIST,
+  };
+};
+
+export const addFilter = (title, filter) => {
+  return {
+    type: ADD_FILTER,
+    payload: { title, filter },
+  };
+};
+
+export const removeFilter = (title, filter) => {
+  return {
+    type: REMOVE_FILTER,
+    payload: { title, filter },
   };
 };

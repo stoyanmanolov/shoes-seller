@@ -47,6 +47,7 @@ router.get("/shoes/:gender/:numOfPages?", async (req, res) => {
     const skip = parseInt(req.query.skip);
     const limit = parseInt(req.query.limit);
     const forKids = req.query.forKids || false;
+
     if (req.params.numOfPages) {
       const count = await Shoe.countDocuments(
         req.params.gender
@@ -58,7 +59,7 @@ router.get("/shoes/:gender/:numOfPages?", async (req, res) => {
         //res.status(200).send({ numOfPages: Math.ceil(count / limit) });
       } else return res.status(400).send("Please specify a limit attribute.");
     }
-    req.query.sortOption = JSON.parse(req.query.sortOption);
+
     await Shoe.find(
       req.params.gender
         ? { gender: getGender(req.params.gender), forKids }
@@ -66,7 +67,7 @@ router.get("/shoes/:gender/:numOfPages?", async (req, res) => {
     )
       .skip(skip)
       .limit(limit)
-      .sort(req.query.sortOption)
+      .sort(JSON.parse(req.query.sortOption))
       .exec((err, shoes) => {
         if (err) throw err;
 

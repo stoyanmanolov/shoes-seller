@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import {
   fetchFilterOptions,
   clearFilterOptions,
+  addFilter,
+  removeFilter,
 } from "../../redux/actions/shoesActions";
 import { Checkbox, Button, Loader } from "semantic-ui-react";
 import {
@@ -47,21 +49,40 @@ export class FilterMenu extends React.Component {
     }
     const sectionData = this.props.filterOptions.optionNames[title];
 
+    const renderPriceRange = () => {
+      const getPrice = (price) => {
+        const selectedPrice = { minPrice: price[0], maxPrice: price[1] };
+        this.props.addFilter(title, selectedPrice);
+      };
+
+      return (
+        <PriceRange
+          getPrice={getPrice}
+          clicked={clicked}
+          boundries={sectionData}
+        />
+      );
+    };
+
     return (
       <ul className="info">
-        {title === "price" ? (
-          <PriceRange clicked={clicked} boundries={sectionData} />
-        ) : (
-          sectionData.map((data, index) => {
-            return (
-              <FilterOption clicked={clicked} key={index}>
-                <Checkbox />
-                <p className="title">{data[title]}</p>
-                <p className="count">{"(" + data.count + ")"}</p>
-              </FilterOption>
-            );
-          })
-        )}
+        {title === "price"
+          ? renderPriceRange()
+          : sectionData.map((data, index) => {
+              return (
+                <FilterOption clicked={clicked} key={index}>
+                  <Checkbox
+                    onChange={(e, { checked }) => {
+                      if (checked) this.props.addFilter(title, data[title]);
+                      else if (!checked)
+                        this.props.removeFilter(title, data[title]);
+                    }}
+                  />
+                  <p className="title">{data[title]}</p>
+                  <p className="count">{"(" + data.count + ")"}</p>
+                </FilterOption>
+              );
+            })}
       </ul>
     );
   };
@@ -151,5 +172,5 @@ FilterMenu.defaultProps = {
 
 export default connect(
   ({ shoes }) => ({ filterOptions: shoes.filterOptions }),
-  { fetchFilterOptions, clearFilterOptions }
+  { fetchFilterOptions, clearFilterOptions, addFilter, removeFilter }
 )(FilterMenu);
