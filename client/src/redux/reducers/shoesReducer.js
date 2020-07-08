@@ -1,7 +1,7 @@
 import {
   FILTER_OPTIONS_NAMES,
   FETCH_SHOES_LIST,
-  CLEAR_FILTER_OPTIONS,
+  CLEAR_FILTERS,
   CLEAR_SHOES_LIST,
   ADD_FILTER,
   REMOVE_FILTER,
@@ -39,10 +39,21 @@ const shoesReducer = (state = initialState, { type, payload }) => {
           optionNames: payload,
         },
       };
-    case CLEAR_FILTER_OPTIONS:
+    case CLEAR_FILTERS:
       return {
         ...state,
-        filterOptions: { ...state.filterOptions, optionNames: null },
+        filterOptions: {
+          ...state.filterOptions,
+          optionNames: null,
+          selectedFilters: {
+            brand: [],
+            category: [],
+            color: [],
+            model: [],
+            price: [],
+            sizes: [],
+          },
+        },
       };
     case FETCH_SHOES_LIST:
       return {

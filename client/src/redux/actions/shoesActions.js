@@ -1,5 +1,5 @@
 import {
-  CLEAR_FILTER_OPTIONS,
+  CLEAR_FILTERS,
   FILTER_OPTIONS_NAMES,
   FETCH_SHOES_LIST,
   CLEAR_SHOES_LIST,
@@ -37,9 +37,9 @@ export const fetchFilterOptions = (gender, forKids, items) => {
   };
 };
 
-export const clearFilterOptions = () => {
+export const clearFilters = () => {
   return {
-    type: CLEAR_FILTER_OPTIONS,
+    type: CLEAR_FILTERS,
   };
 };
 
@@ -73,6 +73,7 @@ export const fetchShoesList = (
       return filtersUrl;
     };
     const filtersUrl = filtersToURLWithJSON();
+    console.log(filtersUrl);
 
     await axios
       .get(

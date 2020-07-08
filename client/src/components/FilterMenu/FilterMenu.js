@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import {
   fetchFilterOptions,
-  clearFilterOptions,
+  clearFilters,
   fetchShoesList,
   clearShoesList,
   addFilter,
@@ -65,7 +65,7 @@ export class FilterMenu extends React.Component {
   };
 
   componentWillUnmount = () => {
-    this.props.clearFilterOptions();
+    this.props.clearFilters();
   };
 
   renderFilterOptions = (title, clicked) => {
@@ -205,7 +205,7 @@ export default connect(
   }),
   {
     fetchFilterOptions,
-    clearFilterOptions,
+    clearFilters,
     fetchShoesList,
     clearShoesList,
     addFilter,
