@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import {
   fetchFilterOptions,
   clearFilterOptions,
+  fetchShoesList,
+  clearShoesList,
   addFilter,
   removeFilter,
 } from "../../redux/actions/shoesActions";
@@ -37,6 +39,31 @@ export class FilterMenu extends React.Component {
       this.state.sections
     );
   };
+
+  componentDidUpdate = (prevProps) => {
+    const {
+      filterOptions: { selectedFilters },
+      gender,
+      forKids,
+      shoesList: { shoesPerPage, currentSort },
+      clearShoesList,
+      fetchShoesList,
+    } = this.props;
+
+    if (prevProps.filterOptions.selectedFilters !== selectedFilters) {
+      clearShoesList();
+      const page = 1;
+      fetchShoesList(
+        shoesPerPage,
+        page,
+        gender,
+        forKids,
+        currentSort,
+        selectedFilters
+      );
+    }
+  };
+
   componentWillUnmount = () => {
     this.props.clearFilterOptions();
   };
@@ -73,8 +100,9 @@ export class FilterMenu extends React.Component {
                 <FilterOption clicked={clicked} key={index}>
                   <Checkbox
                     onChange={(e, { checked }) => {
-                      if (checked) this.props.addFilter(title, data[title]);
-                      else if (!checked)
+                      if (checked) {
+                        this.props.addFilter(title, data[title]);
+                      } else if (!checked)
                         this.props.removeFilter(title, data[title]);
                     }}
                   />
@@ -171,10 +199,15 @@ FilterMenu.defaultProps = {
 };
 
 export default connect(
-  ({ shoes }) => ({ filterOptions: shoes.filterOptions }),
+  ({ shoes }) => ({
+    filterOptions: shoes.filterOptions,
+    shoesList: shoes.shoesList,
+  }),
   {
     fetchFilterOptions,
     clearFilterOptions,
+    fetchShoesList,
+    clearShoesList,
     addFilter,
     removeFilter,
   }

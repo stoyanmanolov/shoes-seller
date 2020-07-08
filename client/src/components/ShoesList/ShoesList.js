@@ -7,26 +7,33 @@ import { Pagination } from "@material-ui/lab";
 import {
   fetchShoesList,
   clearShoesList,
+  setCurrentSort,
 } from "../../redux/actions/shoesActions";
 
 export class ShoesList extends React.Component {
   state = {
-    shoesPerPage: 3,
     sortOptions: [
       { key: "most-recent", value: '{ "createdAt": 1 }', text: "Most recent" },
       { key: "low-to-high", value: '{ "price": 1 }', text: "Price: Low-High" },
       { key: "high-to-low", value: '{ "price": -1 }', text: "Price: High-Low" },
     ],
-    currentSort: '{ "createdAt": 1 }',
   };
 
   componentDidMount = () => {
     const currentPage = 1;
-    const { fetchShoesList, gender, forKids, selectedFilters } = this.props;
-    const { shoesPerPage, currentSort } = this.state;
+    const {
+      fetchShoesList,
+      gender,
+      forKids,
+      selectedFilters,
+      shoesList,
+      setCurrentSort,
+    } = this.props;
+    const currentSort = this.state.sortOptions[0].value;
+    setCurrentSort(currentSort);
 
     fetchShoesList(
-      shoesPerPage,
+      shoesList.shoesPerPage,
       currentPage,
       gender,
       forKids,
@@ -65,7 +72,7 @@ export class ShoesList extends React.Component {
   };
 
   render() {
-    const { shoesPerPage, sortOptions, currentSort } = this.state;
+    const { sortOptions } = this.state;
     const {
       shoesList,
       fetchShoesList,
@@ -73,6 +80,7 @@ export class ShoesList extends React.Component {
       gender,
       forKids,
       selectedFilters,
+      setCurrentSort,
     } = this.props;
 
     return (
@@ -85,11 +93,11 @@ export class ShoesList extends React.Component {
             defaultValue={sortOptions[0].value}
             selection
             onChange={(e, targeted) => {
-              this.setState({ currentSort: targeted.value });
+              setCurrentSort(targeted.value);
               clearShoesList();
               const startingPage = 1;
               fetchShoesList(
-                shoesPerPage,
+                shoesList.shoesPerPage,
                 startingPage,
                 gender,
                 forKids,
@@ -114,11 +122,11 @@ export class ShoesList extends React.Component {
               onChange={(e, page) => {
                 clearShoesList();
                 fetchShoesList(
-                  shoesPerPage,
+                  shoesList.shoesPerPage,
                   page,
                   gender,
                   forKids,
-                  currentSort,
+                  shoesList.currentSort,
                   selectedFilters
                 );
               }}
@@ -143,5 +151,6 @@ export default connect(
   {
     fetchShoesList,
     clearShoesList,
+    setCurrentSort,
   }
 )(ShoesList);

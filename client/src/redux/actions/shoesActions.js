@@ -3,6 +3,7 @@ import {
   FILTER_OPTIONS_NAMES,
   FETCH_SHOES_LIST,
   CLEAR_SHOES_LIST,
+  SET_CURRENT_SORT,
   ADD_FILTER,
   REMOVE_FILTER,
 } from "./types";
@@ -85,6 +86,13 @@ export const fetchShoesList = (
           payload: { currentPage, ...response.data },
         });
       });
+  };
+};
+
+export const setCurrentSort = (currentSort) => {
+  return {
+    type: SET_CURRENT_SORT,
+    payload: currentSort,
   };
 };
 

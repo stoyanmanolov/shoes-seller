@@ -5,6 +5,7 @@ import {
   CLEAR_SHOES_LIST,
   ADD_FILTER,
   REMOVE_FILTER,
+  SET_CURRENT_SORT,
 } from "../actions/types";
 
 const initialState = {
@@ -23,6 +24,8 @@ const initialState = {
     shoes: [],
     numOfPages: null,
     currentPage: null,
+    shoesPerPage: 3,
+    currentSort: null,
   },
 };
 
@@ -59,6 +62,14 @@ const shoesReducer = (state = initialState, { type, payload }) => {
           shoes: [],
           numOfPages: null,
           currentPage: null,
+        },
+      };
+    case SET_CURRENT_SORT:
+      return {
+        ...state,
+        shoesList: {
+          ...state.shoesList,
+          currentSort: payload,
         },
       };
     case ADD_FILTER: {

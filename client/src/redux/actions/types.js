@@ -11,3 +11,4 @@ export const CLEAR_FILTER_OPTIONS = "clear_filter_options";
 export const CLEAR_SHOES_LIST = "clear_shoes_list";
 export const ADD_FILTER = "add_filter";
 export const REMOVE_FILTER = "remove_filter";
+export const SET_CURRENT_SORT = "set_current_sort";
