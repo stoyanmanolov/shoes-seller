@@ -47,14 +47,37 @@ export const fetchShoesList = (
   currentPage,
   gender,
   forKids,
-  currentSort
+  currentSort,
+  selectedFilters
 ) => {
   return async (dispatch) => {
+    const filtersToURLWithJSON = () => {
+      let filtersUrl = "&filters={ ";
+      Object.keys(selectedFilters).forEach((filterKey, index) => {
+        if (index === 0) filtersUrl += `"${filterKey}":[`;
+        else filtersUrl += `, "${filterKey}":[`;
+        selectedFilters[filterKey].forEach((filterValue, index) => {
+          if (index === selectedFilters[filterKey].length - 1)
+            filterKey === "sizes" || filterKey === "price"
+              ? (filtersUrl += `${filterValue}`)
+              : (filtersUrl += `"${filterValue}"`);
+          else
+            filterKey === "sizes" || filterKey === "price"
+              ? (filtersUrl += `${filterValue}, `)
+              : (filtersUrl += `"${filterValue}", `);
+        });
+        filtersUrl += "]";
+      });
+      filtersUrl += " }";
+      return filtersUrl;
+    };
+    const filtersUrl = filtersToURLWithJSON();
+
     await axios
       .get(
         `/shoes/${gender}/numOfPages/?limit=${numOfShoes}&skip=${
           (currentPage - 1) * numOfShoes
-        }&forKids=${forKids}&sortOption=${currentSort}`
+        }&forKids=${forKids}&sortOption=${currentSort}${filtersUrl}`
       )
       .then((response) => {
         dispatch({

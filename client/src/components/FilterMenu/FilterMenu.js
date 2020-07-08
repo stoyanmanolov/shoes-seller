@@ -51,7 +51,7 @@ export class FilterMenu extends React.Component {
 
     const renderPriceRange = () => {
       const getPrice = (price) => {
-        const selectedPrice = { minPrice: price[0], maxPrice: price[1] };
+        const selectedPrice = [price[0], price[1]];
         this.props.addFilter(title, selectedPrice);
       };
 
@@ -172,5 +172,10 @@ FilterMenu.defaultProps = {
 
 export default connect(
   ({ shoes }) => ({ filterOptions: shoes.filterOptions }),
-  { fetchFilterOptions, clearFilterOptions, addFilter, removeFilter }
+  {
+    fetchFilterOptions,
+    clearFilterOptions,
+    addFilter,
+    removeFilter,
+  }
 )(FilterMenu);

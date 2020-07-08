@@ -22,10 +22,17 @@ export class ShoesList extends React.Component {
 
   componentDidMount = () => {
     const currentPage = 1;
-    const { fetchShoesList, gender, forKids } = this.props;
+    const { fetchShoesList, gender, forKids, selectedFilters } = this.props;
     const { shoesPerPage, currentSort } = this.state;
 
-    fetchShoesList(shoesPerPage, currentPage, gender, forKids, currentSort);
+    fetchShoesList(
+      shoesPerPage,
+      currentPage,
+      gender,
+      forKids,
+      currentSort,
+      selectedFilters
+    );
   };
 
   componentWillUnmount = () => {
@@ -65,6 +72,7 @@ export class ShoesList extends React.Component {
       clearShoesList,
       gender,
       forKids,
+      selectedFilters,
     } = this.props;
 
     return (
@@ -85,7 +93,8 @@ export class ShoesList extends React.Component {
                 startingPage,
                 gender,
                 forKids,
-                targeted.value
+                targeted.value,
+                selectedFilters
               );
             }}
           />
@@ -109,7 +118,8 @@ export class ShoesList extends React.Component {
                   page,
                   gender,
                   forKids,
-                  currentSort
+                  currentSort,
+                  selectedFilters
                 );
               }}
             />
@@ -125,7 +135,13 @@ ShoesList.defaultProps = {
   forKids: false,
 };
 
-export default connect(({ shoes }) => ({ shoesList: shoes.shoesList }), {
-  fetchShoesList,
-  clearShoesList,
-})(ShoesList);
+export default connect(
+  ({ shoes }) => ({
+    shoesList: shoes.shoesList,
+    selectedFilters: shoes.filterOptions.selectedFilters,
+  }),
+  {
+    fetchShoesList,
+    clearShoesList,
+  }
+)(ShoesList);

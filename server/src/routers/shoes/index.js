@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const Shoe = require("../../models/Shoe");
 const { adminAuth } = require("../../middleware/auth");
-const { findFieldResults, getGender } = require("./helpers");
+const { findFieldResults, getGender, formatFilters } = require("./helpers");
 
 const router = new express.Router();
 
@@ -48,22 +48,23 @@ router.get("/shoes/:gender/:numOfPages?", async (req, res) => {
     const limit = parseInt(req.query.limit);
     const forKids = req.query.forKids || false;
 
+    const filters = formatFilters(JSON.parse(req.query.filters));
+
     if (req.params.numOfPages) {
       const count = await Shoe.countDocuments(
         req.params.gender
-          ? { gender: getGender(req.params.gender), forKids }
-          : { forKids }
+          ? { gender: getGender(req.params.gender), forKids, ...filters }
+          : { forKids, ...filters }
       );
       if (limit) {
         result = { ...result, numOfPages: Math.ceil(count / limit) };
-        //res.status(200).send({ numOfPages: Math.ceil(count / limit) });
       } else return res.status(400).send("Please specify a limit attribute.");
     }
 
     await Shoe.find(
       req.params.gender
-        ? { gender: getGender(req.params.gender), forKids }
-        : { forKids }
+        ? { gender: getGender(req.params.gender), forKids, ...filters }
+        : { forKids, ...filters }
     )
       .skip(skip)
       .limit(limit)

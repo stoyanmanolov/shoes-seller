@@ -15,11 +15,15 @@ const initialState = {
       category: [],
       color: [],
       model: [],
-      price: null,
+      price: [],
       sizes: [],
     },
   },
-  shoesList: { shoes: [], numOfPages: null, currentPage: null },
+  shoesList: {
+    shoes: [],
+    numOfPages: null,
+    currentPage: null,
+  },
 };
 
 const shoesReducer = (state = initialState, { type, payload }) => {
@@ -41,6 +45,7 @@ const shoesReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         shoesList: {
+          ...state.shoesList,
           shoes: payload.shoes,
           numOfPages: payload.numOfPages,
           currentPage: payload.currentPage,
@@ -50,6 +55,7 @@ const shoesReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         shoesList: {
+          ...state.shoesList,
           shoes: [],
           numOfPages: null,
           currentPage: null,
