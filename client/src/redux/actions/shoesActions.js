@@ -134,7 +134,6 @@ export const fetchShoeDetails = (id) => {
         dispatch({ type: FETCH_SHOE_DETAILS, payload: response.data });
       })
       .catch((error) => {
-        console.log(error.response);
         dispatch({ type: SHOE_DETAILS_ERROR, payload: error.response });
       });
   };

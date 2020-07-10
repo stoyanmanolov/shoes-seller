@@ -1,17 +1,21 @@
 import React from "react";
-<<<<<<< HEAD
 import { connect } from "react-redux";
+import { StyledShoeDetails } from "./ShoeDetails-styles";
 import { fetchShoeDetails } from "../../redux/actions/shoesActions";
 import Error from "../Error";
 
 export class ShoeDetails extends React.Component {
-  componentDidMount() {
+  componentDidMount = () => {
     this.props.fetchShoeDetails(this.props.id);
-  }
+  };
+
+  renderShoeDetails = (shoeDetails) => {
+    if (!shoeDetails) return null;
+    return <h3>{shoeDetails.brand + " " + shoeDetails.model}</h3>;
+  };
 
   render() {
     const { shoeDetails, shoeDetailsError } = this.props;
-    console.log(shoeDetails);
 
     if (shoeDetailsError)
       return (
@@ -20,7 +24,11 @@ export class ShoeDetails extends React.Component {
           message={shoeDetailsError.statusText}
         ></Error>
       );
-    return <div id="shoe-details">ShoeDetails</div>;
+    return (
+      <StyledShoeDetails id="shoe-details">
+        {this.renderShoeDetails(shoeDetails)}
+      </StyledShoeDetails>
+    );
   }
 }
 
@@ -33,15 +41,3 @@ export default connect(
     fetchShoeDetails,
   }
 )(ShoeDetails);
-=======
-
-export class ShoeDetails extends React.Component {
-  componentDidMount() {}
-
-  render() {
-    return <div>ShoeDetails</div>;
-  }
-}
-
-export default ShoeDetails;
->>>>>>> bb1ae4e9fb6a10a72499510eafec2fd7c7279045
