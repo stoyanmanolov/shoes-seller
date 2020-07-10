@@ -72,7 +72,9 @@ router.get("/shoes/:gender/:numOfPages?", async (req, res) => {
       .exec((err, shoes) => {
         if (err) throw err;
         if (shoes.length === 0) {
-          return res.status(404).send("No shoes were found.");
+          return res
+            .status(404)
+            .send("No shoes matching your criteria were found.");
         }
         result = { ...result, shoes };
         res.status(200).send(result);

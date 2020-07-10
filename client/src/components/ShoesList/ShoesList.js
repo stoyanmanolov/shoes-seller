@@ -109,11 +109,10 @@ export class ShoesList extends React.Component {
           />
         </form>
         {shoesListError ? (
-          <Message negative compact>
+          <Message id="error" negative compact>
             {shoesListError.data}
           </Message>
-        ) : null}
-        {shoesList.shoes.length === 0 && !shoesListError ? (
+        ) : shoesList.shoes.length === 0 && !shoesListError ? (
           <div id="loader-container" className="loader-container">
             <Loader active inline />
           </div>

@@ -8,6 +8,7 @@ describe("FilterMenu", () => {
   let props = {
     fetchFilterOptions,
     filterOptions: { optionNames: null, selectedOptions: null },
+    shoesList: { shoesPerPage: 3 },
   };
   let wrapper = shallow(<FilterMenu {...props} />);
 
@@ -59,11 +60,11 @@ describe("FilterMenu", () => {
   });
 
   it("calls the clearing function when the component unmounts", () => {
-    const clearFilterOptions = jest.fn();
-    props = { ...props, clearFilterOptions };
+    const clearFilters = jest.fn();
+    props = { ...props, clearFilters };
     wrapper = shallow(<FilterMenu {...props} />);
 
     wrapper.unmount();
-    expect(clearFilterOptions).toBeCalledTimes(1);
+    expect(clearFilters).toBeCalledTimes(1);
   });
 });

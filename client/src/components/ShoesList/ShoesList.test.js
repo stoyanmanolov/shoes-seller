@@ -7,16 +7,28 @@ describe("ShoesList", () => {
 
   it("renders correctly", () => {
     const fetchShoesList = jest.fn();
-    props = { fetchShoesList, shoesList: { shoes: [] } };
+    const setCurrentSort = jest.fn();
+
+    props = {
+      setCurrentSort,
+      fetchShoesList,
+      shoesList: { shoes: [] },
+    };
     wrapper = shallow(<ShoesList {...props} />);
     expect(wrapper.find({ id: "shoes-list" }).exists()).toBe(true);
   });
 
   describe("When there are no shoes", () => {
     const fetchShoesList = jest.fn();
+    const setCurrentSort = jest.fn();
 
     beforeAll(() => {
-      props = { fetchShoesList, shoesList: { shoes: [] } };
+      props = {
+        setCurrentSort,
+        fetchShoesList,
+        shoesList: { shoes: [] },
+        shoesListError: null,
+      };
       wrapper = shallow(<ShoesList {...props} />);
     });
 
@@ -24,19 +36,27 @@ describe("ShoesList", () => {
       expect(fetchShoesList).toBeCalledTimes(1);
     });
 
-    it("renders a loader when there are no shoes", () => {
+    it("renders a loader when there are no shoes and no errors", () => {
       expect(wrapper.find({ id: "loader-container" }).exists()).toBe(true);
+    });
+
+    it("renders an error message if there is an error", () => {
+      props = { ...props, shoesListError: { data: "error" } };
+      wrapper = shallow(<ShoesList {...props} />);
+      expect(wrapper.find({ id: "error" }).exists()).toBe(true);
     });
   });
 
   describe("When there are shoes", () => {
     const fetchShoesList = jest.fn();
     const clearShoesList = jest.fn();
+    const setCurrentSort = jest.fn();
 
     beforeAll(() => {
       props = {
         fetchShoesList,
         clearShoesList,
+        setCurrentSort,
         shoesList: {
           shoes: [{ brand: "Some Brand" }, { brand: "Other Brand" }],
         },
