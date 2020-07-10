@@ -58,7 +58,7 @@ describe("ShoesList", () => {
       expect(fetchShoesList).toBeCalledTimes(3);
     });
 
-    it("shows a card for each shoes", () => {
+    it("shows a card for each shoe", () => {
       props.shoesList.shoes.forEach((shoe) => {
         expect(
           wrapper.find({ id: "list" }).find({ id: shoe.brand }).exists()

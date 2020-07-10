@@ -6,6 +6,8 @@ import {
   SET_CURRENT_SORT,
   ADD_FILTER,
   REMOVE_FILTER,
+  SHOES_LIST_ERROR,
+  CLEAR_SHOES_LIST_ERROR,
 } from "./types";
 import axios from "axios";
 
@@ -73,7 +75,6 @@ export const fetchShoesList = (
       return filtersUrl;
     };
     const filtersUrl = filtersToURLWithJSON();
-    console.log(filtersUrl);
 
     await axios
       .get(
@@ -82,10 +83,14 @@ export const fetchShoesList = (
         }&forKids=${forKids}&sortOption=${currentSort}${filtersUrl}`
       )
       .then((response) => {
+        dispatch({ type: CLEAR_SHOES_LIST_ERROR });
         dispatch({
           type: FETCH_SHOES_LIST,
           payload: { currentPage, ...response.data },
         });
+      })
+      .catch((error) => {
+        dispatch({ type: SHOES_LIST_ERROR, payload: error.response });
       });
   };
 };

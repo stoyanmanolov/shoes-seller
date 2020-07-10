@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { StyledShoesList, List } from "./ShoesList-styles";
-import { Dropdown, Loader } from "semantic-ui-react";
+import { Dropdown, Loader, Message } from "semantic-ui-react";
 import { Card, CardImg, CardBody, CardTitle, CardSubtitle } from "reactstrap";
 import { Pagination } from "@material-ui/lab";
 import {
@@ -81,6 +81,7 @@ export class ShoesList extends React.Component {
       forKids,
       selectedFilters,
       setCurrentSort,
+      shoesListError,
     } = this.props;
 
     return (
@@ -92,8 +93,8 @@ export class ShoesList extends React.Component {
             options={sortOptions}
             defaultValue={sortOptions[0].value}
             selection
-            onChange={(e, targeted) => {
-              setCurrentSort(targeted.value);
+            onChange={(e, selected) => {
+              setCurrentSort(selected.value);
               clearShoesList();
               const startingPage = 1;
               fetchShoesList(
@@ -101,13 +102,18 @@ export class ShoesList extends React.Component {
                 startingPage,
                 gender,
                 forKids,
-                targeted.value,
+                selected.value,
                 selectedFilters
               );
             }}
           />
         </form>
-        {this.props.shoesList.shoes.length === 0 ? (
+        {shoesListError ? (
+          <Message negative compact>
+            {shoesListError.data}
+          </Message>
+        ) : null}
+        {shoesList.shoes.length === 0 && !shoesListError ? (
           <div id="loader-container" className="loader-container">
             <Loader active inline />
           </div>
@@ -144,9 +150,10 @@ ShoesList.defaultProps = {
 };
 
 export default connect(
-  ({ shoes }) => ({
+  ({ shoes, errors }) => ({
     shoesList: shoes.shoesList,
     selectedFilters: shoes.filterOptions.selectedFilters,
+    shoesListError: errors.shoes.shoesList,
   }),
   {
     fetchShoesList,

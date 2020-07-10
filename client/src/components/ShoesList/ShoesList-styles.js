@@ -13,6 +13,7 @@ export const StyledShoesList = styled.div`
   }
   @media (min-width: 768px) {
     margin-left: 20px;
+    margin-right: 20px;
     padding: 10px 0 10px 10px;
     .dropdown-list {
       width: initial;
@@ -33,10 +34,6 @@ export const List = styled.div`
   }
   @media (min-width: 576px) {
     grid-template-columns: 1fr 1fr;
-  }
-
-  @media (min-width: 768px) {
-    margin-right: 20px;
   }
   @media (min-width: 1200px) {
     grid-template-columns: 1fr 1fr 1fr;
