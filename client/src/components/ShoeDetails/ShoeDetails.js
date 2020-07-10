@@ -1,4 +1,5 @@
 import React from "react";
+<<<<<<< HEAD
 import { connect } from "react-redux";
 import { fetchShoeDetails } from "../../redux/actions/shoesActions";
 import Error from "../Error";
@@ -32,3 +33,15 @@ export default connect(
     fetchShoeDetails,
   }
 )(ShoeDetails);
+=======
+
+export class ShoeDetails extends React.Component {
+  componentDidMount() {}
+
+  render() {
+    return <div>ShoeDetails</div>;
+  }
+}
+
+export default ShoeDetails;
+>>>>>>> bb1ae4e9fb6a10a72499510eafec2fd7c7279045
