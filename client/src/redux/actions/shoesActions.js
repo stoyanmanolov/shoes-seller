@@ -8,6 +8,9 @@ import {
   REMOVE_FILTER,
   SHOES_LIST_ERROR,
   CLEAR_SHOES_LIST_ERROR,
+  FETCH_SHOE_DETAILS,
+  SHOE_DETAILS_ERROR,
+  CLEAR_SHOE_DETAILS_ERROR,
 } from "./types";
 import axios from "axios";
 
@@ -78,7 +81,7 @@ export const fetchShoesList = (
 
     await axios
       .get(
-        `/shoes/${gender}/numOfPages/?limit=${numOfShoes}&skip=${
+        `/shoes/all/${gender}/numOfPages/?limit=${numOfShoes}&skip=${
           (currentPage - 1) * numOfShoes
         }&forKids=${forKids}&sortOption=${currentSort}${filtersUrl}`
       )
@@ -86,7 +89,7 @@ export const fetchShoesList = (
         dispatch({ type: CLEAR_SHOES_LIST_ERROR });
         dispatch({
           type: FETCH_SHOES_LIST,
-          payload: { currentPage, ...response.data },
+          payload: { ...response.data, currentPage },
         });
       })
       .catch((error) => {
@@ -119,5 +122,20 @@ export const removeFilter = (title, filter) => {
   return {
     type: REMOVE_FILTER,
     payload: { title, filter },
+  };
+};
+
+export const fetchShoeDetails = (id) => {
+  return async (dispatch) => {
+    axios
+      .get("/shoes/shoe/" + id)
+      .then((response) => {
+        dispatch({ type: CLEAR_SHOE_DETAILS_ERROR });
+        dispatch({ type: FETCH_SHOE_DETAILS, payload: response.data });
+      })
+      .catch((error) => {
+        console.log(error.response);
+        dispatch({ type: SHOE_DETAILS_ERROR, payload: error.response });
+      });
   };
 };

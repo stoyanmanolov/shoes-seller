@@ -4,6 +4,8 @@ import {
   REGISTER_AUTH_ERROR,
   SHOES_LIST_ERROR,
   CLEAR_SHOES_LIST_ERROR,
+  SHOE_DETAILS_ERROR,
+  CLEAR_SHOE_DETAILS_ERROR,
 } from "../actions/types";
 
 const initialState = {
@@ -13,6 +15,7 @@ const initialState = {
   },
   shoes: {
     shoesList: null,
+    shoeDetails: null,
   },
 };
 
@@ -40,6 +43,23 @@ const errorsReducer = (state = initialState, action) => {
           shoesList: null,
         },
       };
+    case SHOE_DETAILS_ERROR:
+      return {
+        ...state,
+        shoes: {
+          ...state.shoes,
+          shoeDetails: action.payload,
+        },
+      };
+    case CLEAR_SHOE_DETAILS_ERROR:
+      return {
+        ...state,
+        shoes: {
+          ...state.shoes,
+          shoeDetails: null,
+        },
+      };
+
     default:
       return state;
   }

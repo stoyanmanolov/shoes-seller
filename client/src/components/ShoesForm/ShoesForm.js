@@ -12,10 +12,10 @@ export class ShoesForm extends React.Component {
   state = {
     shoeData: {},
     errors: {},
-    submissionError: null
+    submissionError: null,
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
 
     if (this.state.submissionError) {
@@ -42,11 +42,11 @@ export class ShoesForm extends React.Component {
       sizes: formData
         .get("sizes")
         .split(", ")
-        .map(size => size.trim()),
+        .map((size) => size.trim()),
       frontImage: firstImage,
       images: restOfImages,
       gender: formData.get("gender"),
-      forKids: formData.get("forKids")
+      forKids: formData.get("forKids"),
     };
 
     const errors = validateForm(shoeData);
@@ -54,7 +54,7 @@ export class ShoesForm extends React.Component {
 
     if (_.isEmpty(errors)) {
       const submitData = new FormData();
-      Object.keys(shoeData).forEach(key => {
+      Object.keys(shoeData).forEach((key) => {
         if (key === "images") {
           shoeData[key].forEach((image, index) => {
             submitData.append("images" + index, image);
@@ -65,13 +65,13 @@ export class ShoesForm extends React.Component {
       axios
         .post("/shoes", submitData, {
           headers: {
-            "X-Auth-Token": this.props.token
-          }
+            "X-Auth-Token": this.props.token,
+          },
         })
-        .then(response => {
+        .then((response) => {
           this.setState({ shoeData: response });
         })
-        .catch(submissionError => this.setState({ submissionError }));
+        .catch((submissionError) => this.setState({ submissionError }));
     }
   };
 
@@ -80,26 +80,26 @@ export class ShoesForm extends React.Component {
       {
         name: "brand",
         label: "Brand name:",
-        items: <input name="brand" type="text" placeholder="Brand name" />
+        items: <input name="brand" type="text" placeholder="Brand name" />,
       },
       {
         name: "model",
         label: "Model name:",
-        items: <input name="model" type="text" placeholder="Model name" />
+        items: <input name="model" type="text" placeholder="Model name" />,
       },
       {
         name: "category",
         label: "Category:",
-        items: <input name="category" type="text" placeholder="Category" />
+        items: <input name="category" type="text" placeholder="Category" />,
       },
       {
         name: "price",
         label: "Price:",
-        items: <input name="price" type="text" placeholder="Price" />
+        items: <input name="price" type="text" placeholder="Price" />,
       },
       {
         name: "description",
-        label: "Description",
+        label: "Description:",
         items: (
           <textarea
             name="description"
@@ -107,7 +107,7 @@ export class ShoesForm extends React.Component {
             rows="4"
             cols="50"
           ></textarea>
-        )
+        ),
       },
       {
         name: "color",
@@ -118,22 +118,22 @@ export class ShoesForm extends React.Component {
             type="text"
             placeholder="e.g. Black, White, Grey"
           />
-        )
+        ),
       },
       {
         name: "amount",
         label: "Amount of shoes:",
-        items: <input name="amount" type="number" placeholder="Amount" />
+        items: <input name="amount" type="number" placeholder="Amount" />,
       },
       {
         name: "sizes",
         label: "Sizes:",
-        items: <input name="sizes" type="text" placeholder="e.g. 42, 41, 45" />
+        items: <input name="sizes" type="text" placeholder="e.g. 42, 41, 45" />,
       },
       {
         name: "images",
         label: "Images: (The first will be chosen as a front image)",
-        items: <FileUploads />
+        items: <FileUploads />,
       },
       {
         name: "gender",
@@ -147,7 +147,7 @@ export class ShoesForm extends React.Component {
             <input name="gender" type="radio" value="Both" />
             <p>Both</p>
           </>
-        )
+        ),
       },
       {
         name: "forKids",
@@ -159,8 +159,8 @@ export class ShoesForm extends React.Component {
             <input name="forKids" type="radio" value="false" />
             <p>No</p>
           </>
-        )
-      }
+        ),
+      },
     ];
 
     return fields.map((field, index) => {
@@ -169,7 +169,7 @@ export class ShoesForm extends React.Component {
       let error = [];
 
       if (!_.isEmpty(errors)) {
-        error = Object.keys(errors).filter(err => {
+        error = Object.keys(errors).filter((err) => {
           return err === name;
         });
       }
@@ -196,7 +196,7 @@ export class ShoesForm extends React.Component {
           <>
             <Message positive size="big" header={"Shoe added succesfully!"} />
             <Link
-              onClick={e => this.setState({ shoeData: {} })}
+              onClick={(e) => this.setState({ shoeData: {} })}
               to="/shoes/add"
             >
               Go back.
@@ -207,7 +207,7 @@ export class ShoesForm extends React.Component {
             <h3>ADD SHOES TO THE DATABASE</h3>
             <Form
               type="POST"
-              onSubmit={e => this.handleSubmit(e)}
+              onSubmit={(e) => this.handleSubmit(e)}
               encType="multipart/form-data"
             >
               {this.renderFormFields()}

@@ -41,7 +41,7 @@ router.post("/shoes", adminAuth, upload.any(), async (req, res) => {
   }
 });
 
-router.get("/shoes/:gender/:numOfPages?", async (req, res) => {
+router.get("/shoes/all/:gender/:numOfPages?", async (req, res) => {
   try {
     let result = {};
     const skip = parseInt(req.query.skip);
@@ -136,19 +136,17 @@ router.get("/shoes/fields/:gender/price/boundries", async (req, res) => {
 router.get("/shoes/shoe/:id", async (req, res) => {
   try {
     const _id = req.params.id;
-    const shoe = await Shoe.findOne({ _id });
 
+    const shoe = await Shoe.findById(_id);
     if (!shoe) {
       res.sendStatus(404);
-    } else {
-      res.status(200).send(shoe);
-    }
+    } else res.status(200).send(shoe);
   } catch (e) {
     res.status(400).send(e);
   }
 });
 
-router.patch("/shoes/:id", adminAuth, async (req, res) => {
+router.patch("/shoes/shoe/:id", adminAuth, async (req, res) => {
   try {
     const _id = req.params.id;
     const updates = Object.keys(req.body);

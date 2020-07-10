@@ -6,6 +6,7 @@ import {
   ADD_FILTER,
   REMOVE_FILTER,
   SET_CURRENT_SORT,
+  FETCH_SHOE_DETAILS,
 } from "../actions/types";
 
 const initialState = {
@@ -27,6 +28,7 @@ const initialState = {
     shoesPerPage: 3,
     currentSort: null,
   },
+  shoeDetails: null,
 };
 
 const shoesReducer = (state = initialState, { type, payload }) => {
@@ -126,6 +128,13 @@ const shoesReducer = (state = initialState, { type, payload }) => {
             ],
           },
         },
+      };
+    }
+
+    case FETCH_SHOE_DETAILS: {
+      return {
+        ...state,
+        shoeDetails: payload,
       };
     }
     default:
