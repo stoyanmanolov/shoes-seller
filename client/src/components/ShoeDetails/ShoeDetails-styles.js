@@ -4,20 +4,25 @@ export const StyledShoeDetails = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px;
-  h2 {
+  .shoe-name {
+    font-weight: 700;
     margin: 0;
+  }
+  .price {
+    font-size: 20px;
+    margin-bottom: 10px;
   }
 `;
 
 export const Images = styled.div`
-  .front-image {
+  .selected-image {
     max-width: 100%;
     align-self: center;
   }
   .other-images {
     overflow-x: scroll;
     width: 100%;
-    padding: 10px 0;
+    padding: 10px 0 0 0;
     display: flex;
     > img {
       height: 100px;
@@ -35,4 +40,12 @@ export const Images = styled.div`
   .other-images::-webkit-scrollbar {
     display: none;
   }
+`;
+
+export const Sizes = styled.div`
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: ${({ length }) =>
+    length < 4 ? `repeat(${length}, 1fr);` : `repeat(${4}, 1fr);`}
+  align-self: center;
 `;
