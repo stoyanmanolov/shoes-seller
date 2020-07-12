@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const StyledShoeDetails = styled.div`
   display: flex;
@@ -45,7 +45,13 @@ export const Images = styled.div`
 export const Sizes = styled.div`
   margin: 20px 0;
   display: grid;
-  grid-template-columns: ${({ length }) =>
-    length < 4 ? `repeat(${length}, 1fr);` : `repeat(${4}, 1fr);`}
+  ${({ length }) =>
+    length < 4
+      ? css`
+          grid-template-columns: repeat(${length}, 1fr);
+        `
+      : css`
+          grid-template-columns: repeat(${4}, 1fr);
+        `}
   align-self: center;
 `;
