@@ -9,6 +9,9 @@ export const DrawerToggler = styled.button`
   border: 0;
   background: none;
   margin-left: 20px;
+  :focus {
+    outline: none;
+  }
   @media (min-width: 992px) {
     display: none;
   }

@@ -39,11 +39,14 @@ export const GroupedButtons = styled.div`
     display: inherit;
     border: 0;
     background: none;
+    outline: none;
   }
   .search {
+    outline: none;
     margin-right: 10px;
   }
   .cart {
+    outline: none;
     margin-left: 10px;
   }
 `;

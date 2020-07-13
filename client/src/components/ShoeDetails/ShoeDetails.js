@@ -1,6 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { StyledShoeDetails, Images, Sizes } from "./ShoeDetails-styles";
+import {
+  StyledShoeDetails,
+  Images,
+  Sizes,
+  CartButton,
+  Text,
+  InputPanel,
+} from "./ShoeDetails-styles";
 import { fetchShoeDetails } from "../../redux/actions/shoesActions";
 import Error from "../Error";
 import { Button } from "semantic-ui-react";
@@ -16,8 +23,10 @@ export class ShoeDetails extends React.Component {
   };
 
   componentDidUpdate = () => {
-    if (!this.state.selectedImage && this.props.shoeDetails) {
-      this.setState({ selectedImage: this.props.shoeDetails.frontImage });
+    const { shoeDetails } = this.props;
+
+    if (!this.state.selectedImage && shoeDetails) {
+      this.setState({ selectedImage: shoeDetails.frontImage });
     }
   };
 
@@ -27,7 +36,7 @@ export class ShoeDetails extends React.Component {
     if (!images.includes(frontImage)) images.splice(0, 0, frontImage);
 
     return (
-      <Images id="images">
+      <Images id="images" className="images">
         <img
           className="selected-image"
           src={`/images/${this.state.selectedImage}`}
@@ -54,22 +63,25 @@ export class ShoeDetails extends React.Component {
     if (!sizes) return null;
 
     return (
-      <Sizes id="sizes" length={sizes.length}>
-        {sizes.map((size) => {
-          return (
-            <Button
-              active={size === this.state.selectedSize ? true : false}
-              onClick={(e, selected) =>
-                this.setState({ selectedSize: selected.value })
-              }
-              basic
-              value={size}
-              key={size}
-            >
-              {size}
-            </Button>
-          );
-        })}
+      <Sizes length={sizes.length}>
+        <p className="size-text">Select size:</p>
+        <div className="sizes-grid" id="sizes">
+          {sizes.map((size) => {
+            return (
+              <Button
+                active={size === this.state.selectedSize ? true : false}
+                onClick={(e, selected) =>
+                  this.setState({ selectedSize: selected.value })
+                }
+                basic
+                value={size}
+                key={size}
+              >
+                {size}
+              </Button>
+            );
+          })}
+        </div>
       </Sizes>
     );
   };
@@ -77,7 +89,6 @@ export class ShoeDetails extends React.Component {
   renderShoeDetails = (shoeDetails) => {
     if (!shoeDetails) return null;
 
-    console.log(shoeDetails);
     const {
       brand,
       model,
@@ -87,16 +98,39 @@ export class ShoeDetails extends React.Component {
       price,
       images,
       sizes,
+      color,
+      gender,
     } = shoeDetails;
 
     return (
       <StyledShoeDetails id="shoe-details">
-        <span className="category">{category}</span>
-        <h2 className="shoe-name">{brand + " " + model}</h2>
-        <span className="price">{"$" + price}</span>
+        <div id="top-panel" className="top-panel">
+          <span className="category">{category}</span>
+          <h2 className="shoe-name">{brand + " " + model}</h2>
+          <span className="price">{"$" + price}</span>
+        </div>
         {this.renderImages(frontImage, images)}
-        {this.renderSizes(sizes)}
-        <p className="description">{description}</p>
+        <div id="bottom-panel" className="bottom-panel">
+          <InputPanel>
+            {this.renderSizes(sizes)}
+            <CartButton disabled={this.state.selectedSize ? false : true}>
+              {this.state.selectedSize
+                ? "Add to Cart"
+                : "Select a size to continue"}
+            </CartButton>
+          </InputPanel>
+          <Text>
+            <p className="gender">
+              <b>Gender:</b> {gender}
+            </p>
+            <p className="color">
+              <b>Color:</b> {color}
+            </p>
+            <p className="description">
+              <b>Description:</b> {description}
+            </p>
+          </Text>
+        </div>
       </StyledShoeDetails>
     );
   };
