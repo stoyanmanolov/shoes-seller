@@ -1,41 +1,45 @@
 import React, { useState } from "react";
-import MainImage from "./images/MainImage.jpg";
+import KidsImage from "./images/KidsImage.jpg";
 import MenImage from "./images/MenImage.jpg";
 import WomenImage from "./images/WomenImage.jpg";
 import {
   Carousel,
   CarouselItem,
   CarouselIndicators,
-  CarouselCaption
+  CarouselCaption,
 } from "reactstrap";
 import { Button } from "semantic-ui-react";
-import { StyledCarousel, TextOverlay } from "./Carousel-styles";
+import { StyledCarousel, TextOverlay } from "./HeaderCarousel-styles";
+import { Link } from "react-router-dom";
 
 const items = [
-  {
-    src: MainImage,
-    altText: "Main",
-    caption: "",
-    header: "Featured Collection",
-    buttonText: "SHOP"
-  },
   {
     src: MenImage,
     altText: "Men",
     caption: "",
-    header: "Men's Featured",
-    buttonText: "SHOP MEN'S"
+    header: "Men's Latest",
+    buttonText: "SHOP MEN'S",
+    route: "/men",
   },
   {
     src: WomenImage,
     altText: "Women",
     caption: "",
-    header: "Women's Featured",
-    buttonText: "SHOP WOMEN'S"
-  }
+    header: "Women's Latest",
+    buttonText: "SHOP WOMEN'S",
+    route: "/women",
+  },
+  {
+    src: KidsImage,
+    altText: "Kids",
+    caption: "",
+    header: "Kids' Latest",
+    buttonText: "SHOP KIDS'",
+    route: "/kids",
+  },
 ];
 
-const HeaderCarousel = props => {
+const HeaderCarousel = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [animating, setAnimating] = useState(false);
 
@@ -51,22 +55,25 @@ const HeaderCarousel = props => {
     setActiveIndex(nextIndex);
   };
 
-  const goToIndex = newIndex => {
+  const goToIndex = (newIndex) => {
     if (animating) return;
     setActiveIndex(newIndex);
   };
 
-  const slides = items.map(item => {
+  const slides = items.map((item) => {
     return (
       <CarouselItem
+        id={item.altText}
         onExiting={() => setAnimating(true)}
         onExited={() => setAnimating(false)}
-        key={item.src}
+        key={item.altText}
       >
         <img src={item.src} alt={item.altText} />
         <TextOverlay>
           <h1>{item.header}</h1>
-          <Button id="header-button">{item.buttonText}</Button>
+          <Link to={item.route}>
+            <Button id={item.route}>{item.buttonText}</Button>
+          </Link>
         </TextOverlay>
         <CarouselCaption
           captionText={item.caption}
