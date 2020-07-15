@@ -4,53 +4,53 @@ const shoeSchema = new mongoose.Schema(
   {
     brand: {
       type: String,
-      required: true
+      required: true,
     },
     model: {
       type: String,
-      required: true
+      required: true,
     },
     category: {
       type: String,
-      required: true
+      required: true,
     },
     price: {
       type: Number,
-      required: true
+      required: true,
     },
     description: {
       type: String,
-      required: true
+      required: true,
     },
     color: {
       type: String,
-      required: true
-    },
-    amount: {
-      type: Number,
-      default: 1
+      required: true,
     },
     sizes: {
       type: Array,
-      required: true
+      required: true,
+    },
+    amountPerSize: {
+      type: Object,
+      required: true,
     },
     gender: {
       type: String,
       required: true,
-      enum: ["Male", "Female", "Both"]
+      enum: ["Male", "Female", "Both"],
     },
     forKids: {
       type: Boolean,
-      default: false
+      default: false,
     },
     frontImage: {
       type: String,
-      required: true
+      required: true,
     },
     images: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   { timestamps: true }
 );

@@ -81,7 +81,7 @@ export const fetchShoesList = (
 
     await axios
       .get(
-        `/shoes/all/${gender}/numOfPages/?limit=${numOfShoes}&skip=${
+        `/shoes/all/${gender}/?numOfPages=true&limit=${numOfShoes}&skip=${
           (currentPage - 1) * numOfShoes
         }&forKids=${forKids}&sortOption=${currentSort}${filtersUrl}`
       )

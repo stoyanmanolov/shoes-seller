@@ -1,5 +1,6 @@
 const express = require("express");
 const multer = require("multer");
+const fs = require("fs");
 const Shoe = require("../../models/Shoe");
 const { adminAuth } = require("../../middleware/auth");
 const { findFieldResults, getGender, formatFilters } = require("./helpers");
@@ -24,33 +25,47 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 router.post("/shoes", adminAuth, upload.any(), async (req, res) => {
+  //In case of an error - delete the uploaded images.
+  let deleteIfError = [];
   try {
     req.body.sizes = req.body.sizes.split(",").map((size) => parseInt(size));
+    req.body.amountPerSize = JSON.parse(req.body.amountPerSize);
 
     req.body.images = [];
     req.files.forEach((file) => {
       if (file.fieldname === "frontImage") {
         req.body.frontImage = file.filename;
       } else req.body.images.push(file.filename);
+      deleteIfError.push(file.filename);
     });
     const shoe = new Shoe(req.body);
     await shoe.save();
+
     res.status(201).send(shoe);
   } catch (e) {
+    if (deleteIfError.length > 0) {
+      deleteIfError.forEach((image) => {
+        fs.unlink("src/images/" + image, (err) => {});
+      });
+    }
     res.status(400).send(e);
   }
 });
 
-router.get("/shoes/all/:gender/:numOfPages?", async (req, res) => {
+router.get("/shoes/all/:gender", async (req, res) => {
   try {
     let result = {};
+
     const skip = parseInt(req.query.skip);
     const limit = parseInt(req.query.limit);
     const forKids = req.query.forKids || false;
 
-    const filters = formatFilters(JSON.parse(req.query.filters));
+    let filters;
+    req.query.filters
+      ? (filters = formatFilters(JSON.parse(req.query.filters)))
+      : (filters = {});
 
-    if (req.params.numOfPages) {
+    if (req.query.numOfPages) {
       const count = await Shoe.countDocuments(
         req.params.gender
           ? { gender: getGender(req.params.gender), forKids, ...filters }
@@ -60,7 +75,6 @@ router.get("/shoes/all/:gender/:numOfPages?", async (req, res) => {
         result = { ...result, numOfPages: Math.ceil(count / limit) };
       } else return res.status(400).send("Please specify a limit attribute.");
     }
-
     await Shoe.find(
       req.params.gender
         ? { gender: getGender(req.params.gender), forKids, ...filters }
@@ -68,7 +82,7 @@ router.get("/shoes/all/:gender/:numOfPages?", async (req, res) => {
     )
       .skip(skip)
       .limit(limit)
-      .sort(JSON.parse(req.query.sortOption))
+      .sort(req.query.sortOption ? JSON.parse(req.query.sortOption) : {})
       .exec((err, shoes) => {
         if (err) throw err;
         if (shoes.length === 0) {

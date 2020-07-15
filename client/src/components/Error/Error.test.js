@@ -4,7 +4,7 @@ import Error from "./Error";
 
 describe("Error", () => {
   let wrapper, props;
-  props = { ...props, errorMessage: { status: "404", message: "Not found." } };
+  props = { ...props, status: "404", message: "Not found." };
   wrapper = shallow(<Error {...props} />);
 
   it("renders correctly", () => {

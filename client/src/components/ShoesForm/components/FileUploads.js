@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Input } from "semantic-ui-react";
+import { Button, Input, Label } from "semantic-ui-react";
 
 class FileUploads extends React.Component {
   state = {
@@ -9,11 +9,11 @@ class FileUploads extends React.Component {
         id: "images",
         name: "images",
         accept: ".jpg, .jpeg, .png",
-        multiple: false
-      }
+        multiple: false,
+      },
     ],
     firstInputChanged: false,
-    maximumFiles: 5
+    maximumFiles: 5,
   };
 
   handleClick = () => {
@@ -25,9 +25,9 @@ class FileUploads extends React.Component {
           id: "images",
           name: "images",
           accept: ".jpg, .jpeg, .png",
-          multiple: true
-        }
-      ]
+          multiple: true,
+        },
+      ],
     });
   };
 
@@ -52,18 +52,32 @@ class FileUploads extends React.Component {
         {inputs.map((props, index) => {
           if (index === 0)
             return (
-              <Input
-                onChange={e => this.setState({ firstInputChanged: true })}
-                name="images"
-                key={index}
-                {...props}
-              />
+              <React.Fragment key={index}>
+                <Label>Front image:</Label>
+                <Input
+                  onChange={(e) => this.setState({ firstInputChanged: true })}
+                  key={index}
+                  {...props}
+                />
+              </React.Fragment>
             );
-          else return <Input name="images" key={index} {...props} />;
+          else if (index === 1)
+            return (
+              <React.Fragment key={index}>
+                <Label>Other:</Label>
+                <Input key={index} {...props} />
+              </React.Fragment>
+            );
+          else
+            return (
+              <React.Fragment key={index}>
+                <Input key={index} {...props} />
+              </React.Fragment>
+            );
         })}
         <Button
           type="button"
-          onClick={e => this.handleClick()}
+          onClick={(e) => this.handleClick()}
           disabled={this.isDisabled()}
         >
           Add more

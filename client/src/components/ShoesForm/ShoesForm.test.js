@@ -1,12 +1,13 @@
 import React from "react";
 import { shallow } from "enzyme";
 import { ShoesForm } from "./ShoesForm";
+import { isUndefined } from "lodash";
 
 describe("ShoesForm", () => {
   let wrapper = shallow(<ShoesForm />);
 
   describe("Submitting the form", () => {
-    const submitValues = inputValues => {
+    const submitValues = (inputValues) => {
       let outputValues = {
         brand: "",
         model: "",
@@ -14,23 +15,24 @@ describe("ShoesForm", () => {
         price: "",
         description: "",
         color: "",
-        amount: "",
-        sizes: "",
+        amounts: [],
+        sizes: [],
+        amountPerSizes: {},
         images: [],
         gender: null,
-        forKids: null
+        forKids: null,
       };
 
-      Object.keys(inputValues).forEach(value => {
+      Object.keys(inputValues).forEach((value) => {
         outputValues[value] = inputValues[value];
       });
 
       function FormDataMock() {
-        this.get = jest.fn(value => {
+        this.get = jest.fn((value) => {
           if (value) return outputValues[value];
           else return "";
         });
-        this.getAll = jest.fn(value => {
+        this.getAll = jest.fn((value) => {
           if (value) return outputValues[value];
           else return "";
         });
@@ -38,7 +40,7 @@ describe("ShoesForm", () => {
       global.FormData = FormDataMock;
 
       const fakeEvent = {
-        preventDefault: jest.fn()
+        preventDefault: jest.fn(),
       };
 
       wrapper.find("Form").simulate("submit", fakeEvent);
@@ -46,62 +48,26 @@ describe("ShoesForm", () => {
 
     it("creates errors for empty inputs", () => {
       let values = {
-        description: ""
+        description: "",
       };
       submitValues(values);
 
       expect(wrapper.state().errors.description).toBeTruthy();
     });
 
-    it("handles size errors correctly", () => {
-      const incorrectArray = [
-        {
-          sizes: "43, 123"
-        },
-        {
-          sizes: "42, 42"
-        },
-        {
-          sizes: "22,21"
-        }
-      ];
-      incorrectArray.forEach(values => {
-        submitValues(values);
-
-        expect(wrapper.state().errors.sizes).toBeTruthy();
-      });
-
-      const correctArray = [
-        {
-          sizes: "43"
-        },
-        {
-          sizes: "42, 41"
-        },
-        {
-          sizes: "41, 24"
-        }
-      ];
-      correctArray.forEach(values => {
-        submitValues(values);
-
-        expect(wrapper.state().errors.sizes).toBeFalsy();
-      });
-    });
-
     it("handles price errors correctly", () => {
       const incorrectArray = [
         {
-          price: "432, 45123"
+          price: "432, 45123",
         },
         {
-          price: "This isn't a price"
+          price: "This isn't a price",
         },
         {
-          price: "10001,12 3"
-        }
+          price: "10001,12 3",
+        },
       ];
-      incorrectArray.forEach(values => {
+      incorrectArray.forEach((values) => {
         submitValues(values);
 
         expect(wrapper.state().errors.price).toBeTruthy();
@@ -109,21 +75,44 @@ describe("ShoesForm", () => {
 
       const correctArray = [
         {
-          price: "432"
+          price: "432",
         },
         {
-          price: "123.12"
+          price: "123.12",
         },
-        {
-          price: "$10.12"
-        }
       ];
 
-      correctArray.forEach(values => {
+      correctArray.forEach((values) => {
         submitValues(values);
 
         expect(wrapper.state().errors.price).toBeFalsy();
       });
+    });
+
+    it("handles sizes and amounts errors correctly", () => {
+      const incorrectArray = [
+        {
+          sizes: [123, 42],
+          amounts: [400, 200],
+        },
+        {
+          sizes: [12, 42],
+          amounts: [200, ""],
+        },
+      ];
+      incorrectArray.forEach((values) => {
+        submitValues(values);
+
+        expect(wrapper.state().errors.amountPerSizes).toBeTruthy();
+      });
+
+      const correct = {
+        sizes: [42, 43, 44],
+        amounts: [500, 100, 30],
+      };
+      submitValues(correct);
+
+      expect(wrapper.state().errors.amountPerSizes).toBeFalsy();
     });
   });
 });

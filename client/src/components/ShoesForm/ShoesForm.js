@@ -7,10 +7,11 @@ import { validateForm, validateImages } from "./validate";
 import { Form, Button, Message } from "semantic-ui-react";
 import { Container } from "./ShoesForm-styles";
 import FileUploads from "./components/FileUploads";
+import AmountPerSize from "./components/AmountPerSize";
 
 export class ShoesForm extends React.Component {
   state = {
-    shoeData: {},
+    resultData: {},
     errors: {},
     submissionError: null,
   };
@@ -21,46 +22,66 @@ export class ShoesForm extends React.Component {
     if (this.state.submissionError) {
       this.setState({ submissionError: null });
     }
-
     const formData = new FormData(e.target);
 
     const validatedImages = validateImages(formData.getAll("images"));
     const firstImage = validatedImages[0];
-    const restOfImages = [];
+    const restOfTheImages = [];
     validatedImages.forEach((image, index) => {
-      if (index !== 0) return restOfImages.push(image);
+      if (index !== 0) return restOfTheImages.push(image);
     });
 
-    const shoeData = {
+    const toInt = (array) => {
+      let result = [];
+      array.forEach((item, index) => {
+        result[index] = parseInt(item);
+      });
+      return result;
+    };
+    const sizesToInt = toInt(formData.getAll("sizes"));
+    const amountsToInt = toInt(formData.getAll("amounts"));
+    let amountPerSize = {};
+    sizesToInt.forEach((size, index) => {
+      amountPerSize = { ...amountPerSize, [size]: amountsToInt[index] };
+    });
+
+    const dataToValidate = {
       brand: formData.get("brand"),
       model: formData.get("model"),
       category: formData.get("category"),
       price: formData.get("price"),
       description: formData.get("description"),
-      amount: formData.get("amount"),
+      sizes: sizesToInt,
+      amounts: amountsToInt,
+      amountPerSize: amountPerSize,
       color: formData.get("color"),
-      sizes: formData
-        .get("sizes")
-        .split(", ")
-        .map((size) => size.trim()),
       frontImage: firstImage,
-      images: restOfImages,
+      images: restOfTheImages,
       gender: formData.get("gender"),
       forKids: formData.get("forKids"),
     };
 
-    const errors = validateForm(shoeData);
+    const errors = validateForm(dataToValidate);
     this.setState({ errors });
 
     if (_.isEmpty(errors)) {
-      const submitData = new FormData();
-      Object.keys(shoeData).forEach((key) => {
-        if (key === "images") {
-          shoeData[key].forEach((image, index) => {
-            submitData.append("images" + index, image);
-          });
-        } else submitData.append(key, shoeData[key]);
-      });
+      const formatForSubmission = (validatedData) => {
+        const formData = new FormData();
+        Object.keys(validatedData).forEach((key) => {
+          if (key === "amounts") {
+            return;
+          } else if (key === "images") {
+            validatedData[key].forEach((image, index) => {
+              formData.append("images" + index, image);
+            });
+          } else if (key === "amountPerSize") {
+            formData.append(key, JSON.stringify(validatedData[key]));
+          } else formData.append(key, validatedData[key]);
+        });
+        return formData;
+      };
+      const validatedData = dataToValidate;
+      const submitData = formatForSubmission(validatedData);
 
       axios
         .post("/shoes", submitData, {
@@ -69,7 +90,7 @@ export class ShoesForm extends React.Component {
           },
         })
         .then((response) => {
-          this.setState({ shoeData: response });
+          this.setState({ resultData: response });
         })
         .catch((submissionError) => this.setState({ submissionError }));
     }
@@ -95,7 +116,7 @@ export class ShoesForm extends React.Component {
       {
         name: "price",
         label: "Price:",
-        items: <input name="price" type="text" placeholder="Price" />,
+        items: <input name="price" type="number" placeholder="Price" />,
       },
       {
         name: "description",
@@ -121,18 +142,13 @@ export class ShoesForm extends React.Component {
         ),
       },
       {
-        name: "amount",
-        label: "Amount of shoes:",
-        items: <input name="amount" type="number" placeholder="Amount" />,
-      },
-      {
-        name: "sizes",
-        label: "Sizes:",
-        items: <input name="sizes" type="text" placeholder="e.g. 42, 41, 45" />,
+        name: "amountPerSize",
+        label: "Amount of shoes per size: (e.g. 42: 150, 43: 60):",
+        items: <AmountPerSize />,
       },
       {
         name: "images",
-        label: "Images: (The first will be chosen as a front image)",
+        label: "Images: (Duplicates will be ignored)",
         items: <FileUploads />,
       },
       {
@@ -192,11 +208,11 @@ export class ShoesForm extends React.Component {
     }
     return (
       <Container>
-        {!_.isEmpty(this.state.shoeData) ? (
+        {!_.isEmpty(this.state.resultData) ? (
           <>
             <Message positive size="big" header={"Shoe added succesfully!"} />
             <Link
-              onClick={(e) => this.setState({ shoeData: {} })}
+              onClick={(e) => this.setState({ resultData: {} })}
               to="/shoes/add"
             >
               Go back.
