@@ -4,7 +4,7 @@ import TopBar from "./TopBar";
 
 describe("TopBar", () => {
   it("renders for who the shoes are correctly", () => {
-    const props = { shoesFor: "Men's" };
+    const props = { text: "Men's shoes" };
     const wrapper = mount(<TopBar {...props} />);
     const expectedHeading = "Men's shoes";
 
