@@ -9,7 +9,7 @@ import {
   GroupedButtons,
   SearchForm,
   MenuList,
-  ListItem
+  ListItem,
 } from "./NavBar-styles";
 import LogoImage from "./images/Logo.png";
 
@@ -18,7 +18,7 @@ export class NavBar extends React.Component {
     const listItems = [
       { title: "Men", route: "/men" },
       { title: "Women", route: "/women" },
-      { title: "Kids", route: "/kids" }
+      { title: "Kids", route: "/kids" },
     ];
 
     return listItems.map(({ title, route }, index) => {
@@ -46,7 +46,7 @@ export class NavBar extends React.Component {
                 </Link>
               </ListItem>
             ) : null}
-            <ListItem id="logout" onClick={e => this.props.logoutUser()}>
+            <ListItem id="logout" onClick={(e) => this.props.logoutUser()}>
               <Link to="/">
                 <p>Log out</p>
               </Link>
@@ -93,6 +93,7 @@ export class NavBar extends React.Component {
             <i className="fas fa-search"></i>
           </button>
           <button className="cart">
+            <span className="cart-items-counter">{this.props.cart.length}</span>
             <i className="fas fa-shopping-cart"></i>
           </button>
         </GroupedButtons>
@@ -105,8 +106,12 @@ export class NavBar extends React.Component {
 }
 
 export default connect(
-  ({ auth }) => ({ user: auth.user, isLoggedIn: auth.isLoggedIn }),
+  ({ auth, orders }) => ({
+    user: auth.user,
+    isLoggedIn: auth.isLoggedIn,
+    cart: orders.cart,
+  }),
   {
-    logoutUser
+    logoutUser,
   }
 )(NavBar);

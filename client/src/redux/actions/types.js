@@ -17,3 +17,4 @@ export const CLEAR_SHOES_LIST_ERROR = "clear_shoes_list_error";
 export const FETCH_SHOE_DETAILS = "fetch_shoe_details";
 export const SHOE_DETAILS_ERROR = "shoe_details_error";
 export const CLEAR_SHOE_DETAILS_ERROR = "clear_shoe_details_error";
+export const ADD_TO_CART = "add_to_cart";

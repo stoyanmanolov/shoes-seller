@@ -9,6 +9,7 @@ import {
   InputPanel,
 } from "./ShoeDetails-styles";
 import { fetchShoeDetails } from "../../redux/actions/shoesActions";
+import { addToCart } from "../../redux/actions/ordersActions";
 import Error from "../Error";
 import { Button } from "semantic-ui-react";
 
@@ -102,6 +103,10 @@ export class ShoeDetails extends React.Component {
       gender,
     } = shoeDetails;
 
+    const handleClick = (event) => {
+      this.props.addToCart(shoeDetails);
+    };
+
     return (
       <StyledShoeDetails id="shoe-details">
         <div id="top-panel" className="top-panel">
@@ -113,7 +118,10 @@ export class ShoeDetails extends React.Component {
         <div id="bottom-panel" className="bottom-panel">
           <InputPanel>
             {this.renderSizes(sizes)}
-            <CartButton disabled={this.state.selectedSize ? false : true}>
+            <CartButton
+              onClick={handleClick}
+              disabled={this.state.selectedSize ? false : true}
+            >
               {this.state.selectedSize
                 ? "Add to Cart"
                 : "Select a size to continue"}
@@ -156,5 +164,6 @@ export default connect(
   }),
   {
     fetchShoeDetails,
+    addToCart,
   }
 )(ShoeDetails);

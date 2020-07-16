@@ -48,6 +48,16 @@ export const GroupedButtons = styled.div`
   .cart {
     outline: none;
     margin-left: 10px;
+    .cart-items-counter {
+      position: absolute;
+      background-color: darkorange;
+      border-radius: 10px;
+      font-size: 10px;
+      padding: 0.5px 5px;
+      color: white;
+      right: 8px;
+      top: 13px;
+    }
   }
 `;
 
