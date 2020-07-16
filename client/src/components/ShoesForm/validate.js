@@ -16,15 +16,15 @@ export const validateForm = (data) => {
 
       value.forEach((item) => {
         if (!item) {
-          errors["amountPerSizes"] = "Please fill in the fields!";
+          errors["amountPerSize"] = "Please fill in the fields!";
         } else if (key === "sizes") {
           if (item.toString().length !== 2)
-            errors["amountPerSizes"] =
+            errors["amountPerSize"] =
               "Only double digit numbers allowed for sizes!";
           else if (!nonDuplicates.includes(item)) {
             nonDuplicates.push(item);
           } else if (nonDuplicates.includes(item)) {
-            errors["amountPerSizes"] = "Please don't use duplicates!";
+            errors["amountPerSize"] = "Please don't use duplicates!";
           }
         }
       });
