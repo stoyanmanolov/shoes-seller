@@ -99,6 +99,10 @@ export const Sizes = styled.div`
   }
   .sizes-grid {
     display: grid;
+    gap: 5px;
+    > button {
+      width: 100%;
+    }
     ${({ length }) =>
       length < 4
         ? css`
