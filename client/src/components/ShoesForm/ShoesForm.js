@@ -116,7 +116,9 @@ export class ShoesForm extends React.Component {
       {
         name: "price",
         label: "Price:",
-        items: <input name="price" type="number" placeholder="Price" />,
+        items: (
+          <input name="price" type="number" step="0.01" placeholder="Price" />
+        ),
       },
       {
         name: "description",

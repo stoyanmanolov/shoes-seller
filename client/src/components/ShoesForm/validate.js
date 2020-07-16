@@ -7,6 +7,10 @@ export const validateForm = (data) => {
       if (key === "frontImage") {
         errors["images"] = "Please fill in the field!";
       } else errors[key] = "Please fill in the field!";
+    } else if (key === "price") {
+      if (value.split(".")[1] && value.split(".")[1].length > 2) {
+        errors[key] = "Please use the correct format!";
+      }
     } else if (key === "sizes" || key === "amounts") {
       let nonDuplicates = [];
 

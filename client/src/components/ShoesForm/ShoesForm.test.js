@@ -58,13 +58,10 @@ describe("ShoesForm", () => {
     it("handles price errors correctly", () => {
       const incorrectArray = [
         {
-          price: "432, 45123",
+          price: "432.45123",
         },
         {
-          price: "This isn't a price",
-        },
-        {
-          price: "10001,12 3",
+          price: "10001.123",
         },
       ];
       incorrectArray.forEach((values) => {

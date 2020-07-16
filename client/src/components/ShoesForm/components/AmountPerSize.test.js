@@ -3,7 +3,7 @@ import { shallow } from "enzyme";
 import AmountPerSize from "./AmountPerSize";
 
 describe("AmountPerSize", () => {
-  const wrapper = shallow(<AmountPerSizes />);
+  const wrapper = shallow(<AmountPerSize />);
 
   it("renders two inputs and a button", () => {
     expect(wrapper.find({ name: "sizes" }).length).toBe(1);
