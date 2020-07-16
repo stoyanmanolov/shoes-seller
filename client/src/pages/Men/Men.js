@@ -9,7 +9,7 @@ const Men = () => {
   return (
     <ProductsPage>
       <NavBar id="navbar" />
-      <TopBar shoesFor="Men's" />
+      <TopBar text="Men's shoes" />
       <FilterMenu gender="Male" />
       <ShoesList gender="Male" />
     </ProductsPage>

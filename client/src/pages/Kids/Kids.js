@@ -9,7 +9,7 @@ const Kids = () => {
   return (
     <ProductsPage>
       <NavBar />
-      <TopBar shoesFor="Kids'" />
+      <TopBar text="Kids' shoes" />
       <FilterMenu forKids={true} />
       <ShoesList forKids={true} />
     </ProductsPage>

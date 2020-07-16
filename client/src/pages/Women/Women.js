@@ -9,7 +9,7 @@ const Women = () => {
   return (
     <ProductsPage>
       <NavBar />
-      <TopBar shoesFor="Women's" />
+      <TopBar text="Women's shoes" />
       <FilterMenu gender="Female" />
       <ShoesList gender="Female" />
     </ProductsPage>
