@@ -12,8 +12,4 @@ export const StyledTopBar = styled.div`
     font-size: 40px;
     font-weight: 700;
   }
-  p {
-    display: none;
-    font-size: 16px;
-  }
 `;
