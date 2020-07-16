@@ -41,6 +41,12 @@ export const GroupedButtons = styled.div`
     background: none;
     outline: none;
   }
+  a:hover {
+    text-decoration: none;
+  }
+  i {
+    display: inherit;
+  }
   .search {
     outline: none;
     margin-right: 10px;

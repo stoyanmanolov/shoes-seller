@@ -23,6 +23,7 @@ describe("ShoeDetails", () => {
   });
 
   describe("there are details", () => {
+    const addToCart = jest.fn();
     props = {
       ...props,
       shoeDetails: {
@@ -32,6 +33,7 @@ describe("ShoeDetails", () => {
         images: ["image2.jpg", "image3.jpg"],
         sizes: [44, 45],
       },
+      addToCart,
     };
     wrapper = shallow(<ShoeDetails {...props} />);
 
@@ -51,6 +53,19 @@ describe("ShoeDetails", () => {
       );
     });
 
+    it("button is disabled if size isn't selected", () => {
+      expect(wrapper.find({ id: "cart-button" }).props().disabled).toBe(true);
+    });
+
+    it("button is enabled if size is selected", () => {
+      wrapper
+        .find({ id: "sizes" })
+        .find({ value: 44 })
+        .simulate("click", {}, { value: 44 });
+
+      expect(wrapper.find({ id: "cart-button" }).props().disabled).toBe(false);
+    });
+
     it("sets the clicked size as selected size in state", () => {
       wrapper
         .find({ id: "sizes" })
@@ -58,6 +73,12 @@ describe("ShoeDetails", () => {
         .simulate("click", {}, { value: 44 });
 
       expect(wrapper.state().selectedSize).toEqual(props.shoeDetails.sizes[0]);
+    });
+
+    it("calls the addToCart function when the button is clicked", () => {
+      wrapper.find({ id: "cart-button" }).simulate("click");
+
+      expect(addToCart).toBeCalledTimes(1);
     });
   });
 });

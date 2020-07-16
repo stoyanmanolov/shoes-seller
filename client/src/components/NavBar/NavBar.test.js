@@ -4,22 +4,32 @@ import { NavBar } from "./NavBar";
 import { ListItem } from "./NavBar-styles";
 
 describe("NavBar", () => {
-  let wrapper = shallow(<NavBar />);
+  let props = { cart: [{ brand: "Name" }] };
+  let wrapper = shallow(<NavBar {...props} />);
+
   it("renders the static navigation links correctly", () => {
     const staticItems = [
       { name: "Men", route: "/men" },
       { name: "Women", route: "/women" },
-      { name: "Kids", route: "/kids" }
+      { name: "Kids", route: "/kids" },
+      { name: "Cart", route: "/checkout" },
     ];
-    staticItems.forEach(item => {
+    staticItems.forEach((item) => {
       expect(wrapper.find({ to: item.route }).exists()).toBe(true);
     });
   });
 
+  it("renders the number of cart items accordingly", () => {
+    expect(wrapper.find({ id: "cart-items-counter" }).text()).toBe(
+      props.cart.length.toString()
+    );
+  });
+
   describe("Not authenticated", () => {
-    let props = {
+    props = {
+      ...props,
       user: { role: "user" },
-      isLoggedIn: false
+      isLoggedIn: false,
     };
     wrapper = shallow(<NavBar {...props} />);
 
@@ -35,10 +45,11 @@ describe("NavBar", () => {
     let logoutUserMock;
     beforeEach(() => {
       logoutUserMock = jest.fn();
-      let props = {
+      props = {
+        ...props,
         user: { role: "user" },
         isLoggedIn: true,
-        logoutUser: logoutUserMock
+        logoutUser: logoutUserMock,
       };
       wrapper = shallow(<NavBar {...props} />);
     });
@@ -59,17 +70,14 @@ describe("NavBar", () => {
   });
   describe("Authenticated admin", () => {
     beforeEach(() => {
-      let props = { user: { role: "admin" }, isLoggedIn: true };
+      props = { ...props, user: { role: "admin" }, isLoggedIn: true };
       wrapper = shallow(<NavBar {...props} />);
     });
 
     it("renders the Add Shoes link", () => {
-      expect(
-        wrapper
-          .find(ListItem)
-          .find({ to: "/shoes/add" })
-          .exists()
-      ).toBe(true);
+      expect(wrapper.find(ListItem).find({ to: "/shoes/add" }).exists()).toBe(
+        true
+      );
     });
   });
 });

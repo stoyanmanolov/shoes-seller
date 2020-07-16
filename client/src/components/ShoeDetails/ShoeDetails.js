@@ -103,7 +103,7 @@ export class ShoeDetails extends React.Component {
       gender,
     } = shoeDetails;
 
-    const handleClick = (event) => {
+    const handleClick = () => {
       this.props.addToCart(shoeDetails);
     };
 
@@ -119,6 +119,7 @@ export class ShoeDetails extends React.Component {
           <InputPanel>
             {this.renderSizes(sizes)}
             <CartButton
+              id="cart-button"
               onClick={handleClick}
               disabled={this.state.selectedSize ? false : true}
             >

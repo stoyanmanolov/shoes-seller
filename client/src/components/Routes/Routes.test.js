@@ -13,6 +13,7 @@ describe("Routes", () => {
       { path: "/women" },
       { path: "/kids" },
       { path: "/shoe/:id" },
+      { path: "/checkout" },
     ];
 
     routePaths.forEach((routePath) =>

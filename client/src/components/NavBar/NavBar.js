@@ -92,10 +92,14 @@ export class NavBar extends React.Component {
           <button className="search">
             <i className="fas fa-search"></i>
           </button>
-          <button className="cart">
-            <span className="cart-items-counter">{this.props.cart.length}</span>
-            <i className="fas fa-shopping-cart"></i>
-          </button>
+          <Link to="/checkout">
+            <button className="cart">
+              <span id="cart-items-counter" className="cart-items-counter">
+                {this.props.cart.length}
+              </span>
+              <i className="fas fa-shopping-cart"></i>
+            </button>
+          </Link>
         </GroupedButtons>
         <SearchForm>
           <input type="text" placeholder="Search"></input>
