@@ -17,7 +17,7 @@ describe("ShoesForm", () => {
         color: "",
         amounts: [],
         sizes: [],
-        amountPerSizes: {},
+        amountPerSize: {},
         images: [],
         gender: null,
         forKids: null,
@@ -100,7 +100,7 @@ describe("ShoesForm", () => {
       incorrectArray.forEach((values) => {
         submitValues(values);
 
-        expect(wrapper.state().errors.amountPerSizes).toBeTruthy();
+        expect(wrapper.state().errors.amountPerSize).toBeTruthy();
       });
 
       const correct = {
@@ -109,7 +109,7 @@ describe("ShoesForm", () => {
       };
       submitValues(correct);
 
-      expect(wrapper.state().errors.amountPerSizes).toBeFalsy();
+      expect(wrapper.state().errors.amountPerSize).toBeFalsy();
     });
   });
 });
