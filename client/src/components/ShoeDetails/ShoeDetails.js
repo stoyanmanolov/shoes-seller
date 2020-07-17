@@ -104,7 +104,7 @@ export class ShoeDetails extends React.Component {
     } = shoeDetails;
 
     const handleClick = () => {
-      this.props.addToCart(shoeDetails);
+      this.props.addToCart(shoeDetails, this.state.selectedSize);
     };
 
     return (
