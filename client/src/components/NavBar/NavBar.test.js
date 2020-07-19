@@ -4,7 +4,7 @@ import { NavBar } from "./NavBar";
 import { ListItem } from "./NavBar-styles";
 
 describe("NavBar", () => {
-  let props = { cart: [{ brand: "Name" }] };
+  let props = { itemsCount: 3 };
   let wrapper = shallow(<NavBar {...props} />);
 
   it("renders the static navigation links correctly", () => {
@@ -21,7 +21,7 @@ describe("NavBar", () => {
 
   it("renders the number of cart items accordingly", () => {
     expect(wrapper.find({ id: "cart-items-counter" }).text()).toBe(
-      props.cart.length.toString()
+      props.itemsCount.toString()
     );
   });
 

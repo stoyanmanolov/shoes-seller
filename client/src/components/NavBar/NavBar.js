@@ -95,7 +95,7 @@ export class NavBar extends React.Component {
           <Link to="/checkout">
             <button className="cart">
               <span id="cart-items-counter" className="cart-items-counter">
-                {this.props.cart.length}
+                {this.props.itemsCount}
               </span>
               <i className="fas fa-shopping-cart"></i>
             </button>
@@ -113,7 +113,7 @@ export default connect(
   ({ auth, orders }) => ({
     user: auth.user,
     isLoggedIn: auth.isLoggedIn,
-    cart: orders.cart,
+    itemsCount: orders.itemsCount,
   }),
   {
     logoutUser,
