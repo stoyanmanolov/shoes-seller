@@ -1,6 +1,8 @@
 import React from "react";
-import { CartEmpty, StyledCartList } from "./CartList-styles";
+import { CartEmpty, StyledCartList, Checkout } from "./CartList-styles";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { Button } from "semantic-ui-react";
 
 export class CartList extends React.Component {
   state = { totalPrice: null };
@@ -50,17 +52,15 @@ export class CartList extends React.Component {
     };
 
     return (
-      <div className="table-wrapper">
-        <table>
-          <thead>
-            <tr className="headings">
-              <th className="shoes">Shoes</th>
-              <th className="total">Total</th>
-            </tr>
-          </thead>
-          <tbody>{renderShoe()}</tbody>
-        </table>
-      </div>
+      <table>
+        <thead>
+          <tr className="headings">
+            <th className="shoes">Shoes</th>
+            <th className="total">Total</th>
+          </tr>
+        </thead>
+        <tbody>{renderShoe()}</tbody>
+      </table>
     );
   };
 
@@ -72,7 +72,29 @@ export class CartList extends React.Component {
         </CartEmpty>
       );
     } else
-      return <StyledCartList id="cart">{this.renderTable()}</StyledCartList>;
+      return (
+        <StyledCartList id="cart-list">
+          {this.renderTable()}
+          <Checkout>
+            <p>
+              <b>Total price:</b>{" "}
+              {`$${
+                this.state.totalPrice ? this.state.totalPrice.toFixed(2) : null
+              }`}
+            </p>
+            <Link to="/checkout">
+              <Button
+                id="checkout-button"
+                className="checkout-button"
+                primary
+                size="large"
+              >
+                Checkout
+              </Button>
+            </Link>
+          </Checkout>
+        </StyledCartList>
+      );
   }
 }
 

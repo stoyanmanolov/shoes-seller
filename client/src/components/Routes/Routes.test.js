@@ -14,6 +14,7 @@ describe("Routes", () => {
       { path: "/kids" },
       { path: "/shoe/:id" },
       { path: "/cart" },
+      { path: "/checkout" },
     ];
 
     routePaths.forEach((routePath) =>

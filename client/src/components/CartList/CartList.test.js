@@ -63,5 +63,9 @@ describe("Cart", () => {
         "Sizes: 42, 44, 46"
       );
     });
+
+    it("renders a link to the checkout route", () => {
+      expect(wrapper.find({ to: "/checkout" }).exists()).toBe(true);
+    });
   });
 });
