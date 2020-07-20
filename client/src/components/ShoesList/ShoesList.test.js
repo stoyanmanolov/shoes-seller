@@ -59,8 +59,8 @@ describe("ShoesList", () => {
         setCurrentSort,
         shoesList: {
           shoes: [
-            { _id: 123, brand: "Some Brand" },
-            { _id: 12345, brand: "Other Brand" },
+            { _id: 123, brand: "Some Brand", price: 20 },
+            { _id: 12345, brand: "Other Brand", price: 30.99 },
           ],
         },
       };

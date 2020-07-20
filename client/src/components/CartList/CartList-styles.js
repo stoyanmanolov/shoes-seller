@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StyledCart = styled.div`
+export const StyledCartList = styled.div`
   .table-wrapper {
     padding: 10px 20px;
   }
@@ -12,7 +12,7 @@ export const StyledCart = styled.div`
   }
   .item-data {
     img {
-      height: 100px;
+      width: 100px;
     }
     .shoe {
       display: flex;

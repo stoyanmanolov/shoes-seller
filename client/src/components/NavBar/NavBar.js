@@ -92,7 +92,7 @@ export class NavBar extends React.Component {
           <button className="search">
             <i className="fas fa-search"></i>
           </button>
-          <Link to="/checkout">
+          <Link to="/cart">
             <button className="cart">
               <span id="cart-items-counter" className="cart-items-counter">
                 {this.props.itemsCount}

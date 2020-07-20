@@ -67,7 +67,7 @@ export class ShoesList extends React.Component {
             <CardBody>
               <CardTitle>{brand + " " + model}</CardTitle>
               <CardSubtitle style={{ color: "grey" }}>
-                {"$" + price}
+                {"$" + price.toFixed(2)}
               </CardSubtitle>
             </CardBody>
           </Card>

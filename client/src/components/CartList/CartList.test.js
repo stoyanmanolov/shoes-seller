@@ -1,11 +1,11 @@
 import React from "react";
-import { Cart } from "./Cart";
+import { CartList } from "./CartList";
 import { shallow } from "enzyme";
 
 describe("Cart", () => {
   it("renders a div that informs when the cart is empty", () => {
     let props = { cart: [] };
-    let wrapper = shallow(<Cart {...props} />);
+    let wrapper = shallow(<CartList {...props} />);
 
     expect(wrapper.find({ id: "cart-empty" }).exists()).toBe(true);
   });
@@ -33,7 +33,7 @@ describe("Cart", () => {
         },
       ],
     };
-    let wrapper = shallow(<Cart {...props} />);
+    let wrapper = shallow(<CartList {...props} />);
 
     it("renders a table", () => {
       expect(wrapper.find("table").exists()).toBe(true);
@@ -44,7 +44,7 @@ describe("Cart", () => {
       let price = props.cart[1].shoe.price * props.cart[1].sizes.length;
 
       expect(wrapper.find({ id }).find({ id: "price" }).text()).toEqual(
-        "$" + price
+        "$" + price.toFixed(2)
       );
     });
 

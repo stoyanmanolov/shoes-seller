@@ -12,7 +12,7 @@ describe("NavBar", () => {
       { name: "Men", route: "/men" },
       { name: "Women", route: "/women" },
       { name: "Kids", route: "/kids" },
-      { name: "Cart", route: "/checkout" },
+      { name: "Cart", route: "/cart" },
     ];
     staticItems.forEach((item) => {
       expect(wrapper.find({ to: item.route }).exists()).toBe(true);

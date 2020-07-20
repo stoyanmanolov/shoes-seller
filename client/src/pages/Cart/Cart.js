@@ -1,16 +1,16 @@
 import React from "react";
 import NavBar from "../../components/NavBar";
 import TopBar from "../../components/TopBar";
-import Cart from "../../components/Cart";
+import CartList from "../../components/CartList";
 
-const Home = () => {
+const Cart = () => {
   return (
     <>
       <NavBar />
       <TopBar text="Your cart" />
-      <Cart />
+      <CartList />
     </>
   );
 };
 
-export default Home;
+export default Cart;

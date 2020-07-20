@@ -1,8 +1,8 @@
 import React from "react";
-import { CartEmpty, StyledCart } from "./Cart-styles";
+import { CartEmpty, StyledCartList } from "./CartList-styles";
 import { connect } from "react-redux";
 
-export class Cart extends React.Component {
+export class CartList extends React.Component {
   state = { totalPrice: null };
 
   componentDidMount() {
@@ -42,7 +42,7 @@ export class Cart extends React.Component {
               </div>
             </td>
             <td id="price" className="price">
-              {"$" + modelPrice}
+              {"$" + modelPrice.toFixed(2)}
             </td>
           </tr>
         );
@@ -71,11 +71,12 @@ export class Cart extends React.Component {
           <h3>Your cart is empty</h3>
         </CartEmpty>
       );
-    } else return <StyledCart id="cart">{this.renderTable()}</StyledCart>;
+    } else
+      return <StyledCartList id="cart">{this.renderTable()}</StyledCartList>;
   }
 }
 
 export default connect(({ orders }) => ({
   cart: orders.cart,
   itemsCount: orders.itemsCount,
-}))(Cart);
+}))(CartList);
