@@ -5,22 +5,6 @@ import { Link } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 
 export class CartList extends React.Component {
-  state = { totalPrice: null };
-
-  componentDidMount() {
-    if (this.props.cart.length !== 0) {
-      // Calculate total price
-      let totalPrice = 0;
-
-      this.props.cart.forEach((item) => {
-        const modelPrice = item.shoe.price * item.sizes.length;
-        totalPrice += modelPrice;
-      });
-
-      this.setState({ totalPrice });
-    }
-  }
-
   renderTable = () => {
     const renderShoe = () => {
       return this.props.cart.map((item, index) => {
@@ -77,9 +61,9 @@ export class CartList extends React.Component {
           {this.renderTable()}
           <Checkout>
             <p>
-              <b>Total price:</b>{" "}
+              <b>Subtotal: </b>
               {`$${
-                this.state.totalPrice ? this.state.totalPrice.toFixed(2) : null
+                this.props.totalPrice ? this.props.totalPrice.toFixed(2) : null
               }`}
             </p>
             <Link to="/checkout">
@@ -101,4 +85,5 @@ export class CartList extends React.Component {
 export default connect(({ orders }) => ({
   cart: orders.cart,
   itemsCount: orders.itemsCount,
+  totalPrice: orders.totalPrice,
 }))(CartList);

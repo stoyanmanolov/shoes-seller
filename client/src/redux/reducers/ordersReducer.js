@@ -1,9 +1,10 @@
 import { ADD_TO_CART } from "../actions/types";
-import { formatCart, getItemsCount } from "./utils";
+import { formatCart, getItemsCount, getTotalPrice } from "./utils";
 
 const initialState = {
   cart: [],
   itemsCount: 0,
+  totalPrice: 0,
 };
 
 const ordersReducer = (state = initialState, action) => {
@@ -11,7 +12,9 @@ const ordersReducer = (state = initialState, action) => {
     case ADD_TO_CART:
       const cart = formatCart(state.cart, action.payload);
       const itemsCount = getItemsCount(cart);
-      return { ...state, cart, itemsCount };
+      const totalPrice = getTotalPrice(cart);
+
+      return { ...state, cart, itemsCount, totalPrice };
     default:
       return state;
   }

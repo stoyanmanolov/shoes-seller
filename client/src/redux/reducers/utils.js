@@ -29,3 +29,14 @@ export const getItemsCount = (cart) => {
 
   return count;
 };
+
+export const getTotalPrice = (cart) => {
+  let totalPrice = 0;
+
+  cart.forEach((item) => {
+    const modelPrice = item.shoe.price * item.sizes.length;
+    totalPrice += modelPrice;
+  });
+
+  return totalPrice;
+};
