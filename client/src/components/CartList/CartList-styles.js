@@ -10,34 +10,32 @@ export const StyledCartList = styled.div`
   td {
     padding-top: 10px;
   }
-  .item-data {
-    img {
-      width: 100px;
-    }
-    .shoe {
-      display: flex;
-      align-items: center;
-      .info {
-        padding: 10px 20px;
-        h5 {
-          font-weight: 700;
-        }
+  img {
+    width: 100px;
+  }
+  .shoe {
+    display: flex;
+    align-items: center;
+    div {
+      padding: 10px 20px;
+      h5 {
+        font-weight: 700;
       }
     }
-    .price {
-      text-align: center;
-      font-size: 16px;
-      font-weight: 700;
-    }
   }
-  .headings {
+  .price {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  thead tr {
     font-size: 18px;
-    .shoes {
-      width: 100%;
-    }
-    .total {
-      text-align: center;
-    }
+  }
+  thead tr th:first-child {
+    width: 100%;
+  }
+  thead tr th:last-child {
+    text-align: center;
   }
 
   @media (min-width: 768px) {
@@ -60,6 +58,7 @@ export const Checkout = styled.div`
   align-items: center;
   p {
     font-size: 16px;
+    font-weight: 700;
   }
   .checkout-button {
     width: 200px;

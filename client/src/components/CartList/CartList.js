@@ -12,22 +12,18 @@ export class CartList extends React.Component {
         const modelPrice = item.shoe.price * numberOfShoes;
 
         return (
-          <tr id={item.shoe.model} className="item-data" key={index}>
+          <tr id={item.shoe.model} key={index}>
             <td className="shoe">
-              <img
-                className="front-image"
-                src={"images/" + item.shoe.frontImage}
-                alt="Front"
-              />
-              <div className="info">
-                <h5 id="count">{`${numberOfShoes}x ${item.shoe.brand} ${item.shoe.model}`}</h5>
-                <p id="sizes">
+              <img src={"images/" + item.shoe.frontImage} alt="Front" />
+              <div>
+                <h5 id="count-info">{`${numberOfShoes}x ${item.shoe.brand} ${item.shoe.model}`}</h5>
+                <p id="sizes-info">
                   <b>Sizes: </b>
                   {item.sizes.join(", ")}
                 </p>
               </div>
             </td>
-            <td id="price" className="price">
+            <td id="price-info" className="price">
               {"$" + modelPrice.toFixed(2)}
             </td>
           </tr>
@@ -38,9 +34,9 @@ export class CartList extends React.Component {
     return (
       <table>
         <thead>
-          <tr className="headings">
-            <th className="shoes">Shoes</th>
-            <th className="total">Total</th>
+          <tr>
+            <th>Shoes</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>{renderShoe()}</tbody>
@@ -60,12 +56,7 @@ export class CartList extends React.Component {
         <StyledCartList id="cart-list">
           {this.renderTable()}
           <Checkout>
-            <p>
-              <b>Subtotal: </b>
-              {`$${
-                this.props.totalPrice ? this.props.totalPrice.toFixed(2) : null
-              }`}
-            </p>
+            <p>Subtotal: ${this.props.totalPrice.toFixed(2)}</p>
             <Link to="/checkout">
               <Button
                 id="checkout-button"
@@ -84,6 +75,5 @@ export class CartList extends React.Component {
 
 export default connect(({ orders }) => ({
   cart: orders.cart,
-  itemsCount: orders.itemsCount,
   totalPrice: orders.totalPrice,
 }))(CartList);

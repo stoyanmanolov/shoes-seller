@@ -4,7 +4,7 @@ import { shallow } from "enzyme";
 
 describe("Cart", () => {
   it("renders a div that informs when the cart is empty", () => {
-    let props = { cart: [] };
+    let props = { cart: [], totalPrice: 0 };
     let wrapper = shallow(<CartList {...props} />);
 
     expect(wrapper.find({ id: "cart-empty" }).exists()).toBe(true);
@@ -32,6 +32,7 @@ describe("Cart", () => {
           sizes: [44, 46],
         },
       ],
+      totalPrice: 130,
     };
     let wrapper = shallow(<CartList {...props} />);
 
@@ -42,8 +43,7 @@ describe("Cart", () => {
     it("calculates the price correctly", () => {
       let id = props.cart[1].shoe.model;
       let price = props.cart[1].shoe.price * props.cart[1].sizes.length;
-
-      expect(wrapper.find({ id }).find({ id: "price" }).text()).toEqual(
+      expect(wrapper.find({ id }).find({ id: "price-info" }).text()).toEqual(
         "$" + price.toFixed(2)
       );
     });
@@ -52,14 +52,14 @@ describe("Cart", () => {
       let id = props.cart[0].shoe.model;
       let expected = `3x ${props.cart[0].shoe.brand} ${props.cart[0].shoe.model}`;
 
-      expect(wrapper.find({ id }).find({ id: "count" }).text()).toEqual(
+      expect(wrapper.find({ id }).find({ id: "count-info" }).text()).toEqual(
         expected
       );
     });
 
     it("renders the sizes correctly", () => {
       let id = props.cart[0].shoe.model;
-      expect(wrapper.find({ id }).find({ id: "sizes" }).text()).toEqual(
+      expect(wrapper.find({ id }).find({ id: "sizes-info" }).text()).toEqual(
         "Sizes: 42, 44, 46"
       );
     });

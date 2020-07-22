@@ -12,9 +12,8 @@ describe("OrderForm", () => {
     "city",
     "address",
   ];
-
+  wrapper = shallow(<OrderForm />);
   it("renders each field", () => {
-    wrapper = shallow(<OrderForm />);
     fields.forEach((field) => {
       expect(wrapper.find({ id: field }).exists()).toBe(true);
     });
