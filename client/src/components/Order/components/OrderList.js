@@ -43,6 +43,7 @@ const OrderList = (props) => {
 
   return (
     <StyledOrderList id="order-list">
+      <h4>Your order</h4>
       {renderTable(props.cart, props.totalPrice)}
     </StyledOrderList>
   );

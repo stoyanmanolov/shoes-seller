@@ -1,9 +1,14 @@
 import styled from "styled-components";
 
 export const StyledOrderList = styled.div`
-  padding: 20px 30px;
   display: flex;
   flex-direction: column;
+  padding-bottom: 10px;
+  h4 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 700;
+  }
   img {
     width: 100px;
   }
@@ -12,9 +17,11 @@ export const StyledOrderList = styled.div`
   }
   thead tr th:first-child {
     width: 100%;
+    font-size: 16px;
   }
   thead tr th:last-child {
     text-align: center;
+    font-size: 16px;
   }
   td {
     padding-top: 10px;
@@ -33,5 +40,6 @@ export const StyledOrderList = styled.div`
   .total-price {
     align-self: flex-end;
     font-weight: 700;
+    font-size: 16px;
   }
 `;

@@ -104,18 +104,19 @@ class OrderForm extends React.Component {
 
     return (
       <StyledOrderForm id="order-form">
+        <h4>Billing details</h4>
         <Form onSubmit={this.handleSubmit}>
           {formFields.map(({ label, valueName, value }, index) => {
             return (
               <React.Fragment key={index}>
-                {validationErrors[valueName] ? (
-                  <Message
-                    negative
-                    size="tiny"
-                    header={validationErrors[valueName]}
-                  />
-                ) : null}
                 <Form.Field id={valueName}>
+                  {validationErrors[valueName] ? (
+                    <Message
+                      negative
+                      size="tiny"
+                      header={validationErrors[valueName]}
+                    />
+                  ) : null}
                   <label>{label}</label>
                   <input
                     onChange={(e) =>
@@ -128,7 +129,9 @@ class OrderForm extends React.Component {
               </React.Fragment>
             );
           })}
-          <Button type="submit">Submit</Button>
+          <Button className="order-button" primary type="submit">
+            Place order
+          </Button>
         </Form>
       </StyledOrderForm>
     );
