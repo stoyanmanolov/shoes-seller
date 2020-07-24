@@ -19,6 +19,7 @@ export const StyledOrderForm = styled.div`
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-gap: 10px;
+      align-items: flex-end;
       .order-button {
         margin: 0;
         grid-column: span 2;

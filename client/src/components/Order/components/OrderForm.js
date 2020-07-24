@@ -3,6 +3,7 @@ import { Form, Button, Message } from "semantic-ui-react";
 import { StyledOrderForm } from "./OrderForm-styles";
 import validator from "validator";
 import _ from "lodash";
+import axios from "axios";
 
 class OrderForm extends React.Component {
   state = {
@@ -62,7 +63,15 @@ class OrderForm extends React.Component {
     this.setState({ validationErrors });
 
     if (_.isEmpty(validationErrors)) {
-      console.log("no errors");
+      formData.price = this.props.totalPrice;
+      formData.cart = this.props.cart;
+
+      axios
+        .post("/orders", formData)
+        .then((res) => {
+          this.props.getOrder(res.data);
+        })
+        .catch((err) => this.props.getError(err.response));
     }
   };
 

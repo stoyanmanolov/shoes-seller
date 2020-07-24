@@ -14,28 +14,29 @@ export const StyledOrderList = styled.div`
   }
   table {
     width: 100%;
-  }
-  thead tr th:first-child {
-    width: 100%;
-    font-size: 16px;
-  }
-  thead tr th:last-child {
-    text-align: center;
-    font-size: 16px;
-  }
-  td {
-    padding-top: 10px;
-  }
-  .shoe-info {
-    display: flex;
-    align-items: center;
-    div {
-      padding: 0 20px;
+    thead tr th:first-child {
+      width: 100%;
+      font-size: 16px;
     }
-  }
-  .price-info {
-    text-align: center;
-    font-weight: 700;
+    thead tr th:last-child {
+      text-align: center;
+      font-size: 16px;
+    }
+
+    td {
+      padding-top: 10px;
+    }
+    .shoe-info {
+      display: flex;
+      align-items: center;
+      div {
+        padding: 0 20px;
+      }
+    }
+    .price-info {
+      text-align: center;
+      font-weight: 700;
+    }
   }
   .total-price {
     align-self: flex-end;
