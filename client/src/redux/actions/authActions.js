@@ -5,19 +5,19 @@ import {
   LOGOUT_USER,
   CLEAR_AUTH_ERRORS,
   REGISTER_USER,
-  CLEAR_REGISTERED_INFO
+  CLEAR_REGISTERED_INFO,
 } from "./types";
 import axios from "axios";
 
-export const registerUser = signupData => {
-  return async dispatch => {
+export const registerUser = (signupData) => {
+  return async (dispatch) => {
     await axios
       .post("/register", signupData)
-      .then(response => {
+      .then((response) => {
         dispatch({ type: CLEAR_AUTH_ERRORS });
         dispatch({ type: REGISTER_USER, payload: response.data });
       })
-      .catch(error =>
+      .catch((error) =>
         dispatch({ type: REGISTER_AUTH_ERROR, payload: error.response })
       );
   };
@@ -25,19 +25,19 @@ export const registerUser = signupData => {
 
 export const clearRegisteredInfo = () => {
   return {
-    type: CLEAR_REGISTERED_INFO
+    type: CLEAR_REGISTERED_INFO,
   };
 };
 
-export const loginUser = loginData => {
-  return async dispatch => {
+export const loginUser = (loginData) => {
+  return async (dispatch) => {
     await axios
       .post("/login", loginData)
-      .then(response => {
+      .then((response) => {
         dispatch({ type: CLEAR_AUTH_ERRORS });
         dispatch({ type: LOGIN_USER, payload: response.data });
       })
-      .catch(error =>
+      .catch((error) =>
         dispatch({ type: LOGIN_AUTH_ERROR, payload: error.response })
       );
   };
@@ -45,12 +45,12 @@ export const loginUser = loginData => {
 
 export const logoutUser = () => {
   return {
-    type: LOGOUT_USER
+    type: LOGOUT_USER,
   };
 };
 
 export const clearAuthErrors = () => {
   return {
-    type: CLEAR_AUTH_ERRORS
+    type: CLEAR_AUTH_ERRORS,
   };
 };

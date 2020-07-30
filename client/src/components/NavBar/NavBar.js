@@ -40,11 +40,18 @@ export class NavBar extends React.Component {
         {isLoggedIn ? (
           <>
             {this.props.user.role === "admin" ? (
-              <ListItem>
-                <Link to="/shoes/add">
-                  <p>Add shoes</p>
-                </Link>
-              </ListItem>
+              <>
+                <ListItem>
+                  <Link to="/orders">
+                    <p>Orders</p>
+                  </Link>
+                </ListItem>
+                <ListItem>
+                  <Link to="/shoes/add">
+                    <p>Add shoes</p>
+                  </Link>
+                </ListItem>
+              </>
             ) : null}
             <ListItem id="logout" onClick={(e) => this.props.logoutUser()}>
               <Link to="/">

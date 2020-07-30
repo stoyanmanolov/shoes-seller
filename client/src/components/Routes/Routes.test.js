@@ -57,6 +57,24 @@ describe("Routes", () => {
         wrapper.find({ path: "/shoes/add" }).find({ to: "/" }).exists()
       ).toBe(true);
     });
+
+    it("redirects to Orders at /orders if the user is an admin", () => {
+      let props = { isLoggedIn: true, user: { role: "admin" } };
+      wrapper = shallow(<Routes {...props} />);
+
+      expect(wrapper.find({ path: "/orders" }).find("Orders").exists()).toBe(
+        true
+      );
+    });
+
+    it("redirects to Home at /orders if the user is not an admin", () => {
+      let props = { isLoggedIn: true, user: { role: "user" } };
+      wrapper = shallow(<Routes {...props} />);
+
+      expect(wrapper.find({ path: "/orders" }).find({ to: "/" }).exists()).toBe(
+        true
+      );
+    });
   });
   describe("Not logged in", () => {
     beforeEach(() => {
@@ -80,6 +98,12 @@ describe("Routes", () => {
       expect(
         wrapper.find({ path: "/shoes/add" }).find({ to: "/" }).exists()
       ).toBe(true);
+    });
+
+    it("redirects to Home at /orders", () => {
+      expect(wrapper.find({ path: "/orders" }).find({ to: "/" }).exists()).toBe(
+        true
+      );
     });
   });
 });

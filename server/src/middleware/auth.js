@@ -36,7 +36,7 @@ const adminAuth = async (req, res, next) => {
         .status(401)
         .send("Access denied. Only admins can access this.");
   } catch (error) {
-    res.send(error);
+    res.status(401).send(error);
   }
 };
 
