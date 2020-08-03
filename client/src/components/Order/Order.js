@@ -32,7 +32,12 @@ export class Order extends React.Component {
         <OrderDetails id="order-successful">
           <h3>Order succesfully made!</h3>
           {Object.keys(this.state.orderDetails).map((key) => {
-            if (key === "cart" || key === "_id" || key === "__v") {
+            if (
+              key === "cart" ||
+              key === "__v" ||
+              key === "createdAt" ||
+              key === "updatedAt"
+            ) {
               return null;
             }
             return (

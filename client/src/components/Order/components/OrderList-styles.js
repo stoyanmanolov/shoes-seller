@@ -22,7 +22,6 @@ export const StyledOrderList = styled.div`
       text-align: center;
       font-size: 16px;
     }
-
     td {
       padding-top: 10px;
     }

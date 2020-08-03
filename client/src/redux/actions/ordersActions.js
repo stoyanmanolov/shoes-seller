@@ -14,8 +14,8 @@ export const fetchOrders = (token) => {
       },
     };
 
-    axios
-      .get("/orders", config)
+    await axios
+      .get("/orders/all", config)
       .then((response) => {
         dispatch({ type: CLEAR_ORDERS_ERROR });
         dispatch({ type: FETCH_ORDERS, payload: response.data });

@@ -26,8 +26,7 @@ const adminAuth = async (req, res, next) => {
   try {
     const decodedToken = verifyToken(req, res);
     const user = await User.findById(decodedToken.id);
-
-    if (!user) return res.status(404).send("User not found!");
+    if (!user) return res.status(401).send("User not found!");
     if (user.role === "admin") {
       req.user = decodedToken;
       next();

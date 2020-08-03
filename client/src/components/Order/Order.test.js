@@ -18,7 +18,7 @@ describe("Order", () => {
     expect(wrapper.find({ id: "order-successful" }).exists()).toBe(true);
   });
 
-  it("renders an Error if the order wasm't completed", () => {
+  it("renders an Error if the order wasn't completed", () => {
     props = { cart: [{}] };
     wrapper = shallow(<Order {...props} />);
     wrapper.setState({
