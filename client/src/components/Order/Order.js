@@ -3,6 +3,7 @@ import { StyledOrder, OrderDetails } from "./Order-styles";
 import OrderForm from "./components/OrderForm";
 import OrderList from "./components/OrderList";
 import { connect } from "react-redux";
+import { resetCart } from "../../redux/actions/ordersActions";
 import Error from "../Error";
 
 export class Order extends React.Component {
@@ -21,7 +22,7 @@ export class Order extends React.Component {
   };
 
   render() {
-    if (this.props.cart.length === 0) {
+    if (this.props.cart.length === 0 && !this.state.orderDetails) {
       return (
         <OrderDetails id="order-cart-empty">
           <h3>Your cart is empty</h3>
@@ -65,13 +66,17 @@ export class Order extends React.Component {
           totalPrice={this.props.totalPrice}
           getOrder={this.getOrder}
           getError={this.getError}
+          resetCart={this.props.resetCart}
         />
       </StyledOrder>
     );
   }
 }
 
-export default connect(({ orders }) => ({
-  cart: orders.cart,
-  totalPrice: orders.totalPrice,
-}))(Order);
+export default connect(
+  ({ orders }) => ({
+    cart: orders.cart,
+    totalPrice: orders.totalPrice,
+  }),
+  { resetCart }
+)(Order);

@@ -44,6 +44,9 @@ export class OrdersList extends React.Component {
           <p>
             <b>Address:</b> {order.address}
           </p>
+          <p>
+            <b>Date added:</b> {new Date(order.createdAt).toDateString()}
+          </p>
         </div>
       );
     };

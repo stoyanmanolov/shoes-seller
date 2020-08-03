@@ -70,6 +70,7 @@ class OrderForm extends React.Component {
         .post("/orders", formData)
         .then((res) => {
           this.props.getOrder(res.data);
+          this.props.resetCart();
         })
         .catch((err) => this.props.getError(err.response));
     }

@@ -21,3 +21,4 @@ export const ADD_TO_CART = "add_to_cart";
 export const FETCH_ORDERS = "fetch_orders";
 export const ORDERS_ERROR = "orders_error";
 export const CLEAR_ORDERS_ERROR = "clear_orders_error";
+export const RESET_CART = "reset_cart";

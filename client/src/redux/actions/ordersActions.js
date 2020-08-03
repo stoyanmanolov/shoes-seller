@@ -3,6 +3,7 @@ import {
   FETCH_ORDERS,
   ORDERS_ERROR,
   CLEAR_ORDERS_ERROR,
+  RESET_CART,
 } from "./types";
 import axios from "axios";
 
@@ -30,5 +31,11 @@ export const addToCart = (shoe, size) => {
   return {
     type: ADD_TO_CART,
     payload: { shoe, sizes: [size] },
+  };
+};
+
+export const resetCart = () => {
+  return {
+    type: RESET_CART,
   };
 };
