@@ -3,14 +3,8 @@ import { Link } from "react-router-dom";
 import { logoutUser } from "../../redux/actions/authActions";
 import { connect } from "react-redux";
 import NavItems from "./components/NavItems";
-import {
-  Nav,
-  Logo,
-  GroupedButtons,
-  SearchForm,
-  MenuList,
-  ListItem,
-} from "./NavBar-styles";
+import Search from "./components/Search";
+import { Nav, Logo, GroupedButtons, MenuList, ListItem } from "./NavBar-styles";
 import LogoImage from "./images/Logo.png";
 
 export class NavBar extends React.Component {
@@ -96,9 +90,7 @@ export class NavBar extends React.Component {
           </Link>
         </Logo>
         <GroupedButtons>
-          <button className="search">
-            <i className="fas fa-search"></i>
-          </button>
+          <Search />
           <Link to="/cart">
             <button className="cart">
               <span id="cart-items-counter" className="cart-items-counter">
@@ -108,9 +100,6 @@ export class NavBar extends React.Component {
             </button>
           </Link>
         </GroupedButtons>
-        <SearchForm>
-          <input type="text" placeholder="Search"></input>
-        </SearchForm>
       </Nav>
     );
   }

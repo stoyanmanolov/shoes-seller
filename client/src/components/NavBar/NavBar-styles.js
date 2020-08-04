@@ -47,10 +47,6 @@ export const GroupedButtons = styled.div`
   i {
     display: inherit;
   }
-  .search {
-    outline: none;
-    margin-right: 10px;
-  }
   .cart {
     outline: none;
     margin-left: 10px;
@@ -108,8 +104,4 @@ export const ListItem = styled.li`
       }
     }
   }
-`;
-
-export const SearchForm = styled.form`
-  display: none;
 `;
