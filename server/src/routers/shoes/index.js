@@ -160,6 +160,35 @@ router.get("/shoes/shoe/:id", async (req, res) => {
   }
 });
 
+router.get("/shoes/search", async (req, res) => {
+  try {
+    const searchName = req.query.searchName.toLowerCase();
+
+    const shoes = await Shoe.find({});
+
+    if (!shoes) {
+      res.sendStatus(404);
+    } else {
+      let matchingShoes = [];
+      shoes.forEach((shoe) => {
+        const shoeName = (shoe.brand + " " + shoe.model).toLowerCase();
+        let isMatching = true;
+
+        for (let i = 0; i < searchName.length; i++) {
+          if (shoeName[i] !== searchName[i]) {
+            isMatching = false;
+          }
+        }
+
+        if (isMatching) matchingShoes.push(shoe);
+      });
+      res.status(200).send(matchingShoes);
+    }
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+
 router.patch("/shoes/shoe/:id", adminAuth, async (req, res) => {
   try {
     const _id = req.params.id;
