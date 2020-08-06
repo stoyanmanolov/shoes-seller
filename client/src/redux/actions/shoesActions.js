@@ -11,6 +11,7 @@ import {
   FETCH_SHOE_DETAILS,
   SHOE_DETAILS_ERROR,
   CLEAR_SHOE_DETAILS_ERROR,
+  CLEAR_SHOE_DETAILS,
 } from "./types";
 import axios from "axios";
 
@@ -136,5 +137,11 @@ export const fetchShoeDetails = (id) => {
       .catch((error) => {
         dispatch({ type: SHOE_DETAILS_ERROR, payload: error.response });
       });
+  };
+};
+
+export const clearShoeDetails = () => {
+  return {
+    type: CLEAR_SHOE_DETAILS,
   };
 };

@@ -8,7 +8,10 @@ import {
   Text,
   InputPanel,
 } from "./ShoeDetails-styles";
-import { fetchShoeDetails } from "../../redux/actions/shoesActions";
+import {
+  fetchShoeDetails,
+  clearShoeDetails,
+} from "../../redux/actions/shoesActions";
 import { addToCart } from "../../redux/actions/ordersActions";
 import Error from "../Error";
 import { Button } from "semantic-ui-react";
@@ -29,6 +32,10 @@ export class ShoeDetails extends React.Component {
     if (!this.state.selectedImage && shoeDetails) {
       this.setState({ selectedImage: shoeDetails.frontImage });
     }
+  };
+
+  componentWillUnmount = () => {
+    this.props.clearShoeDetails();
   };
 
   renderImages = (frontImage, images) => {
@@ -166,5 +173,6 @@ export default connect(
   {
     fetchShoeDetails,
     addToCart,
+    clearShoeDetails,
   }
 )(ShoeDetails);

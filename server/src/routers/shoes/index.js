@@ -182,6 +182,9 @@ router.get("/shoes/search", async (req, res) => {
 
         if (isMatching) matchingShoes.push(shoe);
       });
+      if (req.query.limit) {
+        matchingShoes = matchingShoes.slice(0, req.query.limit);
+      }
       res.status(200).send(matchingShoes);
     }
   } catch (e) {

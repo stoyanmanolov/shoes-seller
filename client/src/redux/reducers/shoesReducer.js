@@ -7,6 +7,7 @@ import {
   REMOVE_FILTER,
   SET_CURRENT_SORT,
   FETCH_SHOE_DETAILS,
+  CLEAR_SHOE_DETAILS,
 } from "../actions/types";
 
 const initialState = {
@@ -135,6 +136,13 @@ const shoesReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         shoeDetails: payload,
+      };
+    }
+
+    case CLEAR_SHOE_DETAILS: {
+      return {
+        ...state,
+        shoeDetails: null,
       };
     }
     default:

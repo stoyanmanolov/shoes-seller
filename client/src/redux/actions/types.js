@@ -22,3 +22,4 @@ export const FETCH_ORDERS = "fetch_orders";
 export const ORDERS_ERROR = "orders_error";
 export const CLEAR_ORDERS_ERROR = "clear_orders_error";
 export const RESET_CART = "reset_cart";
+export const CLEAR_SHOE_DETAILS = "clear_shoe_details";
