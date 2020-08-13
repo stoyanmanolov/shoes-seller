@@ -19,6 +19,9 @@ export const StyledShoesList = styled.div`
     align-items: center;
     justify-content: center;
   }
+  ul {
+    margin: 10px auto;
+  }
   @media (min-width: 768px) {
     margin-left: 20px;
     margin-right: 20px;
