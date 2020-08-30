@@ -1,6 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 import { ShoesList } from "./ShoesList";
+import ShoeCard from "./components/ShoeCard";
 
 describe("ShoesList", () => {
   let wrapper, props;
@@ -51,14 +52,12 @@ describe("ShoesList", () => {
     const fetchShoesList = jest.fn();
     const clearShoesList = jest.fn();
     const setCurrentSort = jest.fn();
-    const deleteShoe = jest.fn();
 
     beforeAll(() => {
       props = {
         fetchShoesList,
         clearShoesList,
         setCurrentSort,
-        deleteShoe,
         shoesList: {
           shoes: [
             { _id: 123, brand: "Some Brand", price: 20 },
@@ -84,35 +83,8 @@ describe("ShoesList", () => {
     });
 
     it("shows a card for each shoe", () => {
-      props.shoesList.shoes.forEach((shoe) => {
-        expect(
-          wrapper.find({ id: "list" }).find({ id: shoe.brand }).exists()
-        ).toBe(true);
-      });
-    });
-
-    it("renders a link that redirects to a specific shoe based on id", () => {
-      props.shoesList.shoes.forEach((shoe) => {
-        expect(
-          wrapper
-            .find({ id: "list" })
-            .find({ id: shoe._id.toString() })
-            .prop("to")
-        ).toBe("/shoe/" + shoe._id);
-      });
-    });
-
-    it("on clicking the delete button deletes the shoe", () => {
-      const brand = props.shoesList.shoes[0].brand;
-      wrapper
-        .find({ id: "list" })
-        .find({ id: brand })
-        .find("button")
-        .simulate("click");
-      expect(deleteShoe).toBeCalledTimes(1);
-      expect(wrapper.find({ id: "list" }).find({ id: brand }).exists()).toBe(
-        false
-      );
+      const { length } = props.shoesList.shoes;
+      expect(wrapper.find({ id: "list" }).find(ShoeCard)).toHaveLength(2);
     });
   });
 });

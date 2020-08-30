@@ -1,16 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
 import { StyledShoesList, List } from "./ShoesList-styles";
-import { Dropdown, Loader, Message, Button } from "semantic-ui-react";
-import { Card, CardImg, CardBody, CardTitle, CardSubtitle } from "reactstrap";
+import { Dropdown, Loader, Message } from "semantic-ui-react";
 import { Pagination } from "@material-ui/lab";
 import {
   fetchShoesList,
   clearShoesList,
   setCurrentSort,
 } from "../../redux/actions/shoesActions";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import ShoeCard from "./components/ShoeCard";
 
 export class ShoesList extends React.Component {
   state = {
@@ -50,72 +48,22 @@ export class ShoesList extends React.Component {
 
   renderShoesList = () => {
     const {
-      shoesList,
-      shoesList: { currentPage, currentSort },
-      user,
-      fetchShoesList,
-      clearShoesList,
-      gender,
-      forKids,
-      selectedFilters,
-      token,
+      shoesList: { shoes },
     } = this.props;
 
-    if (shoesList.shoes.length === 0) return null;
+    if (shoes.length === 0) return null;
 
-    return shoesList.shoes.map(
-      ({ _id, brand, model, price, frontImage }, index) => {
-        return (
-          <Link id={_id.toString()} key={index} to={`/shoe/${_id}`}>
-            <Card id={brand}>
-              <CardImg
-                className="card-image"
-                top
-                src={"/images/" + frontImage}
-                alt="Shoes front image"
-              />
-              <CardBody>
-                <CardTitle>{brand + " " + model}</CardTitle>
-                <CardSubtitle style={{ color: "grey" }}>
-                  {"$" + price.toFixed(2)}
-                </CardSubtitle>
-                {user && user.role === "admin" && (
-                  <Button
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      await axios
-                        .delete(`/shoes/${_id}`, {
-                          headers: {
-                            "X-Auth-Token": token,
-                          },
-                        })
-                        .then((response) => {
-                          window.alert(response.data.message);
-                          clearShoesList();
-                          fetchShoesList(
-                            shoesList.shoesPerPage,
-                            currentPage,
-                            gender,
-                            forKids,
-                            currentSort,
-                            selectedFilters
-                          );
-                        })
-                        .catch((error) =>
-                          window.alert(error.response.statusText)
-                        );
-                    }}
-                    negative
-                  >
-                    Delete
-                  </Button>
-                )}
-              </CardBody>
-            </Card>
-          </Link>
-        );
-      }
-    );
+    return shoes.map((shoe, index) => {
+      return (
+        <ShoeCard
+          id={shoe.model}
+          key={index}
+          shoe={shoe}
+          forKids={this.props.forKids}
+          gender={this.props.gender}
+        />
+      );
+    });
   };
 
   render() {
