@@ -212,6 +212,12 @@ router.delete("/shoes/:id", adminAuth, async (req, res) => {
     const _id = req.params.id;
     const deletedShoe = await Shoe.findOneAndDelete({ _id });
     if (!deletedShoe) return res.sendStatus(404);
+
+    fs.unlink("src/images/" + deletedShoe.frontImage, (err) => {});
+    deletedShoe.images.forEach((image) => {
+      fs.unlink("src/images/" + image, (err) => {});
+    });
+
     res
       .status(200)
       .send({ message: `Shoe with id: ${_id} deleted successfuly.` });

@@ -51,12 +51,14 @@ describe("ShoesList", () => {
     const fetchShoesList = jest.fn();
     const clearShoesList = jest.fn();
     const setCurrentSort = jest.fn();
+    const deleteShoe = jest.fn();
 
     beforeAll(() => {
       props = {
         fetchShoesList,
         clearShoesList,
         setCurrentSort,
+        deleteShoe,
         shoesList: {
           shoes: [
             { _id: 123, brand: "Some Brand", price: 20 },
@@ -98,6 +100,19 @@ describe("ShoesList", () => {
             .prop("to")
         ).toBe("/shoe/" + shoe._id);
       });
+    });
+
+    it("on clicking the delete button deletes the shoe", () => {
+      const brand = props.shoesList.shoes[0].brand;
+      wrapper
+        .find({ id: "list" })
+        .find({ id: brand })
+        .find("button")
+        .simulate("click");
+      expect(deleteShoe).toBeCalledTimes(1);
+      expect(wrapper.find({ id: "list" }).find({ id: brand }).exists()).toBe(
+        false
+      );
     });
   });
 });
