@@ -1,24 +1,30 @@
 {
-  "name": "shoes-seller",
+  "name": "server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": ">=10.0.0",
-    "npm": ">=6.0.0"
+    "node": "12.x"
   },
   "scripts": {
-    "heroku-prebuild": "cd client && npm install && npm run build && cd .. && cd server && npm install",
-    "start": "cd server && npm start"
+    "start": "node src/index.js",
+    "server": "nodemon src/index.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/stoyanmanolov/shoes-seller.git"
-  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/stoyanmanolov/shoes-seller/issues"
-  },
-  "homepage": "https://github.com/stoyanmanolov/shoes-seller#readme"
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^5.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.4.0",
+    "mongoose": "^5.8.1",
+    "multer": "^1.4.2",
+    "nodemon": "^2.0.2"
+  }
 }
