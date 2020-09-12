@@ -3,11 +3,12 @@ const shoesRouter = require("./routers/shoes");
 const authRouter = require("./routers/auth");
 const ordersRouter = require("./routers/orders");
 const path = require("path");
-require("./db/mongoose");
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
+
+require("./db/mongoose");
 
 const app = express();
 
