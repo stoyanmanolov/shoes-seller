@@ -17,6 +17,19 @@ router.get("/orders/all", adminAuth, async (req, res) => {
   }
 });
 
+router.get("/orders/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const order = await Order.findById({ userId });
+    if (!order) {
+      res.sendStatus(404);
+    } else res.status(200).send(order);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+
 router.post("/orders", async (req, res) => {
   try {
     const order = new Order(req.body);
