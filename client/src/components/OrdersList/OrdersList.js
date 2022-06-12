@@ -47,6 +47,19 @@ export class OrdersList extends React.Component {
           <p>
             <b>Date added:</b> {new Date(order.createdAt).toDateString()}
           </p>
+          <p>
+            <b>Cart:</b> <br />
+            {order.cart.map(({ shoe, sizes }) => {
+              return (
+                <>
+                  <b>{` ${shoe.brand} ${shoe.model} `}</b>
+                  in sizes
+                  <b>{` (${sizes.join(", ")}) `}</b>
+                  <br />
+                </>
+              );
+            })}
+          </p>
         </div>
       );
     };
