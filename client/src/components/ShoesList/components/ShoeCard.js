@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { Card, CardImg, CardBody, CardTitle, CardSubtitle } from "reactstrap";
 import { Button } from "semantic-ui-react";
 import {
@@ -42,6 +42,10 @@ export class ShoeCard extends React.Component {
       .catch((error) => window.alert(error.response.statusText));
   };
 
+  editShoe = async (id) => {
+    this.props.history.push(`/edit/${id}`);
+  };
+
   render() {
     const {
       shoe: { _id, brand, price, model, frontImage },
@@ -63,15 +67,27 @@ export class ShoeCard extends React.Component {
               {"$" + price.toFixed(2)}
             </CardSubtitle>
             {user && user.role === "admin" && (
-              <Button
-                onClick={async (e) => {
-                  e.preventDefault();
-                  this.deleteShoe(_id);
-                }}
-                negative
-              >
-                Delete
-              </Button>
+              <>
+                <Button
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    this.editShoe(_id);
+                  }}
+                  positive
+                >
+                  Edit
+                </Button>
+
+                <Button
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    this.deleteShoe(_id);
+                  }}
+                  negative
+                >
+                  Delete
+                </Button>
+              </>
             )}
           </CardBody>
         </Card>
@@ -92,4 +108,4 @@ export default connect(
     fetchShoesList,
     clearShoesList,
   }
-)(ShoeCard);
+)(withRouter(ShoeCard));

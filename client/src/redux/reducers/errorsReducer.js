@@ -8,12 +8,14 @@ import {
   CLEAR_SHOE_DETAILS_ERROR,
   ORDERS_ERROR,
   CLEAR_ORDERS_ERROR,
+  USERS_ERROR,
 } from "../actions/types";
 
 const initialState = {
   auth: {
     login: null,
     register: null,
+    users: null,
   },
   shoes: {
     shoesList: null,
@@ -30,8 +32,16 @@ const errorsReducer = (state = initialState, action) => {
       return { ...state, auth: { login: action.payload } };
     case REGISTER_AUTH_ERROR:
       return { ...state, auth: { register: action.payload } };
+    case USERS_ERROR: {
+      return {
+        ...state,
+        auth: {
+          users: action.payload,
+        },
+      };
+    }
     case CLEAR_AUTH_ERRORS:
-      return { ...state, auth: { login: null, register: null } };
+      return { ...state, auth: { login: null, register: null, users: null } };
     case SHOES_LIST_ERROR:
       return {
         ...state,

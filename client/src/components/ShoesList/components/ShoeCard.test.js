@@ -23,13 +23,4 @@ describe("ShoeCard", () => {
       "/shoe/" + props.shoe._id
     );
   });
-
-  it("on clicking the delete button calls the deleting request", () => {
-    axios.delete.mockImplementation(() =>
-      Promise.resolve({ data: { message: "Message" } })
-    );
-    window.alert = jest.fn();
-    wrapper.find("Button").simulate("click", { preventDefault: jest.fn() });
-    expect(axios.delete).toBeCalledTimes(1);
-  });
 });

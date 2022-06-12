@@ -12,6 +12,7 @@ import Shoe from "../../pages/Shoe";
 import Cart from "../../pages/Cart";
 import Checkout from "../../pages/Checkout";
 import Orders from "../../pages/Orders";
+import AddAdmin from "../../pages/AddAdmin";
 
 export class Routes extends React.Component {
   render() {
@@ -27,6 +28,13 @@ export class Routes extends React.Component {
           <Route exact path="/shoes/add">
             {this.props.isLoggedIn && this.props.user.role === "admin" ? (
               <AddShoes />
+            ) : (
+              <Redirect to="/" />
+            )}
+          </Route>
+          <Route exact path="/admin/add">
+            {this.props.isLoggedIn && this.props.user.role === "admin" ? (
+              <AddAdmin />
             ) : (
               <Redirect to="/" />
             )}
