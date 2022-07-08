@@ -13,6 +13,7 @@ import Cart from "../../pages/Cart";
 import Checkout from "../../pages/Checkout";
 import Orders from "../../pages/Orders";
 import AddAdmin from "../../pages/AddAdmin";
+import EditShoe from "../../pages/EditShoe";
 
 export class Routes extends React.Component {
   render() {
@@ -28,6 +29,13 @@ export class Routes extends React.Component {
           <Route exact path="/shoes/add">
             {this.props.isLoggedIn && this.props.user.role === "admin" ? (
               <AddShoes />
+            ) : (
+              <Redirect to="/" />
+            )}
+          </Route>
+          <Route exact path="/shoes/edit/:id">
+            {this.props.isLoggedIn && this.props.user.role === "admin" ? (
+              <EditShoe />
             ) : (
               <Redirect to="/" />
             )}

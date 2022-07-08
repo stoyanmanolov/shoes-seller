@@ -43,7 +43,7 @@ export class ShoeCard extends React.Component {
   };
 
   editShoe = async (id) => {
-    this.props.history.push(`/edit/${id}`);
+    this.props.history.push(`/shoes/edit/${id}`);
   };
 
   render() {

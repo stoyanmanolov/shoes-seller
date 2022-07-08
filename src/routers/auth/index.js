@@ -84,7 +84,6 @@ router.get("/users", adminAuth, async (req, res) => {
   }
 });
 
-// add adminAuth
 router.post("/users/add-admin/:userId", adminAuth, async (req, res) => {
   try {
     const userId = req.params.userId;

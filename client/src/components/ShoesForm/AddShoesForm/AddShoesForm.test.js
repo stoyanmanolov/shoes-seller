@@ -1,10 +1,10 @@
 import React from "react";
 import { shallow } from "enzyme";
-import { ShoesForm } from "./ShoesForm";
+import { AddShoesForm } from "./AddShoesForm";
 import { isUndefined } from "lodash";
 
-describe("ShoesForm", () => {
-  let wrapper = shallow(<ShoesForm />);
+describe("AddShoesForm", () => {
+  let wrapper = shallow(<AddShoesForm />);
 
   describe("Submitting the form", () => {
     const submitValues = (inputValues) => {

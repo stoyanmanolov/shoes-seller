@@ -3,13 +3,13 @@ import axios from "axios";
 import _ from "lodash";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { validateForm, validateImages } from "./validate";
+import { validateForm, validateImages, formatForSubmission } from "../validate";
 import { Form, Button, Message } from "semantic-ui-react";
-import { Container } from "./ShoesForm-styles";
-import FileUploads from "./components/FileUploads";
-import AmountPerSize from "./components/AmountPerSize";
+import { Container } from "./AddShoesForm-styles";
+import FileUploads from "../components/FileUploads";
+import AmountPerSize from "../components/AmountPerSize";
 
-export class ShoesForm extends React.Component {
+export class AddShoesForm extends React.Component {
   state = {
     resultData: {},
     errors: {},
@@ -65,21 +65,6 @@ export class ShoesForm extends React.Component {
     this.setState({ errors });
 
     if (_.isEmpty(errors)) {
-      const formatForSubmission = (validatedData) => {
-        const formData = new FormData();
-        Object.keys(validatedData).forEach((key) => {
-          if (key === "amounts") {
-            return;
-          } else if (key === "images") {
-            validatedData[key].forEach((image, index) => {
-              formData.append("images" + index, image);
-            });
-          } else if (key === "amountPerSize") {
-            formData.append(key, JSON.stringify(validatedData[key]));
-          } else formData.append(key, validatedData[key]);
-        });
-        return formData;
-      };
       const validatedData = dataToValidate;
       const submitData = formatForSubmission(validatedData);
 
@@ -238,4 +223,4 @@ export class ShoesForm extends React.Component {
   }
 }
 
-export default connect(({ auth }) => ({ token: auth.token }))(ShoesForm);
+export default connect(({ auth }) => ({ token: auth.token }))(AddShoesForm);

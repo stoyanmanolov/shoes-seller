@@ -48,3 +48,19 @@ export const validateImages = (images) => {
 
   return validatedImages;
 };
+
+export const formatForSubmission = (validatedData) => {
+  const formData = new FormData();
+  Object.keys(validatedData).forEach((key) => {
+    if (key === "amounts") {
+      return;
+    } else if (key === "images") {
+      validatedData[key].forEach((image, index) => {
+        formData.append("images" + index, image);
+      });
+    } else if (key === "amountPerSize") {
+      formData.append(key, JSON.stringify(validatedData[key]));
+    } else formData.append(key, validatedData[key]);
+  });
+  return formData;
+};

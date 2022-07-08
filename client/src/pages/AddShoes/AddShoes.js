@@ -1,12 +1,12 @@
 import React from "react";
 import NavBar from "../../components/NavBar";
-import ShoesForm from "../../components/ShoesForm";
+import AddShoesForm from "../../components/ShoesForm/AddShoesForm";
 
 const AddShoes = () => {
   return (
     <>
       <NavBar />
-      <ShoesForm />
+      <AddShoesForm />
     </>
   );
 };
