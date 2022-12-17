@@ -15,8 +15,8 @@ export const UsersAPI = {
     });
   },
   addAdmin: (userId, token) => {
-    return axios.post(
-      `/users/add-admin/${userId}`,
+    return axios.patch(
+      `/users/role/admin/${userId}`,
       {},
       {
         headers: {

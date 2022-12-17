@@ -7,6 +7,6 @@ const router = new express.Router();
 router.post("/register", usersController.register);
 router.post("/login", usersController.login);
 router.get("/users", adminAuth, usersController.getUsers);
-router.post("/users/add-admin/:userId", adminAuth, usersController.addAdmin);
+router.patch("/users/role/admin/:userId", adminAuth, usersController.addAdmin);
 
 module.exports = router;
