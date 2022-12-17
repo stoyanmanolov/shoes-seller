@@ -4,9 +4,9 @@ const { adminAuth } = require("../../middleware/auth");
 
 const router = new express.Router();
 
-router.get("/orders/all", adminAuth, ordersController.getOrders);
-router.get("/orders/:userId", ordersController.getOrderByUserId);
+router.get("/orders", adminAuth, ordersController.getOrders);
 router.post("/orders", ordersController.addOrder);
+router.get("/orders/:userId", ordersController.getOrderByUserId);
 router.patch(
   "/orders/complete/:id",
   adminAuth,

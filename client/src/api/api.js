@@ -35,11 +35,11 @@ export const ShoesAPI = {
       },
     });
   },
-  getShoeById: (id) => {
-    return axios.get("/shoes/shoe/" + id);
+  getShoe: (id) => {
+    return axios.get("/shoes/" + id);
   },
   editShoe: (id, submitData, token) => {
-    return axios.patch("/shoes/shoe/" + id, submitData, {
+    return axios.patch("/shoes/" + id, submitData, {
       headers: {
         "X-Auth-Token": token,
       },
@@ -65,14 +65,14 @@ export const ShoesAPI = {
   },
   getFilteredShoes: (gender, limit, skip, forKids, currentSort, filtersUrl) => {
     return axios.get(
-      `/shoes/all/${gender}/?numOfPages=true&limit=${limit}&skip=${skip}&forKids=${forKids}&sortOption=${currentSort}${filtersUrl}`
+      `/shoes/gender/${gender}/?numOfPages=true&limit=${limit}&skip=${skip}&forKids=${forKids}&sortOption=${currentSort}${filtersUrl}`
     );
   },
 };
 
 export const OrdersAPI = {
   getOrders: (config) => {
-    return axios.get("/orders/all", config);
+    return axios.get("/orders", config);
   },
   getOrder: (formData) => {
     return axios.post("/orders", formData);

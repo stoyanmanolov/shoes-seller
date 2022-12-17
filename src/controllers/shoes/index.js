@@ -2,6 +2,19 @@ const fs = require("fs");
 const Shoe = require("../../models/Shoe");
 const { findFieldResults, getGender, formatFilters } = require("./utils");
 
+const getShoe = async (req, res) => {
+  try {
+    const _id = req.params.id;
+
+    const shoe = await Shoe.findById(_id);
+    if (!shoe) {
+      res.sendStatus(404);
+    } else res.status(200).send(shoe);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+};
+
 const addShoe = async (req, res) => {
   //In case of an error - delete the uploaded images.
   let deleteIfError = [];
@@ -26,6 +39,72 @@ const addShoe = async (req, res) => {
         fs.unlink("src/images/" + image, (err) => {});
       });
     }
+    res.status(400).send(e);
+  }
+};
+
+const editShoe = async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const updates = Object.keys(req.body);
+    const shoe = await Shoe.findById({ _id });
+    updates.forEach((update) => {
+      shoe[update] = req.body[update];
+    });
+    await shoe.save();
+    res.status(200).send(shoe);
+  } catch (e) {
+    res.sendStatus(404);
+  }
+};
+
+const deleteShoe = async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const deletedShoe = await Shoe.findOneAndDelete({ _id });
+    if (!deletedShoe) return res.sendStatus(404);
+
+    fs.unlink("src/images/" + deletedShoe.frontImage, (err) => {});
+    deletedShoe.images.forEach((image) => {
+      fs.unlink("src/images/" + image, (err) => {});
+    });
+
+    res
+      .status(200)
+      .send({ message: `Shoe with id: ${_id} deleted successfuly.` });
+  } catch (e) {
+    res.sendStatus(400);
+  }
+};
+
+const searchShoes = async (req, res) => {
+  try {
+    const searchName = req.query.searchName.toLowerCase();
+
+    const shoes = await Shoe.find({});
+
+    if (!shoes) {
+      res.sendStatus(404);
+    } else {
+      let matchingShoes = [];
+      shoes.forEach((shoe) => {
+        const shoeName = (shoe.brand + " " + shoe.model).toLowerCase();
+        let isMatching = true;
+
+        for (let i = 0; i < searchName.length; i++) {
+          if (shoeName[i] !== searchName[i]) {
+            isMatching = false;
+          }
+        }
+
+        if (isMatching) matchingShoes.push(shoe);
+      });
+      if (req.query.limit) {
+        matchingShoes = matchingShoes.slice(0, req.query.limit);
+      }
+      res.status(200).send(matchingShoes);
+    }
+  } catch (e) {
     res.status(400).send(e);
   }
 };
@@ -78,7 +157,7 @@ const getGenderSpecificShoes = async (req, res) => {
 
 // Search for the unique values of a field of the Shoe model and how many times it was met.
 // Example: GET/shoes/fields/men/category => Output: [{ category: 'Sneakers', count: 12 }]
-const getShoeField = async (req, res) => {
+const getShoeFields = async (req, res) => {
   try {
     await Shoe.find(
       {
@@ -125,92 +204,13 @@ const getShoePriceBoundries = async (req, res) => {
   }
 };
 
-const getShoeById = async (req, res) => {
-  try {
-    const _id = req.params.id;
-
-    const shoe = await Shoe.findById(_id);
-    if (!shoe) {
-      res.sendStatus(404);
-    } else res.status(200).send(shoe);
-  } catch (e) {
-    res.status(400).send(e);
-  }
-};
-
-const searchShoes = async (req, res) => {
-  try {
-    const searchName = req.query.searchName.toLowerCase();
-
-    const shoes = await Shoe.find({});
-
-    if (!shoes) {
-      res.sendStatus(404);
-    } else {
-      let matchingShoes = [];
-      shoes.forEach((shoe) => {
-        const shoeName = (shoe.brand + " " + shoe.model).toLowerCase();
-        let isMatching = true;
-
-        for (let i = 0; i < searchName.length; i++) {
-          if (shoeName[i] !== searchName[i]) {
-            isMatching = false;
-          }
-        }
-
-        if (isMatching) matchingShoes.push(shoe);
-      });
-      if (req.query.limit) {
-        matchingShoes = matchingShoes.slice(0, req.query.limit);
-      }
-      res.status(200).send(matchingShoes);
-    }
-  } catch (e) {
-    res.status(400).send(e);
-  }
-};
-
-const editShoeById = async (req, res) => {
-  try {
-    const _id = req.params.id;
-    const updates = Object.keys(req.body);
-    const shoe = await Shoe.findById({ _id });
-    updates.forEach((update) => {
-      shoe[update] = req.body[update];
-    });
-    await shoe.save();
-    res.status(200).send(shoe);
-  } catch (e) {
-    res.sendStatus(404);
-  }
-};
-
-const deleteShoeById = async (req, res) => {
-  try {
-    const _id = req.params.id;
-    const deletedShoe = await Shoe.findOneAndDelete({ _id });
-    if (!deletedShoe) return res.sendStatus(404);
-
-    fs.unlink("src/images/" + deletedShoe.frontImage, (err) => {});
-    deletedShoe.images.forEach((image) => {
-      fs.unlink("src/images/" + image, (err) => {});
-    });
-
-    res
-      .status(200)
-      .send({ message: `Shoe with id: ${_id} deleted successfuly.` });
-  } catch (e) {
-    res.sendStatus(400);
-  }
-};
-
 module.exports = {
+  getShoe,
   addShoe,
-  getGenderSpecificShoes,
-  getShoeField,
-  getShoePriceBoundries,
-  getShoeById,
+  editShoe,
+  deleteShoe,
   searchShoes,
-  editShoeById,
-  deleteShoeById,
+  getShoeFields,
+  getShoePriceBoundries,
+  getGenderSpecificShoes,
 };

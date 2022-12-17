@@ -23,15 +23,15 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 router.post("/shoes", adminAuth, upload.any(), shoesController.addShoe);
-router.get("/shoes/all/:gender", shoesController.getGenderSpecificShoes);
-router.get("/shoes/fields/:gender/:field", shoesController.getShoeField);
+router.get("/shoes/:id", shoesController.getShoe);
+router.patch("/shoes/:id", adminAuth, shoesController.editShoe);
+router.delete("/shoes/:id", adminAuth, shoesController.deleteShoe);
+router.get("/shoes/search", shoesController.searchShoes);
+router.get("/shoes/gender/:gender", shoesController.getGenderSpecificShoes);
+router.get("/shoes/fields/:gender/:field", shoesController.getShoeFields);
 router.get(
   "/shoes/fields/:gender/price/boundries",
   shoesController.getShoePriceBoundries
 );
-router.get("/shoes/shoe/:id", shoesController.getShoeById);
-router.get("/shoes/search", shoesController.searchShoes);
-router.patch("/shoes/shoe/:id", adminAuth, shoesController.editShoeById);
-router.delete("/shoes/:id", adminAuth, shoesController.deleteShoeById);
 
 module.exports = router;

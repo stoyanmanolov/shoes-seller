@@ -16,7 +16,7 @@ export class EditShoesForm extends React.Component {
   };
 
   componentDidMount() {
-    ShoesAPI.getShoeById(this.props.match.params.id)
+    ShoesAPI.getShoe(this.props.match.params.id)
       .then((response) => {
         this.setState({ shoe: response.data });
       })

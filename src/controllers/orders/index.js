@@ -13,6 +13,17 @@ const getOrders = async (req, res) => {
   }
 };
 
+const addOrder = async (req, res) => {
+  try {
+    const order = new Order(req.body);
+    await order.save();
+
+    res.status(201).send(order);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
 const getOrderByUserId = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -23,17 +34,6 @@ const getOrderByUserId = async (req, res) => {
     } else res.status(200).send(order);
   } catch (e) {
     res.status(400).send(e);
-  }
-};
-
-const addOrder = async (req, res) => {
-  try {
-    const order = new Order(req.body);
-    await order.save();
-
-    res.status(201).send(order);
-  } catch (error) {
-    res.status(400).send(error);
   }
 };
 
@@ -52,7 +52,7 @@ const markOrderAsComplete = async (req, res) => {
 
 module.exports = {
   getOrders,
-  getOrderByUserId,
   addOrder,
+  getOrderByUserId,
   markOrderAsComplete,
 };

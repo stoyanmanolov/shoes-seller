@@ -128,7 +128,7 @@ export const removeFilter = (title, filter) => {
 
 export const fetchShoeDetails = (id) => {
   return async (dispatch) => {
-    ShoesAPI.getShoeById(id)
+    ShoesAPI.getShoe(id)
       .then((response) => {
         dispatch({ type: CLEAR_SHOE_DETAILS_ERROR });
         dispatch({ type: FETCH_SHOE_DETAILS, payload: response.data });
