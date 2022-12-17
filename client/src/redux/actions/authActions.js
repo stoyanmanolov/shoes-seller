@@ -10,12 +10,11 @@ import {
   MAKE_USER_ADMIN,
   USERS_ERROR,
 } from "./types";
-import axios from "axios";
+import { UsersAPI } from "../../api";
 
 export const registerUser = (signupData) => {
   return async (dispatch) => {
-    await axios
-      .post("/register", signupData)
+    UsersAPI.register(signupData)
       .then((response) => {
         dispatch({ type: CLEAR_AUTH_ERRORS });
         dispatch({ type: REGISTER_USER, payload: response.data });
@@ -34,8 +33,7 @@ export const clearRegisteredInfo = () => {
 
 export const loginUser = (loginData) => {
   return async (dispatch) => {
-    await axios
-      .post("/login", loginData)
+    UsersAPI.login(loginData)
       .then((response) => {
         dispatch({ type: CLEAR_AUTH_ERRORS });
         dispatch({ type: LOGIN_USER, payload: response.data });
@@ -54,12 +52,7 @@ export const logoutUser = () => {
 
 export const getUsers = () => {
   return async (dispatch, getState) => {
-    await axios
-      .get("/users", {
-        headers: {
-          "X-Auth-Token": getState().auth.token,
-        },
-      })
+    UsersAPI.getUsers(getState().auth.token)
       .then((response) => {
         dispatch({ type: CLEAR_AUTH_ERRORS });
         dispatch({ type: GET_USERS, payload: response.data });
@@ -72,16 +65,7 @@ export const getUsers = () => {
 
 export const makeUserAnAdmin = (userId) => {
   return async (dispatch, getState) => {
-    await axios
-      .post(
-        `/users/add-admin/${userId}`,
-        {},
-        {
-          headers: {
-            "X-Auth-Token": getState().auth.token,
-          },
-        }
-      )
+    UsersAPI.addAdmin(userId, getState().auth.token)
       .then((response) => {
         dispatch({ type: CLEAR_AUTH_ERRORS });
         dispatch({ type: MAKE_USER_ADMIN, payload: response.data });

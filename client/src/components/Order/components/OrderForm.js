@@ -3,7 +3,7 @@ import { Form, Button, Message } from "semantic-ui-react";
 import { StyledOrderForm } from "./OrderForm-styles";
 import validator from "validator";
 import _ from "lodash";
-import axios from "axios";
+import { OrdersAPI } from "../../../api";
 
 class OrderForm extends React.Component {
   state = {
@@ -19,14 +19,8 @@ class OrderForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    const {
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      city,
-      address,
-    } = this.state;
+    const { firstName, lastName, email, phoneNumber, city, address } =
+      this.state;
 
     const formData = {
       firstName,
@@ -66,8 +60,7 @@ class OrderForm extends React.Component {
       formData.price = this.props.totalPrice;
       formData.cart = this.props.cart;
 
-      axios
-        .post("/orders", formData)
+      OrdersAPI.getOrder(formData)
         .then((res) => {
           this.props.getOrder(res.data);
           this.props.resetCart();

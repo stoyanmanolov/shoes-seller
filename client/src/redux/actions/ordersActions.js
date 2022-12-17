@@ -5,7 +5,7 @@ import {
   CLEAR_ORDERS_ERROR,
   RESET_CART,
 } from "./types";
-import axios from "axios";
+import { OrdersAPI } from "../../api";
 
 export const fetchOrders = (token) => {
   return async (dispatch) => {
@@ -15,8 +15,7 @@ export const fetchOrders = (token) => {
       },
     };
 
-    await axios
-      .get("/orders/all", config)
+    OrdersAPI.getOrders(config)
       .then((response) => {
         dispatch({ type: CLEAR_ORDERS_ERROR });
         dispatch({ type: FETCH_ORDERS, payload: response.data });

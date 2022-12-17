@@ -3,7 +3,7 @@ import { StyledSearch } from "./Search-styles";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Button, Input, List, Image } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
-import axios from "axios";
+import { ShoesAPI } from "../../../api";
 
 export class Search extends React.Component {
   state = { toggled: false, input: "", matchingShoes: [] };
@@ -15,8 +15,7 @@ export class Search extends React.Component {
   handleChange = (e) => {
     this.setState({ input: e.target.value });
 
-    axios
-      .get(`/shoes/search?searchName=${e.target.value}&limit=10`)
+    ShoesAPI.searchShoes(e.target.value)
       .then((response) => this.setState({ matchingShoes: response.data }))
       .catch((error) => window.alert("There has been an error!"));
   };

@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import axios from "axios";
 import { Link, withRouter } from "react-router-dom";
 import { Card, CardImg, CardBody, CardTitle, CardSubtitle } from "reactstrap";
 import { Button } from "semantic-ui-react";
@@ -8,6 +7,7 @@ import {
   fetchShoesList,
   clearShoesList,
 } from "../../../redux/actions/shoesActions";
+import { ShoesAPI } from "../../../api";
 
 export class ShoeCard extends React.Component {
   deleteShoe = async (id) => {
@@ -21,12 +21,7 @@ export class ShoeCard extends React.Component {
       forKids,
     } = this.props;
 
-    await axios
-      .delete(`/shoes/${id}`, {
-        headers: {
-          "X-Auth-Token": token,
-        },
-      })
+    ShoesAPI.deleteShoe(id, token)
       .then((response) => {
         window.alert(response.data.message);
         clearShoesList();

@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import _ from "lodash";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -8,6 +7,7 @@ import { Form, Button, Message } from "semantic-ui-react";
 import { Container } from "./AddShoesForm-styles";
 import FileUploads from "../components/FileUploads";
 import AmountPerSize from "../components/AmountPerSize";
+import { ShoesAPI } from "../../../api";
 
 export class AddShoesForm extends React.Component {
   state = {
@@ -68,12 +68,7 @@ export class AddShoesForm extends React.Component {
       const validatedData = dataToValidate;
       const submitData = formatForSubmission(validatedData);
 
-      axios
-        .post("/shoes", submitData, {
-          headers: {
-            "X-Auth-Token": this.props.token,
-          },
-        })
+      ShoesAPI.addShoe(submitData, this.props.token)
         .then((response) => {
           this.setState({ resultData: response });
         })

@@ -1,11 +1,11 @@
 import React from "react";
-import axios from "axios";
 import _ from "lodash";
 import { connect } from "react-redux";
 import { validateForm } from "../validate";
 import { Form, Button, Message, Loader } from "semantic-ui-react";
 import { Container } from "./EditShoesForm-styles";
 import { withRouter } from "react-router-dom";
+import { ShoesAPI } from "../../../api";
 
 export class EditShoesForm extends React.Component {
   state = {
@@ -16,8 +16,7 @@ export class EditShoesForm extends React.Component {
   };
 
   componentDidMount() {
-    axios
-      .get("/shoes/shoe/" + this.props.match.params.id)
+    ShoesAPI.getShoeById(this.props.match.params.id)
       .then((response) => {
         this.setState({ shoe: response.data });
       })
@@ -49,12 +48,7 @@ export class EditShoesForm extends React.Component {
 
     if (_.isEmpty(errors)) {
       const submitData = dataToValidate;
-      axios
-        .patch("/shoes/shoe/" + this.state.shoe._id, submitData, {
-          headers: {
-            "X-Auth-Token": this.props.token,
-          },
-        })
+      ShoesAPI.editShoe(this.state.shoe._id, submitData, this.props.token)
         .then((response) => {
           this.setState({ resultData: response });
         })

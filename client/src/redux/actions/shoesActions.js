@@ -13,7 +13,7 @@ import {
   CLEAR_SHOE_DETAILS_ERROR,
   CLEAR_SHOE_DETAILS,
 } from "./types";
-import axios from "axios";
+import { ShoesAPI } from "../../api";
 
 export const fetchFilterOptions = (gender, forKids, items) => {
   return async (dispatch) => {
@@ -21,19 +21,17 @@ export const fetchFilterOptions = (gender, forKids, items) => {
 
     const fetchItems = async (item) => {
       if (item.title === "price") {
-        await axios
-          .get(
-            `/shoes/fields/${gender}/${item.title}/boundries?forKids=${forKids}`
-          )
-          .then((response) => {
+        await ShoesAPI.getShoePriceBoundries(gender, item.title, forKids).then(
+          (response) => {
             data = { ...data, [item.title]: response.data };
-          });
+          }
+        );
       } else
-        await axios
-          .get(`/shoes/fields/${gender}/${item.title}?forKids=${forKids}`)
-          .then((response) => {
+        await ShoesAPI.getShoeFields(gender, item.title, forKids).then(
+          (response) => {
             data = { ...data, [item.title]: response.data };
-          });
+          }
+        );
     };
 
     for (let item of items) {
@@ -80,12 +78,14 @@ export const fetchShoesList = (
     };
     const filtersUrl = filtersToURLWithJSON();
 
-    await axios
-      .get(
-        `/shoes/all/${gender}/?numOfPages=true&limit=${numOfShoes}&skip=${
-          (currentPage - 1) * numOfShoes
-        }&forKids=${forKids}&sortOption=${currentSort}${filtersUrl}`
-      )
+    await ShoesAPI.getFilteredShoes(
+      gender,
+      numOfShoes,
+      (currentPage - 1) * numOfShoes,
+      forKids,
+      currentSort,
+      filtersUrl
+    )
       .then((response) => {
         dispatch({ type: CLEAR_SHOES_LIST_ERROR });
         dispatch({
@@ -128,8 +128,7 @@ export const removeFilter = (title, filter) => {
 
 export const fetchShoeDetails = (id) => {
   return async (dispatch) => {
-    axios
-      .get("/shoes/shoe/" + id)
+    ShoesAPI.getShoeById(id)
       .then((response) => {
         dispatch({ type: CLEAR_SHOE_DETAILS_ERROR });
         dispatch({ type: FETCH_SHOE_DETAILS, payload: response.data });

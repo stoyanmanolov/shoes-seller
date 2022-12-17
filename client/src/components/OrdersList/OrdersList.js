@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import axios from "axios";
 import { fetchOrders } from "../../redux/actions/ordersActions";
 import { StyledOrdersList } from "./OrdersList-styles";
 import Error from "../Error";
+import { OrdersAPI } from "../../api";
 
 export class OrdersList extends React.Component {
   state = { clickedIndexes: [] };
@@ -64,18 +64,10 @@ export class OrdersList extends React.Component {
       );
     };
 
-    const completeOrder = async (id, token) => {
-      const config = {
-        headers: {
-          "X-Auth-Token": token,
-        },
-      };
-
-      await axios
-        .patch(`/orders/complete/${id}`, {}, config)
-        .then((response) => {
-          window.alert("Completed successfully!");
-        });
+    const completeOrder = (id, token) => {
+      OrdersAPI.markOrderAsComplete(id, token).then((response) => {
+        window.alert("Completed successfully!");
+      });
 
       this.props.fetchOrders(token);
     };
