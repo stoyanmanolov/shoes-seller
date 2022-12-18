@@ -1,32 +1,31 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
-import { StyledCollections, TextOverlay } from "./Collections-styles";
+import * as Styled from "./Collections.styles";
 
 export const Collections = () => {
   return (
-    <StyledCollections>
+    <Styled.Container>
       <h2>COLLECTIONS</h2>
-      <ul>
-        <li id="men-wrapper" className="men">
+      <Styled.List>
+        <Styled.ListItem type="MEN">
           <Link to="/men">
-            <TextOverlay>Men</TextOverlay>
+            <Styled.TextOverlay>Men</Styled.TextOverlay>
           </Link>
-        </li>
+        </Styled.ListItem>
 
-        <li id="women-wrapper" className="women">
+        <Styled.ListItem type="WOMEN">
           <Link to="/women">
-            <TextOverlay>Women</TextOverlay>
+            <Styled.TextOverlay>Women</Styled.TextOverlay>
           </Link>
-        </li>
+        </Styled.ListItem>
 
-        <li id="kids-wrapper" className="kids">
+        <Styled.ListItem type="KIDS">
           <Link to="/kids">
-            <TextOverlay>Kids</TextOverlay>
+            <Styled.TextOverlay>Kids</Styled.TextOverlay>
           </Link>
-        </li>
-      </ul>
-    </StyledCollections>
+        </Styled.ListItem>
+      </Styled.List>
+    </Styled.Container>
   );
 };
 
