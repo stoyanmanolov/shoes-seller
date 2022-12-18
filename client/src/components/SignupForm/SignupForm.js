@@ -1,123 +1,93 @@
-import React from "react";
-import {
-  registerUser,
-  clearRegisteredInfo,
-  clearAuthErrors
-} from "../../redux/actions/authActions";
+import React, { useState } from "react";
+import { loginUser } from "../../redux/actions/authActions";
 import _ from "lodash";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import validate from "./validate";
-import { Container } from "./SignupForm-styles";
-import { Form, Button, Message } from "semantic-ui-react";
+import * as Styled from "./SignupForm.styles";
+import { Button, Message, Form } from "semantic-ui-react";
+import { UsersAPI } from "../../api";
 
-export class SignupForm extends React.Component {
-  state = { email: "", username: "", password: "", validationErrors: {} };
+export const SignupForm = () => {
+  const [validationErrors, setValidationErrors] = useState(null);
+  const [authErrors, setAuthErrors] = useState(null);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { email, username, password } = this.state;
+    const formData = new FormData(e.target);
+    const submitData = {
+      email: formData.get("email"),
+      username: formData.get("username"),
+      password: formData.get("password"),
+    };
 
-    const signupData = { email, username, password };
+    const errors = validate(submitData);
+    setValidationErrors(errors);
 
-    const validationErrors = validate(signupData);
-    this.setState({ validationErrors });
+    if (_.isEmpty(errors)) {
+      UsersAPI.register(submitData)
+        .then((response) => {
+          dispatch(loginUser(response.data));
 
-    if (_.isEmpty(validationErrors)) {
-      this.props.registerUser(signupData);
+          setAuthErrors(null);
+          history.push("/");
+        })
+        .catch((error) => setAuthErrors(error.response.data));
     }
   };
 
-  componentWillUnmount = () => {
-    this.props.clearRegisteredInfo();
-    this.props.clearAuthErrors();
-  };
-
-  renderInput = () => {
-    const fields = [
+  const renderInputs = () => {
+    const inputFields = [
       {
         label: "Email",
-        inputProps: { name: "email", type: "text", placeholder: "Email" }
+        inputProps: { name: "email", type: "text", placeholder: "Email" },
       },
       {
         label: "Username",
-        inputProps: { name: "username", type: "text", placeholder: "Username" }
+        inputProps: { name: "username", type: "text", placeholder: "Username" },
       },
       {
         label: "Password",
         inputProps: {
           name: "password",
           type: "password",
-          placeholder: "Password"
-        }
-      }
+          placeholder: "Password",
+        },
+      },
     ];
 
-    const renderError = fieldName => {
-      const { validationErrors } = this.state;
-      const { authErrors } = this.props;
-
-      if (validationErrors[fieldName]) {
-        return (
-          <Message negative size="tiny" header={validationErrors[fieldName]} />
-        );
-      } else if (authErrors) {
-        if (authErrors.data[fieldName])
-          return (
-            <Message negative size="tiny" header={authErrors.data[fieldName]} />
-          );
-      }
-    };
-
-    return fields.map((field, index) => {
+    return inputFields.map((field, index) => {
       const { label, inputProps } = field;
       const { name } = inputProps;
 
       return (
         <Form.Field key={index}>
-          {renderError(name)}
+          {validationErrors?.[name] && (
+            <Message negative size="tiny" header={validationErrors[name]} />
+          )}
+          {authErrors?.[name] && (
+            <Message negative size="tiny" header={authErrors[name]} />
+          )}
           <label>{label}</label>
-          <input
-            onChange={e => this.setState({ [name]: e.target.value })}
-            value={this.state[name]}
-            {...inputProps}
-          ></input>
+          <input {...inputProps} />
         </Form.Field>
       );
     });
   };
 
-  render() {
-    const { registeredInfo } = this.props;
-    if (registeredInfo) {
-      return (
-        <Container>
-          <h3>Registration successful.</h3>
-          <p>{`Email: ${registeredInfo.email}`}</p>
-          <p>{`Username: ${registeredInfo.username}`}</p>
-          <Link to="/login">
-            <Button>Login</Button>
-          </Link>
-        </Container>
-      );
-    }
+  return (
+    <Styled.Container>
+      <h3>CREATE AN ACCOUNT</h3>
+      <Form onSubmit={handleSubmit}>
+        {renderInputs()}
+        <Button type="submit" fluid>
+          Create
+        </Button>
+      </Form>
+    </Styled.Container>
+  );
+};
 
-    return (
-      <Container>
-        <h3>CREATE AN ACCOUNT</h3>
-        <Form onSubmit={e => this.handleSubmit(e)}>
-          {this.renderInput()}
-          <Button type="submit">Create</Button>
-        </Form>
-      </Container>
-    );
-  }
-}
-
-export default connect(
-  state => ({
-    registeredInfo: state.auth.registeredInfo,
-    authErrors: state.errors.auth.register
-  }),
-  { registerUser, clearRegisteredInfo, clearAuthErrors }
-)(SignupForm);
+export default SignupForm;

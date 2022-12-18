@@ -45,11 +45,6 @@ export class NavBar extends React.Component {
                     <p>Add shoes</p>
                   </Link>
                 </ListItem>
-                <ListItem>
-                  <Link to="/admin/add">
-                    <p>Add admin</p>
-                  </Link>
-                </ListItem>
               </>
             ) : null}
             <ListItem id="logout" onClick={(e) => this.props.logoutUser()}>
