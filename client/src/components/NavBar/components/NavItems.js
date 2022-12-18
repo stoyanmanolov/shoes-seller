@@ -4,7 +4,7 @@ import { DrawerToggler, StyledNavItems } from "./NavItems-styles";
 class NavItems extends React.Component {
   state = { drawerOn: false };
 
-  toggleDrawer = e => {
+  toggleDrawer = (e) => {
     if (!this.state.drawerOn) {
       this.setState({ drawerOn: true });
     } else this.setState({ drawerOn: false });
@@ -13,7 +13,7 @@ class NavItems extends React.Component {
   render() {
     return (
       <>
-        <DrawerToggler id="toggler" onClick={e => this.toggleDrawer(e)}>
+        <DrawerToggler onClick={(e) => this.toggleDrawer(e)}>
           {/* If the Drawer is on the Toggler will turn into an X */}
           {this.state.drawerOn ? (
             <i className="fas fa-times"></i>

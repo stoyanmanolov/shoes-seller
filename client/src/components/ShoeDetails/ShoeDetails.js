@@ -44,7 +44,7 @@ export class ShoeDetails extends React.Component {
     if (!images.includes(frontImage)) images.splice(0, 0, frontImage);
 
     return (
-      <Images id="images" className="images">
+      <Images className="images">
         <img
           className="selected-image"
           src={`/images/${this.state.selectedImage}`}
@@ -73,7 +73,7 @@ export class ShoeDetails extends React.Component {
     return (
       <Sizes length={sizes.length}>
         <p className="size-text">Select size:</p>
-        <div className="sizes-grid" id="sizes">
+        <div className="sizes-grid">
           {sizes.map((size) => {
             return (
               <Button
@@ -115,18 +115,17 @@ export class ShoeDetails extends React.Component {
     };
 
     return (
-      <StyledShoeDetails id="shoe-details">
-        <div id="top-panel" className="top-panel">
+      <StyledShoeDetails>
+        <div className="top-panel">
           <span className="category">{category}</span>
           <h2 className="shoe-name">{brand + " " + model}</h2>
           <span className="price">{"$" + price}</span>
         </div>
         {this.renderImages(frontImage, images)}
-        <div id="bottom-panel" className="bottom-panel">
+        <div className="bottom-panel">
           <InputPanel>
             {this.renderSizes(sizes)}
             <CartButton
-              id="cart-button"
               onClick={handleClick}
               disabled={this.state.selectedSize ? false : true}
             >

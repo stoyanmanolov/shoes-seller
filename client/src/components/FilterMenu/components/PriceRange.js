@@ -15,7 +15,6 @@ const PriceRange = (props) => {
   return (
     <StyledPriceRange {...props}>
       <Slider
-        id="slider"
         className="slider"
         value={value}
         min={minPrice}
@@ -27,7 +26,6 @@ const PriceRange = (props) => {
       />
       <Input
         readOnly
-        id="minimum"
         name="0"
         className="min"
         type="number"
@@ -36,7 +34,6 @@ const PriceRange = (props) => {
       <p className="divider">-</p>
       <Input
         readOnly
-        id="maximum"
         name="1"
         className="max"
         type="number"

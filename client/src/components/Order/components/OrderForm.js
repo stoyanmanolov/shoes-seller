@@ -106,7 +106,7 @@ class OrderForm extends React.Component {
     ];
 
     return (
-      <StyledOrderForm id="order-form">
+      <StyledOrderForm>
         <h4>Billing details</h4>
         <Form onSubmit={this.handleSubmit}>
           {formFields.map(({ label, valueName, value }, index) => {

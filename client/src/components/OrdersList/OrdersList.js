@@ -28,7 +28,7 @@ export class OrdersList extends React.Component {
 
     const renderDetails = (order) => {
       return (
-        <div id="more-details">
+        <div>
           <p>
             <b>Name:</b> {order.firstName + " " + order.lastName}
           </p>

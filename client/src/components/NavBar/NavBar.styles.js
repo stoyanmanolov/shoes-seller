@@ -41,12 +41,6 @@ export const GroupedButtons = styled.div`
     background: none;
     outline: none;
   }
-  a:hover {
-    text-decoration: none;
-  }
-  i {
-    display: inherit;
-  }
   .cart {
     outline: none;
     margin-left: 10px;
@@ -80,28 +74,22 @@ export const MenuList = styled.ul`
 
 export const ListItem = styled.li`
   width: 100%;
-  a:hover {
-    text-decoration: none;
-  }
   a {
-    cursor: pointer;
+    padding: 10px 20px;
+    border-bottom: 1px solid ${lightgrey};
+    display: inline-block;
     text-decoration: none;
-    p {
+    color: ${darkgrey};
+    font-size: 16px;
+    &:hover {
+      text-decoration: none;
       color: ${darkgrey};
-      font-size: 16px;
-      padding: 10px 20px;
-      border-bottom: 1px solid ${lightgrey};
     }
   }
   @media (min-width: 992px) {
     width: initial;
-    p {
-      padding: 0;
-    }
     a {
-      p {
-        border: 0;
-      }
+      border: 0;
     }
   }
 `;

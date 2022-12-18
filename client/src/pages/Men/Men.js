@@ -8,7 +8,7 @@ import { ProductsPage } from "../shared-styles/ProductsPage-styles";
 const Men = () => {
   return (
     <ProductsPage>
-      <NavBar id="navbar" />
+      <NavBar />
       <TopBar text="Men's shoes" />
       <FilterMenu gender="Male" />
       <ShoesList gender="Male" />

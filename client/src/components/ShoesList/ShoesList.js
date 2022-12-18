@@ -81,9 +81,8 @@ export class ShoesList extends React.Component {
 
     return (
       <StyledShoesList id="shoes-list">
-        <form id="filter-sort">
+        <form>
           <Dropdown
-            id="dropdown"
             className="dropdown-list"
             options={sortOptions}
             defaultValue={sortOptions[0].value}
@@ -104,18 +103,17 @@ export class ShoesList extends React.Component {
           />
         </form>
         {shoesListError ? (
-          <Message id="error" negative compact>
+          <Message negative compact>
             {shoesListError.data}
           </Message>
         ) : shoesList.shoes.length === 0 && !shoesListError ? (
-          <div id="loader-container" className="loader-container">
+          <div className="loader-container">
             <Loader active inline />
           </div>
         ) : (
           <>
-            <List id="list">{this.renderShoesList()}</List>
+            <List>{this.renderShoesList()}</List>
             <Pagination
-              id="pagination"
               className="pagination"
               count={shoesList.numOfPages}
               page={shoesList.currentPage}

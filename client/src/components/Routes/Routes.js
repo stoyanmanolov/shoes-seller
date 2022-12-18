@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import Home from "../../pages/Home";
 import Men from "../../pages/Men";
@@ -20,36 +20,23 @@ export class Routes extends React.Component {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/men" component={Men} />
-          <Route exact path="/women" component={Women} />
-          <Route exact path="/kids" component={Kids} />
-          <Route exact path="/cart" component={Cart} />
-          <Route exact path="/checkout" component={Checkout} />
-          <Route exact path="/shoe/:id" component={Shoe} />
+          <Route path="/men" component={Men} />
+          <Route path="/women" component={Women} />
+          <Route path="/kids" component={Kids} />
+          <Route path="/cart" component={Cart} />
+          <Route path="/checkout" component={Checkout} />
+          <Route path="/shoe/:id" component={Shoe} />
           {this.props.isLoggedIn && this.props.user.role === "admin" && (
             <Switch>
-              <Route exact path="/shoes/add">
-                <AddShoes />
-              </Route>
-              <Route exact path="/shoes/edit/:id">
-                <EditShoe />
-              </Route>
-              <Route exact path="/shoes/edit/:id">
-                <EditShoe />
-              </Route>
-              <Route exact path="/orders">
-                <Orders />
-              </Route>
+              <Route path="/shoes/add" component={AddShoes} />
+              <Route path="/shoes/edit/:id" component={EditShoe} />
+              <Route path="/orders" component={Orders} />
             </Switch>
           )}
           {!this.props.isLoggedIn && (
             <Switch>
-              <Route exact path="/register">
-                <Signup />
-              </Route>
-              <Route exact path="/login">
-                <Login />
-              </Route>
+              <Route path="/register" component={Signup} />
+              <Route path="/login" component={Login} />
             </Switch>
           )}
         </Switch>

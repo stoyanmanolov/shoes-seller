@@ -24,13 +24,13 @@ export class Order extends React.Component {
   render() {
     if (this.props.cart.length === 0 && !this.state.orderDetails) {
       return (
-        <OrderDetails id="order-cart-empty">
+        <OrderDetails>
           <h3>Your cart is empty</h3>
         </OrderDetails>
       );
     } else if (this.state.orderDetails) {
       return (
-        <OrderDetails id="order-successful">
+        <OrderDetails>
           <h3>Order succesfully made!</h3>
           {Object.keys(this.state.orderDetails).map((key) => {
             if (
@@ -52,14 +52,13 @@ export class Order extends React.Component {
     } else if (this.state.orderError) {
       return (
         <Error
-          id="order-error"
           status={this.state.orderError.status}
           message={this.state.orderError.statusText}
         />
       );
     }
     return (
-      <StyledOrder id="order">
+      <StyledOrder>
         <OrderList cart={this.props.cart} totalPrice={this.props.totalPrice} />
         <OrderForm
           cart={this.props.cart}

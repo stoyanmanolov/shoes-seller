@@ -5,7 +5,7 @@ import OrdersList from "../../components/OrdersList";
 const Orders = () => {
   return (
     <>
-      <NavBar id="navbar" />
+      <NavBar />
       <OrdersList />
     </>
   );

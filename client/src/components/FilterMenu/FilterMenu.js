@@ -71,7 +71,7 @@ export class FilterMenu extends React.Component {
   renderFilterOptions = (title, clicked) => {
     if (!this.props.filterOptions.optionNames) {
       return this.state.sectionsClicked.includes(title) ? (
-        <Loader id="loader" active inline size="small" />
+        <Loader active inline size="small" />
       ) : null;
     }
     const sectionData = this.props.filterOptions.optionNames[title];
@@ -175,17 +175,10 @@ export class FilterMenu extends React.Component {
           </Button>
           <div className="filter-topbar">
             <h3>Filters</h3>
-            <i
-              id="close-X-icon"
-              className="fas fa-times"
-              onClick={() => handleClick()}
-            ></i>
+            <i className="fas fa-times" onClick={() => handleClick()}></i>
           </div>
         </div>
-        <FilterList
-          id="filter-list"
-          showOnSmallerScreens={showOnSmallerScreens}
-        >
+        <FilterList showOnSmallerScreens={showOnSmallerScreens}>
           {this.renderFilterSections()}
         </FilterList>
       </StyledFilterMenu>
