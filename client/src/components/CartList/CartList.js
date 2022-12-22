@@ -1,13 +1,15 @@
 import React from "react";
-import { CartEmpty, StyledCartList, Checkout } from "./CartList-styles";
-import { connect } from "react-redux";
+import * as Styled from "./CartList.styles";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Button } from "semantic-ui-react";
 
-export class CartList extends React.Component {
-  renderTable = () => {
+export const CartList = () => {
+  const cart = useSelector((state) => state.orders.cart);
+  const totalPrice = useSelector((state) => state.orders.totalPrice);
+
+  const renderTable = () => {
     const renderShoe = () => {
-      return this.props.cart.map((item, index) => {
+      return cart.map((item, index) => {
         const numberOfShoes = item.sizes.length;
         const modelPrice = item.shoe.price * numberOfShoes;
 
@@ -30,7 +32,7 @@ export class CartList extends React.Component {
     };
 
     return (
-      <table>
+      <Styled.Table>
         <thead>
           <tr>
             <th>Shoes</th>
@@ -38,35 +40,27 @@ export class CartList extends React.Component {
           </tr>
         </thead>
         <tbody>{renderShoe()}</tbody>
-      </table>
+      </Styled.Table>
     );
   };
 
-  render() {
-    if (this.props.cart.length === 0) {
-      return (
-        <CartEmpty>
-          <h3>Your cart is empty</h3>
-        </CartEmpty>
-      );
-    } else
-      return (
-        <StyledCartList>
-          {this.renderTable()}
-          <Checkout>
-            <p>Subtotal: ${this.props.totalPrice.toFixed(2)}</p>
-            <Link to="/checkout">
-              <Button className="checkout-button" primary size="large">
-                Checkout
-              </Button>
-            </Link>
-          </Checkout>
-        </StyledCartList>
-      );
+  if (cart.length === 0) {
+    return <Styled.Heading>Your cart is empty</Styled.Heading>;
+  } else {
+    return (
+      <Styled.CartList>
+        {renderTable()}
+        <Styled.Checkout>
+          <p>Subtotal: ${totalPrice.toFixed(2)}</p>
+          <Link to="/checkout">
+            <Styled.Button primary size="large">
+              Checkout
+            </Styled.Button>
+          </Link>
+        </Styled.Checkout>
+      </Styled.CartList>
+    );
   }
-}
+};
 
-export default connect(({ orders }) => ({
-  cart: orders.cart,
-  totalPrice: orders.totalPrice,
-}))(CartList);
+export default CartList;

@@ -13,12 +13,12 @@ export const Container = styled.div`
   }
 `;
 
-export const Form = styled(SemanticForm)(`
+export const Form = styled(SemanticForm)`
   width: 20%;
   display: flex;
   flex-direction: column;
-`);
+`;
 
-export const Button = styled(SemanticButton)(`
+export const Button = styled(SemanticButton)`
   width: 100%;
-`);
+`;

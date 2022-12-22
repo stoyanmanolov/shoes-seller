@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StyledOrder = styled.div`
+export const Order = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px 30px;
@@ -11,10 +11,10 @@ export const StyledOrder = styled.div`
   @media (min-width: 992px) {
     padding: 20px 30px;
     flex-direction: row-reverse;
-    > div {
+    > * {
       width: 50%;
     }
-    > div:last-child {
+    > *:last-child {
       margin-right: 100px;
     }
   }
@@ -23,11 +23,9 @@ export const StyledOrder = styled.div`
   }
 `;
 
-export const OrderDetails = styled.div`
+export const Heading = styled.h3`
+  margin: 20px;
   display: flex;
   flex-direction: column;
   text-align: center;
-  h3 {
-    margin: 20px;
-  }
 `;

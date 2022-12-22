@@ -3,8 +3,6 @@ import {
   CLEAR_SHOES_LIST_ERROR,
   SHOE_DETAILS_ERROR,
   CLEAR_SHOE_DETAILS_ERROR,
-  ORDERS_ERROR,
-  CLEAR_ORDERS_ERROR,
 } from "../actions/types";
 
 const initialState = {
@@ -12,9 +10,6 @@ const initialState = {
   shoes: {
     shoesList: null,
     shoeDetails: null,
-  },
-  orders: {
-    ordersList: null,
   },
 };
 
@@ -50,22 +45,6 @@ const errorsReducer = (state = initialState, action) => {
         shoes: {
           ...state.shoes,
           shoeDetails: null,
-        },
-      };
-    case ORDERS_ERROR:
-      return {
-        ...state,
-        orders: {
-          ...state.orders,
-          ordersList: action.payload,
-        },
-      };
-    case CLEAR_ORDERS_ERROR:
-      return {
-        ...state,
-        orders: {
-          ...state.orders,
-          ordersList: null,
         },
       };
     default:

@@ -1,26 +1,39 @@
-import { ADD_TO_CART, FETCH_ORDERS, RESET_CART } from "../actions/types";
-import { formatCart, getItemsCount, getTotalPrice } from "./utils";
+import { ADD_TO_CART, RESET_CART } from "../actions/types";
 
 const initialState = {
   cart: [],
-  itemsCount: 0,
   totalPrice: 0,
-  ordersList: [],
 };
 
 const ordersReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_TO_CART:
-      const cart = formatCart(state.cart, action.payload);
-      const itemsCount = getItemsCount(cart);
-      const totalPrice = getTotalPrice(cart);
+      const newCart = [...state.cart];
+      const { shoe, size } = action.payload;
 
-      return { ...state, cart, itemsCount, totalPrice };
+      const alreadyInCartIndex = newCart.findIndex(
+        (cartItem) => cartItem.shoe._id === shoe._id
+      );
 
-    case FETCH_ORDERS:
-      return { ...state, ordersList: action.payload };
+      if (alreadyInCartIndex !== -1) {
+        newCart[alreadyInCartIndex].sizes.push(size);
+      } else {
+        newCart.push({ shoe, sizes: [size] });
+      }
+
+      const newTotalPrice = newCart.reduce(
+        (accumulator, cartItem) =>
+          accumulator + cartItem.shoe.price * cartItem.sizes.length,
+        0
+      );
+
+      return {
+        ...state,
+        cart: newCart,
+        totalPrice: newTotalPrice,
+      };
     case RESET_CART:
-      return { ...state, cart: [], itemsCount: 0, totalPrice: 0 };
+      return { ...state, cart: [], totalPrice: 0 };
     default:
       return state;
   }

@@ -1,8 +1,12 @@
 import React from "react";
-import { StyledOrderList } from "./OrderList-styles";
+import { useSelector } from "react-redux";
+import * as Styled from "./OrderList.styles";
 
-const OrderList = (props) => {
-  const renderTable = (cart, totalPrice) => {
+const OrderList = () => {
+  const cart = useSelector((state) => state.orders.cart);
+  const totalPrice = useSelector((state) => state.orders.totalPrice);
+
+  const renderTable = () => {
     const renderShoe = () => {
       return cart.map((item, index) => {
         const numberOfShoes = item.sizes.length;
@@ -26,26 +30,24 @@ const OrderList = (props) => {
       });
     };
     return (
-      <>
-        <table>
-          <thead>
-            <tr>
-              <th>Shoes</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>{renderShoe()}</tbody>
-        </table>
-        <p className="total-price">Subtotal: ${totalPrice.toFixed(2)}</p>
-      </>
+      <Styled.Table>
+        <thead>
+          <tr>
+            <th>Shoes</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>{renderShoe()}</tbody>
+      </Styled.Table>
     );
   };
 
   return (
-    <StyledOrderList>
+    <Styled.OrderList>
       <h4>Your order</h4>
-      {renderTable(props.cart, props.totalPrice)}
-    </StyledOrderList>
+      {renderTable()}
+      <p className="total-price">Subtotal: ${totalPrice.toFixed(2)}</p>
+    </Styled.OrderList>
   );
 };
 

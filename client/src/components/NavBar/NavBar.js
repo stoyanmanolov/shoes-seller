@@ -8,10 +8,15 @@ import * as Styled from "./NavBar.styles";
 import LogoImage from "./images/Logo.png";
 
 export const NavBar = () => {
-  const itemsCount = useSelector((state) => state.orders.itemsCount);
+  const cart = useSelector((state) => state.orders.cart);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+
+  const cartItemsCount = cart.reduce(
+    (accumulator, cartItem) => accumulator + cartItem.sizes.length,
+    0
+  );
 
   const navItems = [
     {
@@ -61,11 +66,11 @@ export const NavBar = () => {
     <Styled.Nav id="navbar">
       <NavItems>
         <Styled.MenuList>
-          {navItems.map((item) => {
+          {navItems.map((item, index) => {
             if (!item.isShown) return null;
 
             return (
-              <Styled.ListItem>
+              <Styled.ListItem key={index}>
                 <Link to={item.route} onClick={item?.onClick}>
                   <span>{item.title}</span>
                 </Link>
@@ -83,7 +88,7 @@ export const NavBar = () => {
         <Search />
         <Link to="/cart">
           <button className="cart">
-            <span className="cart-items-counter">{itemsCount}</span>
+            <span className="cart-items-counter">{cartItemsCount}</span>
             <i className="fas fa-shopping-cart"></i>
           </button>
         </Link>

@@ -74,7 +74,7 @@ export const OrdersAPI = {
   getOrders: (config) => {
     return axios.get("/orders", config);
   },
-  getOrder: (formData) => {
+  sendOrder: (formData) => {
     return axios.post("/orders", formData);
   },
   markOrderAsComplete: (id, token) => {

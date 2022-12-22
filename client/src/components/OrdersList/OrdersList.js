@@ -1,29 +1,35 @@
-import React from "react";
-import { connect } from "react-redux";
-import { fetchOrders } from "../../redux/actions/ordersActions";
-import { StyledOrdersList } from "./OrdersList-styles";
+import React, { useEffect, useState } from "react";
+import * as Styled from "./OrdersList.styles";
 import Error from "../Error";
 import { OrdersAPI } from "../../api";
+import { useSelector } from "react-redux";
 
-export class OrdersList extends React.Component {
-  state = { clickedIndexes: [] };
+export const OrdersList = () => {
+  const [clickedIndexes, setClickedIndexes] = useState([]);
+  const [ordersList, setOrdersList] = useState([]);
+  const [error, setError] = useState();
+  const token = useSelector((state) => state.auth.token);
 
-  componentDidMount() {
-    this.props.fetchOrders(this.props.token);
-  }
+  useEffect(() => {
+    const config = {
+      headers: {
+        "X-Auth-Token": token,
+      },
+    };
 
-  renderTable = (ordersList) => {
+    OrdersAPI.getOrders(config)
+      .then((response) => {
+        setError("");
+        setOrdersList(response.data);
+      })
+      .catch((error) => setError(error.response));
+  }, []);
+
+  const renderTable = (ordersList) => {
     const expandItem = (e, index) => {
-      if (this.state.clickedIndexes.includes(index)) {
-        this.setState({
-          clickedIndexes: this.state.clickedIndexes.filter(
-            (item) => item !== index
-          ),
-        });
-      } else
-        this.setState({
-          clickedIndexes: [...this.state.clickedIndexes, index],
-        });
+      if (clickedIndexes.includes(index)) {
+        setClickedIndexes((prev) => prev.filter((item) => item !== index));
+      } else setClickedIndexes((prev) => [...prev, index]);
     };
 
     const renderDetails = (order) => {
@@ -78,7 +84,7 @@ export class OrdersList extends React.Component {
           <tr key={index}>
             <td className="info" onClick={(e) => expandItem(e, index)}>
               {order._id}
-              {!this.state.clickedIndexes.includes(index) ? (
+              {!clickedIndexes.includes(index) ? (
                 <p>
                   <b>Click for more info...</b>
                 </p>
@@ -95,7 +101,7 @@ export class OrdersList extends React.Component {
                   <p>No</p>
                   <p
                     className="complete"
-                    onClick={(e) => completeOrder(order._id, this.props.token)}
+                    onClick={(e) => completeOrder(order._id, token)}
                   >
                     Click to complete
                   </p>
@@ -108,7 +114,7 @@ export class OrdersList extends React.Component {
     };
 
     return (
-      <table>
+      <Styled.Table>
         <thead>
           <tr>
             <th>ID</th>
@@ -117,39 +123,24 @@ export class OrdersList extends React.Component {
           </tr>
         </thead>
         <tbody>{renderOrder()}</tbody>
-      </table>
+      </Styled.Table>
     );
   };
 
-  render() {
-    if (this.props.error)
-      return (
-        <Error
-          status={this.props.error.status}
-          message={this.props.error.statusText}
-        />
-      );
-    else if (this.props.ordersList.length === 0)
-      return (
-        <StyledOrdersList>
-          <h3>There are no orders</h3>
-        </StyledOrdersList>
-      );
-    else
-      return (
-        <StyledOrdersList>
-          <h3 className="title">Orders</h3>
-          {this.renderTable(this.props.ordersList)}
-        </StyledOrdersList>
-      );
-  }
-}
+  if (error) return <Error status={error.status} message={error.statusText} />;
+  else if (ordersList.length === 0)
+    return (
+      <Styled.OrdersList>
+        <Styled.Heading>There are no orders</Styled.Heading>
+      </Styled.OrdersList>
+    );
+  else
+    return (
+      <Styled.OrdersList>
+        <Styled.Heading>Orders</Styled.Heading>
+        {renderTable(ordersList)}
+      </Styled.OrdersList>
+    );
+};
 
-export default connect(
-  ({ orders, auth, errors }) => ({
-    error: errors.orders.ordersList,
-    token: auth.token,
-    ordersList: orders.ordersList,
-  }),
-  { fetchOrders }
-)(OrdersList);
+export default OrdersList;
