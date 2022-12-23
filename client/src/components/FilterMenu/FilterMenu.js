@@ -3,8 +3,6 @@ import { connect } from "react-redux";
 import {
   fetchFilterOptions,
   clearFilters,
-  fetchShoesList,
-  clearShoesList,
   addFilter,
   removeFilter,
 } from "../../redux/actions/shoesActions";
@@ -38,30 +36,6 @@ export class FilterMenu extends React.Component {
       this.props.forKids,
       this.state.sections
     );
-  };
-
-  componentDidUpdate = (prevProps) => {
-    const {
-      filterOptions: { selectedFilters },
-      gender,
-      forKids,
-      shoesList: { shoesPerPage, currentSort },
-      clearShoesList,
-      fetchShoesList,
-    } = this.props;
-
-    if (prevProps.filterOptions.selectedFilters !== selectedFilters) {
-      clearShoesList();
-      const page = 1;
-      fetchShoesList(
-        shoesPerPage,
-        page,
-        gender,
-        forKids,
-        currentSort,
-        selectedFilters
-      );
-    }
   };
 
   componentWillUnmount = () => {
@@ -198,8 +172,6 @@ export default connect(
   {
     fetchFilterOptions,
     clearFilters,
-    fetchShoesList,
-    clearShoesList,
     addFilter,
     removeFilter,
   }

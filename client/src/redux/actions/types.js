@@ -7,9 +7,9 @@ export const CLEAR_FILTERS = "clear_filters";
 export const ADD_FILTER = "add_filter";
 export const REMOVE_FILTER = "remove_filter";
 export const SET_CURRENT_SORT = "set_current_sort";
+export const SET_CURRENT_PAGE = "set_current_page";
 // shoes
 export const FETCH_SHOES_LIST = "fetch_shoes_list";
-export const CLEAR_SHOES_LIST = "clear_shoes_list";
 export const FETCH_SHOE_DETAILS = "fetch_shoe_details";
 export const CLEAR_SHOE_DETAILS = "clear_shoe_details";
 // orders

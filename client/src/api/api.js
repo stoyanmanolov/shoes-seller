@@ -53,19 +53,16 @@ export const ShoesAPI = {
     });
   },
   searchShoes: (searchName) => {
-    return axios.get(`/shoes/search?searchName=${searchName}&limit=${10}`);
+    return axios.get(`/shoes?searchName=${searchName}&limit=${10}`);
   },
-  getShoeFields: (gender, title, forKids) => {
-    return axios.get(`/shoes/fields/${gender}/${title}?forKids=${forKids}`);
-  },
-  getShoePriceBoundries: (gender, title, forKids) => {
+  getShoeFields: (gender, forKids, fields) => {
     return axios.get(
-      `/shoes/fields/${gender}/${title}/boundries?forKids=${forKids}`
+      `/shoes/filters/fields?gender=${gender}&forKids=${forKids}&fields=${fields}`
     );
   },
-  getFilteredShoes: (gender, limit, skip, forKids, currentSort, filtersUrl) => {
+  getFilteredShoes: ({ limit, skip, currentSort, filtersQueryParams }) => {
     return axios.get(
-      `/shoes/gender/${gender}/?numOfPages=true&limit=${limit}&skip=${skip}&forKids=${forKids}&sortOption=${currentSort}${filtersUrl}`
+      `/shoes/filtered/all?limit=${limit}&skip=${skip}&sortOption=${currentSort}&${filtersQueryParams}`
     );
   },
 };

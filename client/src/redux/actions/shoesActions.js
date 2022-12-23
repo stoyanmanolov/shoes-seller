@@ -2,7 +2,6 @@ import {
   CLEAR_FILTERS,
   FILTER_OPTIONS_NAMES,
   FETCH_SHOES_LIST,
-  CLEAR_SHOES_LIST,
   SET_CURRENT_SORT,
   ADD_FILTER,
   REMOVE_FILTER,
@@ -12,32 +11,20 @@ import {
   SHOE_DETAILS_ERROR,
   CLEAR_SHOE_DETAILS_ERROR,
   CLEAR_SHOE_DETAILS,
+  SET_CURRENT_PAGE,
 } from "./types";
 import { ShoesAPI } from "../../api";
+import { SHOES_PER_PAGE } from "../../constants";
 
-export const fetchFilterOptions = (gender, forKids, items) => {
+export const fetchFilterOptions = (gender, forKids, fields) => {
+  const fieldsQueryParams = fields.map((f) => f.title).toString();
+
   return async (dispatch) => {
-    let data = {};
-
-    const fetchItems = async (item) => {
-      if (item.title === "price") {
-        await ShoesAPI.getShoePriceBoundries(gender, item.title, forKids).then(
-          (response) => {
-            data = { ...data, [item.title]: response.data };
-          }
-        );
-      } else
-        await ShoesAPI.getShoeFields(gender, item.title, forKids).then(
-          (response) => {
-            data = { ...data, [item.title]: response.data };
-          }
-        );
-    };
-
-    for (let item of items) {
-      await fetchItems(item);
-    }
-    dispatch({ type: FILTER_OPTIONS_NAMES, payload: data });
+    await ShoesAPI.getShoeFields(gender, forKids, fieldsQueryParams).then(
+      (response) => {
+        dispatch({ type: FILTER_OPTIONS_NAMES, payload: response.data });
+      }
+    );
   };
 };
 
@@ -47,45 +34,23 @@ export const clearFilters = () => {
   };
 };
 
-export const fetchShoesList = (
-  numOfShoes,
-  currentPage,
-  gender,
-  forKids,
-  currentSort,
-  selectedFilters
-) => {
-  return async (dispatch) => {
-    const filtersToURLWithJSON = () => {
-      let filtersUrl = "&filters={ ";
-      Object.keys(selectedFilters).forEach((filterKey, index) => {
-        if (index === 0) filtersUrl += `"${filterKey}":[`;
-        else filtersUrl += `, "${filterKey}":[`;
-        selectedFilters[filterKey].forEach((filterValue, index) => {
-          if (index === selectedFilters[filterKey].length - 1)
-            filterKey === "sizes" || filterKey === "price"
-              ? (filtersUrl += `${filterValue}`)
-              : (filtersUrl += `"${filterValue}"`);
-          else
-            filterKey === "sizes" || filterKey === "price"
-              ? (filtersUrl += `${filterValue}, `)
-              : (filtersUrl += `"${filterValue}", `);
-        });
-        filtersUrl += "]";
-      });
-      filtersUrl += " }";
-      return filtersUrl;
-    };
-    const filtersUrl = filtersToURLWithJSON();
+export const fetchShoesList = (gender, forKids) => {
+  return async (dispatch, getState) => {
+    const { currentPage, currentSort } = getState().shoes.shoesList;
+    const { selectedFilters } = getState().shoes.filterOptions;
 
-    await ShoesAPI.getFilteredShoes(
+    const filtersQueryParams = new URLSearchParams({
+      ...selectedFilters,
       gender,
-      numOfShoes,
-      (currentPage - 1) * numOfShoes,
       forKids,
-      currentSort,
-      filtersUrl
-    )
+    }).toString();
+
+    await ShoesAPI.getFilteredShoes({
+      limit: SHOES_PER_PAGE,
+      skip: (currentPage - 1) * SHOES_PER_PAGE,
+      currentSort: currentSort,
+      filtersQueryParams: filtersQueryParams,
+    })
       .then((response) => {
         dispatch({ type: CLEAR_SHOES_LIST_ERROR });
         dispatch({
@@ -106,9 +71,10 @@ export const setCurrentSort = (currentSort) => {
   };
 };
 
-export const clearShoesList = () => {
+export const setCurrentPage = (currentPage) => {
   return {
-    type: CLEAR_SHOES_LIST,
+    type: SET_CURRENT_PAGE,
+    payload: currentPage,
   };
 };
 

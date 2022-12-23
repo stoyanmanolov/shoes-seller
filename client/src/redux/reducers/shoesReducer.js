@@ -2,12 +2,12 @@ import {
   FILTER_OPTIONS_NAMES,
   FETCH_SHOES_LIST,
   CLEAR_FILTERS,
-  CLEAR_SHOES_LIST,
   ADD_FILTER,
   REMOVE_FILTER,
   SET_CURRENT_SORT,
   FETCH_SHOE_DETAILS,
   CLEAR_SHOE_DETAILS,
+  SET_CURRENT_PAGE,
 } from "../actions/types";
 
 const initialState = {
@@ -24,10 +24,9 @@ const initialState = {
   },
   shoesList: {
     shoes: [],
-    numOfPages: null,
-    currentPage: null,
-    shoesPerPage: 3,
-    currentSort: null,
+    numOfPages: 1,
+    currentPage: 1,
+    currentSort: '{ "createdAt": 1 }',
   },
   shoeDetails: null,
 };
@@ -68,22 +67,20 @@ const shoesReducer = (state = initialState, { type, payload }) => {
           currentPage: payload.currentPage,
         },
       };
-    case CLEAR_SHOES_LIST:
-      return {
-        ...state,
-        shoesList: {
-          ...state.shoesList,
-          shoes: [],
-          numOfPages: null,
-          currentPage: null,
-        },
-      };
     case SET_CURRENT_SORT:
       return {
         ...state,
         shoesList: {
           ...state.shoesList,
           currentSort: payload,
+        },
+      };
+    case SET_CURRENT_PAGE:
+      return {
+        ...state,
+        shoesList: {
+          ...state.shoesList,
+          currentPage: payload,
         },
       };
     case ADD_FILTER: {

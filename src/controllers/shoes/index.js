@@ -1,6 +1,6 @@
 const fs = require("fs");
 const Shoe = require("../../models/Shoe");
-const { findFieldResults, getGender, formatFilters } = require("./utils");
+const { findFieldResults, getGender } = require("./utils");
 
 const getShoe = async (req, res) => {
   try {
@@ -69,9 +69,7 @@ const deleteShoe = async (req, res) => {
       fs.unlink("src/images/" + image, (err) => {});
     });
 
-    res
-      .status(200)
-      .send({ message: `Shoe with id: ${_id} deleted successfuly.` });
+    res.status(200).send(deletedShoe);
   } catch (e) {
     res.sendStatus(400);
   }
@@ -80,7 +78,6 @@ const deleteShoe = async (req, res) => {
 const searchShoes = async (req, res) => {
   try {
     const searchName = req.query.searchName.toLowerCase();
-
     const shoes = await Shoe.find({});
 
     if (!shoes) {
@@ -109,96 +106,105 @@ const searchShoes = async (req, res) => {
   }
 };
 
-const getGenderSpecificShoes = async (req, res) => {
+const getFilteredShoes = async (req, res) => {
   try {
+    const { limit, skip, sortOption, ...rest } = req.query;
+    const queryFilters = rest;
     let result = {};
+    let filters = {};
 
-    const skip = parseInt(req.query.skip);
-    const limit = parseInt(req.query.limit);
-    const forKids = req.query.forKids || false;
+    Object.keys(queryFilters).map((filterKey) => {
+      const filterValue = queryFilters[filterKey];
 
-    let filters;
-    req.query.filters
-      ? (filters = formatFilters(JSON.parse(req.query.filters)))
-      : (filters = {});
-
-    if (req.query.numOfPages) {
-      const count = await Shoe.countDocuments(
-        req.params.gender
-          ? { gender: getGender(req.params.gender), forKids, ...filters }
-          : { forKids, ...filters }
-      );
-      if (limit) {
-        result = { ...result, numOfPages: Math.ceil(count / limit) };
-      } else return res.status(400).send("Please specify a limit attribute.");
-    }
-    await Shoe.find(
-      req.params.gender
-        ? { gender: getGender(req.params.gender), forKids, ...filters }
-        : { forKids, ...filters }
-    )
-      .skip(skip)
-      .limit(limit)
-      .sort(req.query.sortOption ? JSON.parse(req.query.sortOption) : {})
-      .exec((err, shoes) => {
-        if (err) throw err;
-        if (shoes.length === 0) {
-          return res
-            .status(404)
-            .send("No shoes matching your criteria were found.");
+      if (filterValue.length !== 0) {
+        switch (filterKey) {
+          case "gender": {
+            filters = {
+              ...filters,
+              gender: getGender(filterValue),
+            };
+            break;
+          }
+          case "sizes": {
+            filters = {
+              ...filters,
+              sizes: { $in: filterValue },
+            };
+            break;
+          }
+          case "price": {
+            const [lowestPrice, highestPrice] =
+              queryFilters["price"].split(",");
+            filters = {
+              ...filters,
+              price: {
+                $gt: parseInt(lowestPrice) - 1,
+                $lt: parseInt(highestPrice) + 1,
+              },
+            };
+            break;
+          }
+          default: {
+            filters = { ...filters, [filterKey]: filterValue };
+          }
         }
-        result = { ...result, shoes };
-        res.status(200).send(result);
-      });
+      }
+    });
+
+    const query = Shoe.find(filters);
+
+    if (skip) {
+      query.skip(parseInt(skip));
+    }
+
+    if (limit) {
+      query.limit(parseInt(limit));
+
+      const count = await Shoe.countDocuments(filters);
+      result = { ...result, numOfPages: Math.ceil(count / parseInt(limit)) };
+    }
+
+    if (sortOption) {
+      query.sort(JSON.parse(sortOption));
+    }
+
+    await query.exec((err, shoes) => {
+      if (err) throw err;
+      if (shoes.length === 0) {
+        return res
+          .status(404)
+          .send("No shoes matching your criteria were found.");
+      }
+      result = { ...result, shoes };
+      res.status(200).send(result);
+    });
   } catch (e) {
     res.status(400).send(e);
   }
 };
 
-// Search for the unique values of a field of the Shoe model and how many times it was met.
-// Example: GET/shoes/fields/men/category => Output: [{ category: 'Sneakers', count: 12 }]
 const getShoeFields = async (req, res) => {
   try {
-    await Shoe.find(
-      {
-        gender: getGender(req.params.gender),
-        forKids: req.query.forKids,
-      },
-      (err, shoes) => {
-        const { field } = req.params;
-        const results = findFieldResults(shoes, field);
-        results.sort((a, b) =>
+    const shoes = await Shoe.find({
+      gender: getGender(req.query.gender),
+      forKids: req.query.forKids,
+    }).sort({ price: 1 });
+
+    let results = {};
+
+    req.query.fields.split(",").forEach((field) => {
+      if (field === "price") {
+        results[field] = {
+          minPrice: shoes[0].price,
+          maxPrice: shoes[shoes.length - 1].price,
+        };
+      } else {
+        results[field] = findFieldResults(shoes, field).sort((a, b) =>
           a[field] > b[field] ? 1 : b[field] > a[field] ? -1 : 0
         );
-        res.status(200).send(results);
       }
-    );
-  } catch (e) {
-    res.status(400).send(e);
-  }
-};
-
-const getShoePriceBoundries = async (req, res) => {
-  try {
-    let result = {};
-
-    const minPriceShoe = await Shoe.find({
-      gender: getGender(req.params.gender),
-      forKids: req.query.forKids,
-    })
-      .sort({ price: 1 })
-      .limit(1);
-    result.minPrice = minPriceShoe[0].price;
-
-    const maxPriceShoe = await Shoe.find({
-      gender: getGender(req.params.gender),
-      forKids: req.query.forKids,
-    })
-      .sort({ price: -1 })
-      .limit(1);
-    result.maxPrice = maxPriceShoe[0].price;
-
-    res.status(200).send(result);
+    });
+    res.status(200).send(results);
   } catch (e) {
     res.status(400).send(e);
   }
@@ -211,6 +217,5 @@ module.exports = {
   deleteShoe,
   searchShoes,
   getShoeFields,
-  getShoePriceBoundries,
-  getGenderSpecificShoes,
+  getFilteredShoes,
 };

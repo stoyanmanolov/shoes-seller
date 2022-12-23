@@ -13,6 +13,7 @@ import Cart from "../../pages/Cart";
 import Checkout from "../../pages/Checkout";
 import Orders from "../../pages/Orders";
 import EditShoe from "../../pages/EditShoe";
+import DeletedShoe from "../../pages/DeletedShoe";
 
 export class Routes extends React.Component {
   render() {
@@ -30,6 +31,7 @@ export class Routes extends React.Component {
             <Switch>
               <Route path="/shoes/add" component={AddShoes} />
               <Route path="/shoes/edit/:id" component={EditShoe} />
+              <Route path="/shoes/deleted/:id" component={DeletedShoe} />
               <Route path="/orders" component={Orders} />
             </Switch>
           )}

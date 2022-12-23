@@ -35,27 +35,4 @@ const getGender = (gender) => {
   }
 };
 
-const formatFilters = (queryFilters) => {
-  let filters = {};
-  Object.keys(queryFilters).map((filterKey) => {
-    if (queryFilters[filterKey].length !== 0) {
-      if (filterKey === "sizes") {
-        filters = {
-          ...filters,
-          [filterKey]: { $in: queryFilters[filterKey] },
-        };
-      } else if (filterKey === "price") {
-        filters = {
-          ...filters,
-          [filterKey]: {
-            $gt: queryFilters[filterKey][0] - 1,
-            $lt: queryFilters[filterKey][1] + 1,
-          },
-        };
-      } else filters = { ...filters, [filterKey]: queryFilters[filterKey] };
-    }
-  });
-  return filters;
-};
-
-module.exports = { findFieldResults, getGender, formatFilters };
+module.exports = { findFieldResults, getGender };
