@@ -63,7 +63,6 @@ const HeaderCarousel = (props) => {
   const slides = items.map((item) => {
     return (
       <CarouselItem
-        id={item.altText}
         onExiting={() => setAnimating(true)}
         onExited={() => setAnimating(false)}
         key={item.altText}
@@ -72,7 +71,7 @@ const HeaderCarousel = (props) => {
         <TextOverlay>
           <h1>{item.header}</h1>
           <Link to={item.route}>
-            <Button id={item.route}>{item.buttonText}</Button>
+            <Button>{item.buttonText}</Button>
           </Link>
         </TextOverlay>
         <CarouselCaption

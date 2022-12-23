@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StyledTopBar = styled.div`
+export const TopBar = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;

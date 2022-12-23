@@ -56,7 +56,6 @@ export class ShoesList extends React.Component {
     return shoes.map((shoe, index) => {
       return (
         <ShoeCard
-          id={shoe.model}
           key={index}
           shoe={shoe}
           forKids={this.props.forKids}

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StyledPriceRange = styled.div`
+export const PriceRange = styled.div`
   display: ${(props) => (props.clicked ? "grid" : "none")};
   grid-template-areas:
     "slider slider slider"

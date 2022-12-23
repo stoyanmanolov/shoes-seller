@@ -1,11 +1,11 @@
 import React from "react";
-import { StyledTopBar } from "./TopBar-styles";
+import * as Styled from "./TopBar.styles";
 
 const TopBar = (props) => {
   return (
-    <StyledTopBar id="topbar">
+    <Styled.TopBar id="topbar">
       <h3>{props.text}</h3>
-    </StyledTopBar>
+    </Styled.TopBar>
   );
 };
 

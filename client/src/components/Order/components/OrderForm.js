@@ -76,7 +76,7 @@ export const OrderForm = ({ setOrderId, setError }) => {
         {formFields.map(({ label, valueName }, index) => {
           return (
             <React.Fragment key={index}>
-              <Form.Field id={valueName}>
+              <Form.Field>
                 {validationErrors[valueName] ? (
                   <Message
                     negative

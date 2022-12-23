@@ -138,7 +138,6 @@ export class FilterMenu extends React.Component {
       return (
         <React.Fragment key={index}>
           <FilterSection
-            id={title}
             onClick={(e) => handleClick(e, title)}
             clicked={clicked}
           >

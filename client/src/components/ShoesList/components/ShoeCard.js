@@ -48,8 +48,8 @@ export class ShoeCard extends React.Component {
     } = this.props;
 
     return (
-      <Link id={_id.toString()} to={`/shoe/${_id}`}>
-        <Card id={model}>
+      <Link to={`/shoe/${_id}`}>
+        <Card>
           <CardImg
             className="card-image"
             top

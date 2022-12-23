@@ -17,7 +17,7 @@ export const DrawerToggler = styled.button`
   }
 `;
 
-export const StyledNavItems = styled.div`
+export const NavItems = styled.div`
   position: absolute;
   top: 100%;
   background-color: white;

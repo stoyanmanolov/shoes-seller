@@ -1,5 +1,5 @@
 import React from "react";
-import { StyledSearch } from "./Search-styles";
+import * as Styled from "./Search.styles";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Button, Input, List, Image } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
@@ -28,7 +28,7 @@ export class Search extends React.Component {
       <List>
         {shoes.map((shoe, index) => {
           return (
-            <List.Item id={shoe.model} key={index}>
+            <List.Item key={index}>
               <Image avatar src={`/images/${shoe.frontImage}`} />
               <List.Content>
                 <List.Header
@@ -54,10 +54,10 @@ export class Search extends React.Component {
 
   render() {
     return (
-      <StyledSearch>
-        <button className="search-button" onClick={this.handleClick}>
+      <>
+        <Styled.Button className="search-button" onClick={this.handleClick}>
           <i className="fas fa-search"></i>
-        </button>
+        </Styled.Button>
         <Modal isOpen={this.state.toggled} toggle={this.handleClick}>
           <ModalHeader toggle={this.handleClick}>
             <i style={{ marginRight: "5px" }} className="fas fa-search"></i>{" "}
@@ -79,7 +79,7 @@ export class Search extends React.Component {
             </Button>
           </ModalFooter>
         </Modal>
-      </StyledSearch>
+      </>
     );
   }
 }

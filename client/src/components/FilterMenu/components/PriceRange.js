@@ -1,7 +1,7 @@
 import React from "react";
 import Slider from "@material-ui/core/Slider";
 import { Input } from "semantic-ui-react";
-import { StyledPriceRange } from "./PriceRange-styles";
+import * as Styled from "./PriceRange.styles";
 
 const PriceRange = (props) => {
   const { minPrice, maxPrice } = props.boundries;
@@ -13,7 +13,7 @@ const PriceRange = (props) => {
   };
 
   return (
-    <StyledPriceRange {...props}>
+    <Styled.PriceRange {...props}>
       <Slider
         className="slider"
         value={value}
@@ -39,7 +39,7 @@ const PriceRange = (props) => {
         type="number"
         value={value[1]}
       ></Input>
-    </StyledPriceRange>
+    </Styled.PriceRange>
   );
 };
 

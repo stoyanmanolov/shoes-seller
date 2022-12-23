@@ -54,7 +54,6 @@ export class ShoeDetails extends React.Component {
           {images.map((image, index) => {
             return (
               <img
-                id={"image" + index}
                 onClick={(e) => this.setState({ selectedImage: image })}
                 src={`/images/${image}`}
                 alt={image}
