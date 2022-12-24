@@ -5,8 +5,6 @@ import {
   ADD_FILTER,
   REMOVE_FILTER,
   SET_CURRENT_SORT,
-  FETCH_SHOE_DETAILS,
-  CLEAR_SHOE_DETAILS,
   SET_CURRENT_PAGE,
 } from "../actions/types";
 
@@ -126,20 +124,6 @@ const shoesReducer = (state = initialState, { type, payload }) => {
             ],
           },
         },
-      };
-    }
-
-    case FETCH_SHOE_DETAILS: {
-      return {
-        ...state,
-        shoeDetails: payload,
-      };
-    }
-
-    case CLEAR_SHOE_DETAILS: {
-      return {
-        ...state,
-        shoeDetails: null,
       };
     }
     default:

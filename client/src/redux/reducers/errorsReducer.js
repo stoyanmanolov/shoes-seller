@@ -1,9 +1,4 @@
-import {
-  SHOES_LIST_ERROR,
-  CLEAR_SHOES_LIST_ERROR,
-  SHOE_DETAILS_ERROR,
-  CLEAR_SHOE_DETAILS_ERROR,
-} from "../actions/types";
+import { SHOES_LIST_ERROR, CLEAR_SHOES_LIST_ERROR } from "../actions/types";
 
 const initialState = {
   errorMessage: "",
@@ -29,22 +24,6 @@ const errorsReducer = (state = initialState, action) => {
         shoes: {
           ...state.shoes,
           shoesList: null,
-        },
-      };
-    case SHOE_DETAILS_ERROR:
-      return {
-        ...state,
-        shoes: {
-          ...state.shoes,
-          shoeDetails: action.payload,
-        },
-      };
-    case CLEAR_SHOE_DETAILS_ERROR:
-      return {
-        ...state,
-        shoes: {
-          ...state.shoes,
-          shoeDetails: null,
         },
       };
     default:

@@ -9,39 +9,39 @@ import {
   CarouselCaption,
 } from "reactstrap";
 import { Button } from "semantic-ui-react";
-import { StyledCarousel, TextOverlay } from "./HeaderCarousel-styles";
+import * as Styled from "./HeaderCarousel.styles";
 import { Link } from "react-router-dom";
 
-const items = [
-  {
-    src: MenImage,
-    altText: "Men",
-    caption: "",
-    header: "Men's Latest",
-    buttonText: "SHOP MEN'S",
-    route: "/men",
-  },
-  {
-    src: WomenImage,
-    altText: "Women",
-    caption: "",
-    header: "Women's Latest",
-    buttonText: "SHOP WOMEN'S",
-    route: "/women",
-  },
-  {
-    src: KidsImage,
-    altText: "Kids",
-    caption: "",
-    header: "Kids' Latest",
-    buttonText: "SHOP KIDS'",
-    route: "/kids",
-  },
-];
-
-const HeaderCarousel = (props) => {
+const HeaderCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [animating, setAnimating] = useState(false);
+
+  const items = [
+    {
+      src: MenImage,
+      altText: "Men",
+      caption: "",
+      header: "Men's Latest",
+      buttonText: "SHOP MEN'S",
+      route: "/men",
+    },
+    {
+      src: WomenImage,
+      altText: "Women",
+      caption: "",
+      header: "Women's Latest",
+      buttonText: "SHOP WOMEN'S",
+      route: "/women",
+    },
+    {
+      src: KidsImage,
+      altText: "Kids",
+      caption: "",
+      header: "Kids' Latest",
+      buttonText: "SHOP KIDS'",
+      route: "/kids",
+    },
+  ];
 
   const next = () => {
     if (animating) return;
@@ -67,13 +67,13 @@ const HeaderCarousel = (props) => {
         onExited={() => setAnimating(false)}
         key={item.altText}
       >
-        <img src={item.src} alt={item.altText} />
-        <TextOverlay>
+        <Styled.Image src={item.src} alt={item.altText} />
+        <Styled.TextOverlay>
           <h1>{item.header}</h1>
           <Link to={item.route}>
             <Button>{item.buttonText}</Button>
           </Link>
-        </TextOverlay>
+        </Styled.TextOverlay>
         <CarouselCaption
           captionText={item.caption}
           captionHeader={item.caption}
@@ -83,16 +83,14 @@ const HeaderCarousel = (props) => {
   });
 
   return (
-    <StyledCarousel>
-      <Carousel activeIndex={activeIndex} next={next} previous={previous}>
-        <CarouselIndicators
-          items={items}
-          activeIndex={activeIndex}
-          onClickHandler={goToIndex}
-        />
-        {slides}
-      </Carousel>
-    </StyledCarousel>
+    <Carousel activeIndex={activeIndex} next={next} previous={previous}>
+      <CarouselIndicators
+        items={items}
+        activeIndex={activeIndex}
+        onClickHandler={goToIndex}
+      />
+      {slides}
+    </Carousel>
   );
 };
 

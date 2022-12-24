@@ -1,20 +1,9 @@
 import styled from "styled-components";
 
-export const StyledCarousel = styled.div`
-  .overlay {
-    background-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.25),
-      rgba(0, 0, 0, 0.25) calc(100% - 150px),
-      rgba(0, 0, 0, 0.38) calc(100% - 60px),
-      rgba(0, 0, 0, 0.5)
-    );
-  }
-  .carousel-item > img {
-    height: 600px;
-    width: 100%;
-    object-fit: cover;
-  }
+export const Image = styled.img`
+  height: 600px;
+  width: 100%;
+  object-fit: cover;
 `;
 
 export const TextOverlay = styled.div`

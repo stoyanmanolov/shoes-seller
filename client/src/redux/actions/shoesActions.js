@@ -7,10 +7,6 @@ import {
   REMOVE_FILTER,
   SHOES_LIST_ERROR,
   CLEAR_SHOES_LIST_ERROR,
-  FETCH_SHOE_DETAILS,
-  SHOE_DETAILS_ERROR,
-  CLEAR_SHOE_DETAILS_ERROR,
-  CLEAR_SHOE_DETAILS,
   SET_CURRENT_PAGE,
 } from "./types";
 import { ShoesAPI } from "../../api";
@@ -89,24 +85,5 @@ export const removeFilter = (title, filter) => {
   return {
     type: REMOVE_FILTER,
     payload: { title, filter },
-  };
-};
-
-export const fetchShoeDetails = (id) => {
-  return async (dispatch) => {
-    ShoesAPI.getShoe(id)
-      .then((response) => {
-        dispatch({ type: CLEAR_SHOE_DETAILS_ERROR });
-        dispatch({ type: FETCH_SHOE_DETAILS, payload: response.data });
-      })
-      .catch((error) => {
-        dispatch({ type: SHOE_DETAILS_ERROR, payload: error.response });
-      });
-  };
-};
-
-export const clearShoeDetails = () => {
-  return {
-    type: CLEAR_SHOE_DETAILS,
   };
 };
