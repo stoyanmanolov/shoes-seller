@@ -3,8 +3,8 @@ import Slider from "@material-ui/core/Slider";
 import { Input } from "semantic-ui-react";
 import * as Styled from "./PriceRange.styles";
 
-const PriceRange = (props) => {
-  const { minPrice, maxPrice } = props.boundries;
+const PriceRange = ({ toggled, handlePriceChange, boundries }) => {
+  const { minPrice, maxPrice } = boundries;
 
   const [value, setValue] = React.useState([minPrice, maxPrice]);
 
@@ -13,14 +13,14 @@ const PriceRange = (props) => {
   };
 
   return (
-    <Styled.PriceRange {...props}>
+    <Styled.PriceRange toggled={toggled}>
       <Slider
         className="slider"
         value={value}
         min={minPrice}
         max={maxPrice}
         onChange={handleSliderChange}
-        onChangeCommitted={(e) => props.getPrice(value)}
+        onChangeCommitted={(e) => handlePriceChange(value)}
         valueLabelDisplay="auto"
         aria-labelledby="range-slider"
       />

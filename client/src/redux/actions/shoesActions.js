@@ -1,39 +1,21 @@
 import {
-  CLEAR_FILTERS,
-  FILTER_OPTIONS_NAMES,
+  SET_FILTERS_DATA,
   FETCH_SHOES_LIST,
   SET_CURRENT_SORT,
-  ADD_FILTER,
-  REMOVE_FILTER,
+  SELECT_FILTER,
+  REMOVE_SELECTED_FILTER,
   SHOES_LIST_ERROR,
   CLEAR_SHOES_LIST_ERROR,
   SET_CURRENT_PAGE,
+  CLEAR_SELECTED_FILTERS,
 } from "./types";
 import { ShoesAPI } from "../../api";
 import { SHOES_PER_PAGE } from "../../constants";
 
-export const fetchFilterOptions = (gender, forKids, fields) => {
-  const fieldsQueryParams = fields.map((f) => f.title).toString();
-
-  return async (dispatch) => {
-    await ShoesAPI.getShoeFields(gender, forKids, fieldsQueryParams).then(
-      (response) => {
-        dispatch({ type: FILTER_OPTIONS_NAMES, payload: response.data });
-      }
-    );
-  };
-};
-
-export const clearFilters = () => {
-  return {
-    type: CLEAR_FILTERS,
-  };
-};
-
 export const fetchShoesList = (gender, forKids) => {
   return async (dispatch, getState) => {
     const { currentPage, currentSort } = getState().shoes.shoesList;
-    const { selectedFilters } = getState().shoes.filterOptions;
+    const { selectedFilters } = getState().shoes;
 
     const filtersQueryParams = new URLSearchParams({
       ...selectedFilters,
@@ -74,16 +56,29 @@ export const setCurrentPage = (currentPage) => {
   };
 };
 
-export const addFilter = (title, filter) => {
+export const setFiltersData = (data) => {
   return {
-    type: ADD_FILTER,
+    type: SET_FILTERS_DATA,
+    payload: data,
+  };
+};
+
+export const selectFilter = (title, filter) => {
+  return {
+    type: SELECT_FILTER,
     payload: { title, filter },
   };
 };
 
-export const removeFilter = (title, filter) => {
+export const removeSelectedFilter = (title, filter) => {
   return {
-    type: REMOVE_FILTER,
+    type: REMOVE_SELECTED_FILTER,
     payload: { title, filter },
+  };
+};
+
+export const clearSelectedFilters = () => {
+  return {
+    type: CLEAR_SELECTED_FILTERS,
   };
 };

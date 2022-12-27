@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const PriceRange = styled.div`
-  display: ${(props) => (props.clicked ? "grid" : "none")};
+  display: ${(props) => (props.toggled ? "grid" : "none")};
   grid-template-areas:
     "slider slider slider"
     "minimum divider maximum";

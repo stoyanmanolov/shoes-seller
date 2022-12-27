@@ -16,17 +16,19 @@ export const ShoesList = ({ gender = "All", forKids = false }) => {
     { key: "high-to-low", value: '{ "price": -1 }', text: "Price: High-Low" },
   ];
   const shoesList = useSelector((state) => state.shoes.shoesList);
-  const currentSort = useSelector((state) => state.shoes.shoesList.currentSort);
-  const currentPage = useSelector((state) => state.shoes.shoesList.currentPage);
-  const selectedFilters = useSelector(
-    (state) => state.shoes.filterOptions.selectedFilters
-  );
   const shoesListError = useSelector((state) => state.errors.shoes.shoesList);
+  const selectedFilters = useSelector((state) => state.shoes.selectedFilters);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchShoesList(gender, forKids));
-  }, [currentSort, currentPage, selectedFilters]);
+  }, [
+    shoesList.currentSort,
+    shoesList.currentPage,
+    selectedFilters,
+    gender,
+    forKids,
+  ]);
 
   const renderShoesList = () => {
     return shoesList.shoes.map((shoe, index) => (
@@ -46,9 +48,7 @@ export const ShoesList = ({ gender = "All", forKids = false }) => {
         }}
       />
       {shoesListError ? (
-        <Message negative compact>
-          {shoesListError.data}
-        </Message>
+        <Message negative>{shoesListError.data}</Message>
       ) : shoesList.shoes.length === 0 && !shoesListError ? (
         <Loader active />
       ) : (

@@ -1,24 +1,22 @@
 import {
-  FILTER_OPTIONS_NAMES,
+  SET_FILTERS_DATA,
   FETCH_SHOES_LIST,
-  CLEAR_FILTERS,
-  ADD_FILTER,
-  REMOVE_FILTER,
+  SELECT_FILTER,
+  REMOVE_SELECTED_FILTER,
   SET_CURRENT_SORT,
   SET_CURRENT_PAGE,
+  CLEAR_SELECTED_FILTERS,
 } from "../actions/types";
 
 const initialState = {
-  filterOptions: {
-    optionNames: null,
-    selectedFilters: {
-      brand: [],
-      category: [],
-      color: [],
-      model: [],
-      price: [],
-      sizes: [],
-    },
+  filtersData: null,
+  selectedFilters: {
+    brand: [],
+    category: [],
+    color: [],
+    model: [],
+    price: [],
+    sizes: [],
   },
   shoesList: {
     shoes: [],
@@ -31,30 +29,6 @@ const initialState = {
 
 const shoesReducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case FILTER_OPTIONS_NAMES:
-      return {
-        ...state,
-        filterOptions: {
-          ...state.filterOptions,
-          optionNames: payload,
-        },
-      };
-    case CLEAR_FILTERS:
-      return {
-        ...state,
-        filterOptions: {
-          ...state.filterOptions,
-          optionNames: null,
-          selectedFilters: {
-            brand: [],
-            category: [],
-            color: [],
-            model: [],
-            price: [],
-            sizes: [],
-          },
-        },
-      };
     case FETCH_SHOES_LIST:
       return {
         ...state,
@@ -81,49 +55,49 @@ const shoesReducer = (state = initialState, { type, payload }) => {
           currentPage: payload,
         },
       };
-    case ADD_FILTER: {
+    case SET_FILTERS_DATA:
+      return {
+        ...state,
+        filtersData: payload,
+      };
+    case SELECT_FILTER: {
       if (payload.title === "price") {
         return {
           ...state,
-          filterOptions: {
-            ...state.filterOptions,
-            selectedFilters: {
-              ...state.filterOptions.selectedFilters,
-              [payload.title]: payload.filter,
-            },
+          selectedFilters: {
+            ...state.selectedFilters,
+            [payload.title]: payload.filter,
           },
         };
       } else
         return {
           ...state,
-          filterOptions: {
-            ...state.filterOptions,
-            selectedFilters: {
-              ...state.filterOptions.selectedFilters,
-              [payload.title]: [
-                payload.filter,
-                ...state.filterOptions.selectedFilters[payload.title],
-              ],
-            },
+          selectedFilters: {
+            ...state.selectedFilters,
+            [payload.title]: [
+              payload.filter,
+              ...state.selectedFilters[payload.title],
+            ],
           },
         };
     }
-    case REMOVE_FILTER: {
+    case REMOVE_SELECTED_FILTER: {
       return {
         ...state,
-        filterOptions: {
-          ...state.filterOptions,
-          selectedFilters: {
-            ...state.filterOptions.selectedFilters,
-            [payload.title]: [
-              ...state.filterOptions.selectedFilters[payload.title].filter(
-                (value) => {
-                  return value !== payload.filter;
-                }
-              ),
-            ],
-          },
+        selectedFilters: {
+          ...state.selectedFilters,
+          [payload.title]: [
+            ...state.selectedFilters[payload.title].filter((value) => {
+              return value !== payload.filter;
+            }),
+          ],
         },
+      };
+    }
+    case CLEAR_SELECTED_FILTERS: {
+      return {
+        ...state,
+        selectedFilters: initialState.selectedFilters,
       };
     }
     default:
