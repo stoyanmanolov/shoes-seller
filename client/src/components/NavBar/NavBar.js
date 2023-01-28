@@ -1,122 +1,100 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { logoutUser } from "../../redux/actions/authActions";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import NavItems from "./components/NavItems";
 import Search from "./components/Search";
-import { Nav, Logo, GroupedButtons, MenuList, ListItem } from "./NavBar-styles";
+import * as Styled from "./NavBar.styles";
 import LogoImage from "./images/Logo.png";
 
-export class NavBar extends React.Component {
-  renderStaticItems = () => {
-    const listItems = [
-      { title: "Men", route: "/men" },
-      { title: "Women", route: "/women" },
-      { title: "Kids", route: "/kids" },
-    ];
+export const NavBar = () => {
+  const cart = useSelector((state) => state.orders.cart);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
 
-    return listItems.map(({ title, route }, index) => {
-      return (
-        <ListItem key={index}>
-          <Link to={route}>
-            <p>{title}</p>
-          </Link>
-        </ListItem>
-      );
-    });
-  };
+  const cartItemsCount = cart.reduce(
+    (accumulator, cartItem) => accumulator + cartItem.sizes.length,
+    0
+  );
 
-  renderAuthItems = () => {
-    const { isLoggedIn } = this.props;
+  const navItems = [
+    {
+      title: "Men",
+      route: "/men",
+      isShown: true,
+    },
+    {
+      title: "Women",
+      route: "/women",
+      isShown: true,
+    },
+    {
+      title: "Kids",
+      route: "/kids",
+      isShown: true,
+    },
+    {
+      title: "Orders",
+      route: "/orders",
+      isShown: user?.role === "admin",
+    },
+    {
+      title: "Add shoes",
+      route: "/shoes/add",
+      isShown: user?.role === "admin",
+    },
+    {
+      title: "Login",
+      route: "/login",
+      isShown: !isLoggedIn,
+    },
+    {
+      title: "Register",
+      route: "/register",
+      isShown: !isLoggedIn,
+    },
+    {
+      title: "Logout",
+      route: "/",
+      onClick: () => dispatch(logoutUser()),
+      isShown: isLoggedIn,
+    },
+  ];
 
-    return (
-      <>
-        {isLoggedIn ? (
-          <>
-            {this.props.user.role === "admin" ? (
-              <>
-                <ListItem>
-                  <Link to="/orders">
-                    <p>Orders</p>
-                  </Link>
-                </ListItem>
-                <ListItem>
-                  <Link to="/shoes/add">
-                    <p>Add shoes</p>
-                  </Link>
-                </ListItem>
-                <ListItem>
-                  <Link to="/admin/add">
-                    <p>Add admin</p>
-                  </Link>
-                </ListItem>
-              </>
-            ) : null}
-            <ListItem id="logout" onClick={(e) => this.props.logoutUser()}>
-              <Link to="/">
-                <p>Log out</p>
-              </Link>
-            </ListItem>
-          </>
-        ) : (
-          <>
-            <ListItem>
-              <Link to="/login">
-                <p>Log in</p>
-              </Link>
-            </ListItem>
-            <ListItem>
-              <Link to="/register">
-                <p>Sign up</p>
-              </Link>
-            </ListItem>
-          </>
-        )}
-      </>
-    );
-  };
+  return (
+    <Styled.Nav id="navbar">
+      <NavItems>
+        <Styled.MenuList>
+          {navItems.map((item, index) => {
+            if (!item.isShown) return null;
 
-  renderNavItems = () => {
-    return (
-      <MenuList>
-        {this.renderStaticItems()}
-        {this.renderAuthItems()}
-      </MenuList>
-    );
-  };
+            return (
+              <Styled.ListItem key={index}>
+                <Link to={item.route} onClick={item?.onClick}>
+                  <span>{item.title}</span>
+                </Link>
+              </Styled.ListItem>
+            );
+          })}
+        </Styled.MenuList>
+      </NavItems>
+      <Styled.Logo>
+        <Link to="/">
+          <img src={LogoImage} alt="Logo" />
+        </Link>
+      </Styled.Logo>
+      <Styled.GroupedButtons>
+        <Search />
+        <Link to="/cart">
+          <button className="cart">
+            <span className="cart-items-counter">{cartItemsCount}</span>
+            <i className="fas fa-shopping-cart"></i>
+          </button>
+        </Link>
+      </Styled.GroupedButtons>
+    </Styled.Nav>
+  );
+};
 
-  render() {
-    return (
-      <Nav id="navbar">
-        <NavItems>{this.renderNavItems()}</NavItems>
-        <Logo>
-          <Link to="/">
-            <img src={LogoImage} alt="Logo" />
-          </Link>
-        </Logo>
-        <GroupedButtons>
-          <Search />
-          <Link to="/cart">
-            <button className="cart">
-              <span id="cart-items-counter" className="cart-items-counter">
-                {this.props.itemsCount}
-              </span>
-              <i className="fas fa-shopping-cart"></i>
-            </button>
-          </Link>
-        </GroupedButtons>
-      </Nav>
-    );
-  }
-}
-
-export default connect(
-  ({ auth, orders }) => ({
-    user: auth.user,
-    isLoggedIn: auth.isLoggedIn,
-    itemsCount: orders.itemsCount,
-  }),
-  {
-    logoutUser,
-  }
-)(NavBar);
+export default NavBar;

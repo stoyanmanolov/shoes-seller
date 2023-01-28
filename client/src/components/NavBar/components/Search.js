@@ -1,9 +1,9 @@
 import React from "react";
-import { StyledSearch } from "./Search-styles";
+import * as Styled from "./Search.styles";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Button, Input, List, Image } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
-import axios from "axios";
+import { ShoesAPI } from "../../../api";
 
 export class Search extends React.Component {
   state = { toggled: false, input: "", matchingShoes: [] };
@@ -15,8 +15,7 @@ export class Search extends React.Component {
   handleChange = (e) => {
     this.setState({ input: e.target.value });
 
-    axios
-      .get(`/shoes/search?searchName=${e.target.value}&limit=10`)
+    ShoesAPI.searchShoes(e.target.value)
       .then((response) => this.setState({ matchingShoes: response.data }))
       .catch((error) => window.alert("There has been an error!"));
   };
@@ -29,7 +28,7 @@ export class Search extends React.Component {
       <List>
         {shoes.map((shoe, index) => {
           return (
-            <List.Item id={shoe.model} key={index}>
+            <List.Item key={index}>
               <Image avatar src={`/images/${shoe.frontImage}`} />
               <List.Content>
                 <List.Header
@@ -55,10 +54,10 @@ export class Search extends React.Component {
 
   render() {
     return (
-      <StyledSearch>
-        <button className="search-button" onClick={this.handleClick}>
+      <>
+        <Styled.Button className="search-button" onClick={this.handleClick}>
           <i className="fas fa-search"></i>
-        </button>
+        </Styled.Button>
         <Modal isOpen={this.state.toggled} toggle={this.handleClick}>
           <ModalHeader toggle={this.handleClick}>
             <i style={{ marginRight: "5px" }} className="fas fa-search"></i>{" "}
@@ -80,7 +79,7 @@ export class Search extends React.Component {
             </Button>
           </ModalFooter>
         </Modal>
-      </StyledSearch>
+      </>
     );
   }
 }

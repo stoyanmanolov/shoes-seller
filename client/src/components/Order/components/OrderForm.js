@@ -1,151 +1,101 @@
-import React from "react";
-import { Form, Button, Message } from "semantic-ui-react";
-import { StyledOrderForm } from "./OrderForm-styles";
-import validator from "validator";
+import React, { useState } from "react";
+import { Form, Message } from "semantic-ui-react";
+import * as Styled from "./OrderForm.styles";
 import _ from "lodash";
-import axios from "axios";
+import { OrdersAPI } from "../../../api";
+import { getValidationErrors } from "./OrderForm.utils";
+import { useDispatch, useSelector } from "react-redux";
+import { resetCart } from "../../../redux/actions/ordersActions";
 
-class OrderForm extends React.Component {
-  state = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    city: "",
-    address: "",
-    validationErrors: {},
-  };
+export const OrderForm = ({ setOrderId, setError }) => {
+  const [validationErrors, setValidationErrors] = useState({});
+  const cart = useSelector((state) => state.orders.cart);
+  const totalPrice = useSelector((state) => state.orders.totalPrice);
+  const dispatch = useDispatch();
 
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const {
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      city,
-      address,
-    } = this.state;
-
-    const formData = {
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      city,
-      address,
+    const formData = new FormData(e.target);
+    const submitData = {
+      firstName: formData.get("firstName"),
+      lastName: formData.get("lastName"),
+      email: formData.get("email"),
+      phoneNumber: formData.get("phoneNumber"),
+      city: formData.get("city"),
+      address: formData.get("address"),
     };
 
-    const findErrors = (data) => {
-      let errors = {};
+    const errors = getValidationErrors(submitData);
+    setValidationErrors(errors);
 
-      Object.keys(data).forEach((key) => {
-        const value = data[key];
+    if (_.isEmpty(errors)) {
+      submitData.cart = cart;
+      submitData.price = totalPrice;
 
-        if (value === "") {
-          errors[key] = "Please fill in the field!";
-        } else if (key === "email") {
-          if (!validator.isEmail(value)) {
-            errors[key] = "Please enter a valid email!";
-          }
-        } else if (key === "phoneNumber") {
-          if (!validator.isMobilePhone(value)) {
-            errors[key] = "Please enter a valid phone number!";
-          }
-        }
-      });
-
-      return errors;
-    };
-
-    const validationErrors = findErrors(formData);
-    this.setState({ validationErrors });
-
-    if (_.isEmpty(validationErrors)) {
-      formData.price = this.props.totalPrice;
-      formData.cart = this.props.cart;
-
-      axios
-        .post("/orders", formData)
+      OrdersAPI.sendOrder(submitData)
         .then((res) => {
-          this.props.getOrder(res.data);
-          this.props.resetCart();
+          setOrderId(res.data._id);
+          dispatch(resetCart());
         })
-        .catch((err) => this.props.getError(err.response));
+        .catch((err) => setError(err.response));
     }
   };
 
-  render() {
-    const { validationErrors } = this.state;
+  const formFields = [
+    {
+      label: "First Name",
+      valueName: "firstName",
+    },
+    {
+      label: "Last Name",
+      valueName: "lastName",
+    },
+    {
+      label: "Email",
+      valueName: "email",
+    },
+    {
+      label: "Phone Number",
+      valueName: "phoneNumber",
+    },
+    {
+      label: "City",
+      valueName: "city",
+    },
+    {
+      label: "Address",
+      valueName: "address",
+    },
+  ];
 
-    const formFields = [
-      {
-        label: "First Name",
-        valueName: "firstName",
-        value: this.state.firstName,
-      },
-      {
-        label: "Last Name",
-        valueName: "lastName",
-        value: this.state.lastName,
-      },
-      {
-        label: "Email",
-        valueName: "email",
-        value: this.state.email,
-      },
-      {
-        label: "Phone Number",
-        valueName: "phoneNumber",
-        value: this.state.phoneNumber,
-      },
-      {
-        label: "City",
-        valueName: "city",
-        value: this.state.city,
-      },
-      {
-        label: "Address",
-        valueName: "address",
-        value: this.state.address,
-      },
-    ];
-
-    return (
-      <StyledOrderForm id="order-form">
-        <h4>Billing details</h4>
-        <Form onSubmit={this.handleSubmit}>
-          {formFields.map(({ label, valueName, value }, index) => {
-            return (
-              <React.Fragment key={index}>
-                <Form.Field id={valueName}>
-                  {validationErrors[valueName] ? (
-                    <Message
-                      negative
-                      size="tiny"
-                      header={validationErrors[valueName]}
-                    />
-                  ) : null}
-                  <label>{label}</label>
-                  <input
-                    onChange={(e) =>
-                      this.setState({ [valueName]: e.target.value })
-                    }
-                    value={value}
-                    placeholder={label}
+  return (
+    <div>
+      <Styled.Heading>Billing details</Styled.Heading>
+      <Styled.Form onSubmit={handleSubmit}>
+        {formFields.map(({ label, valueName }, index) => {
+          return (
+            <React.Fragment key={index}>
+              <Form.Field>
+                {validationErrors[valueName] ? (
+                  <Message
+                    negative
+                    size="tiny"
+                    header={validationErrors[valueName]}
                   />
-                </Form.Field>
-              </React.Fragment>
-            );
-          })}
-          <Button className="order-button" primary type="submit">
-            Place order
-          </Button>
-        </Form>
-      </StyledOrderForm>
-    );
-  }
-}
+                ) : null}
+                <label>{label}</label>
+                <input name={valueName} placeholder={label} />
+              </Form.Field>
+            </React.Fragment>
+          );
+        })}
+        <Styled.Button primary type="submit">
+          Place order
+        </Styled.Button>
+      </Styled.Form>
+    </div>
+  );
+};
 
 export default OrderForm;

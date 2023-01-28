@@ -1,214 +1,137 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchFilterOptions,
-  clearFilters,
-  fetchShoesList,
-  clearShoesList,
-  addFilter,
-  removeFilter,
+  setFiltersData,
+  selectFilter,
+  removeSelectedFilter,
+  clearSelectedFilters,
 } from "../../redux/actions/shoesActions";
-import { Checkbox, Button, Loader } from "semantic-ui-react";
+import { Button, Checkbox, Loader } from "semantic-ui-react";
 import {
   StyledFilterMenu,
   FilterList,
   FilterSection,
   FilterOption,
-} from "./FilterMenu-styles";
+  MobileWrapper,
+} from "./FilterMenu.styles";
 import PriceRange from "./components/PriceRange";
+import { ShoesAPI } from "../../api";
 
-export class FilterMenu extends React.Component {
-  state = {
-    sections: [
-      { title: "category" },
-      { title: "brand" },
-      { title: "model" },
-      { title: "color" },
-      { title: "price" },
-      { title: "sizes" },
-    ],
-    sectionsClicked: ["category", "brand"],
-    showOnSmallerScreens: false,
-  };
+export const FilterMenu = ({ gender = "All", forKids = false }) => {
+  const [sectionsToggled, setSectionsToggled] = useState(["category", "brand"]);
+  const [showOnSmallerScreens, setShowOnSmallerScreens] = useState(false);
+  const filtersData = useSelector((state) => state.shoes.filtersData);
+  const selectedFilters = useSelector((state) => state.shoes.selectedFilters);
+  const dispatch = useDispatch();
 
-  componentDidMount = () => {
-    // Get all the unique brands, categories etc. and how many times they were found in the database.
-    this.props.fetchFilterOptions(
-      this.props.gender,
-      this.props.forKids,
-      this.state.sections
-    );
-  };
+  useEffect(() => {
+    dispatch(clearSelectedFilters());
 
-  componentDidUpdate = (prevProps) => {
-    const {
-      filterOptions: { selectedFilters },
+    ShoesAPI.getShoeFields(
       gender,
       forKids,
-      shoesList: { shoesPerPage, currentSort },
-      clearShoesList,
-      fetchShoesList,
-    } = this.props;
+      Object.keys(selectedFilters).toString()
+    ).then((response) => {
+      dispatch(setFiltersData(response.data));
+    });
+  }, [gender, forKids]);
 
-    if (prevProps.filterOptions.selectedFilters !== selectedFilters) {
-      clearShoesList();
-      const page = 1;
-      fetchShoesList(
-        shoesPerPage,
-        page,
-        gender,
-        forKids,
-        currentSort,
-        selectedFilters
-      );
+  const handleSectionClick = (nameToToggle, toggled) => {
+    const newSectionsToggled = [...sectionsToggled];
+
+    if (toggled) {
+      // Remove from array of toggled sections
+      newSectionsToggled.splice(sectionsToggled.indexOf(nameToToggle), 1);
+    } else {
+      // add
+      newSectionsToggled.push(nameToToggle);
     }
+
+    setSectionsToggled(newSectionsToggled);
   };
 
-  componentWillUnmount = () => {
-    this.props.clearFilters();
-  };
-
-  renderFilterOptions = (title, clicked) => {
-    if (!this.props.filterOptions.optionNames) {
-      return this.state.sectionsClicked.includes(title) ? (
-        <Loader id="loader" active inline size="small" />
-      ) : null;
+  const renderFilterOptions = (name, toggled) => {
+    if (!filtersData) {
+      return <Loader active inline size="small" />;
     }
-    const sectionData = this.props.filterOptions.optionNames[title];
-
-    const renderPriceRange = () => {
-      const getPrice = (price) => {
-        const selectedPrice = [price[0], price[1]];
-        this.props.addFilter(title, selectedPrice);
-      };
-
-      return (
-        <PriceRange
-          getPrice={getPrice}
-          clicked={clicked}
-          boundries={sectionData}
-        />
-      );
-    };
 
     return (
       <ul className="info">
-        {title === "price"
-          ? renderPriceRange()
-          : sectionData.map((data, index) => {
+        {(() => {
+          const filterData = filtersData[name];
+
+          if (name === "price") {
+            return (
+              <PriceRange
+                toggled={toggled}
+                boundries={filterData}
+                handlePriceChange={(price) => {
+                  const selectedPrice = [price[0], price[1]];
+                  dispatch(selectFilter(name, selectedPrice));
+                }}
+              />
+            );
+          } else {
+            return filterData.map((data, index) => {
               return (
-                <FilterOption clicked={clicked} key={index}>
+                <FilterOption toggled={toggled} key={index}>
                   <Checkbox
                     onChange={(e, { checked }) => {
                       if (checked) {
-                        this.props.addFilter(title, data[title]);
-                      } else if (!checked)
-                        this.props.removeFilter(title, data[title]);
+                        dispatch(selectFilter(name, data[name]));
+                      } else if (!checked) {
+                        dispatch(removeSelectedFilter(name, data[name]));
+                      }
                     }}
                   />
-                  <p className="title">{data[title]}</p>
-                  <p className="count">{"(" + data.count + ")"}</p>
+                  <p>{data[name]}</p>
+                  <span>{"(" + data.count + ")"}</span>
                 </FilterOption>
               );
-            })}
+            });
+          }
+        })()}
       </ul>
     );
   };
 
-  renderFilterSections = () => {
-    const { sections, sectionsClicked } = this.state;
-
-    const handleClick = (e, title) => {
-      e.preventDefault();
-      const clicked = sectionsClicked.includes(title);
-
-      if (clicked) {
-        // Remove from array of clicked sections
-        const index = sectionsClicked.indexOf(title);
-        sectionsClicked.splice(index, 1);
-      } else {
-        // Add to array of clicked sections
-        sectionsClicked.push(title);
-      }
-      this.setState({ sectionsClicked });
-    };
-
-    return sections.map(({ title }, index) => {
-      const clicked = sectionsClicked.includes(title);
-      return (
-        <React.Fragment key={index}>
-          <FilterSection
-            id={title}
-            onClick={(e) => handleClick(e, title)}
-            clicked={clicked}
-          >
-            <p className="title">{title.toUpperCase()}</p>
-            {!clicked ? (
-              <i className="chevron fas fa-chevron-down"></i>
-            ) : (
-              <i className="chevron fas fa-chevron-up"></i>
-            )}
-          </FilterSection>
-          {this.renderFilterOptions(title, clicked)}
-        </React.Fragment>
-      );
-    });
-  };
-
-  render() {
-    const { showOnSmallerScreens } = this.state;
-
-    const handleClick = () => {
-      !showOnSmallerScreens
-        ? this.setState({ showOnSmallerScreens: true })
-        : this.setState({ showOnSmallerScreens: false });
-    };
-
-    return (
-      <StyledFilterMenu
-        id="filter-menu"
-        showOnSmallerScreens={showOnSmallerScreens}
-      >
-        <div className="button-wrapper">
-          <Button className="filter-button" onClick={() => handleClick()}>
-            FILTERS
-          </Button>
-          <div className="filter-topbar">
-            <h3>Filters</h3>
-            <i
-              id="close-X-icon"
-              className="fas fa-times"
-              onClick={() => handleClick()}
-            ></i>
-          </div>
-        </div>
-        <FilterList
-          id="filter-list"
-          showOnSmallerScreens={showOnSmallerScreens}
+  return (
+    <StyledFilterMenu
+      id="filter-menu"
+      showOnSmallerScreens={showOnSmallerScreens}
+    >
+      <MobileWrapper>
+        <Button
+          fluid
+          onClick={() => setShowOnSmallerScreens(!showOnSmallerScreens)}
         >
-          {this.renderFilterSections()}
-        </FilterList>
-      </StyledFilterMenu>
-    );
-  }
-}
+          FILTERS
+        </Button>
+      </MobileWrapper>
+      <FilterList showOnSmallerScreens={showOnSmallerScreens}>
+        {(() => {
+          return Object.keys(selectedFilters).map((name, index) => {
+            const toggled = sectionsToggled.includes(name);
 
-FilterMenu.defaultProps = {
-  gender: "All",
-  forKids: false,
+            return (
+              <React.Fragment key={index}>
+                <FilterSection
+                  onClick={(e) => handleSectionClick(name, toggled)}
+                  toggled={toggled}
+                >
+                  <p>{name.toUpperCase()}</p>
+                  <i
+                    className={`fas fa-chevron-${!toggled ? "down" : "up"}`}
+                  ></i>
+                </FilterSection>
+                {renderFilterOptions(name, toggled)}
+              </React.Fragment>
+            );
+          });
+        })()}
+      </FilterList>
+    </StyledFilterMenu>
+  );
 };
 
-export default connect(
-  ({ shoes }) => ({
-    filterOptions: shoes.filterOptions,
-    shoesList: shoes.shoesList,
-  }),
-  {
-    fetchFilterOptions,
-    clearFilters,
-    fetchShoesList,
-    clearShoesList,
-    addFilter,
-    removeFilter,
-  }
-)(FilterMenu);
+export default FilterMenu;

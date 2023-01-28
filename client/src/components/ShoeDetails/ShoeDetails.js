@@ -1,178 +1,101 @@
 import React from "react";
-import { connect } from "react-redux";
-import {
-  StyledShoeDetails,
-  Images,
-  Sizes,
-  CartButton,
-  Text,
-  InputPanel,
-} from "./ShoeDetails-styles";
-import {
-  fetchShoeDetails,
-  clearShoeDetails,
-} from "../../redux/actions/shoesActions";
+import { useDispatch } from "react-redux";
+import * as Styled from "./ShoeDetails.styles";
 import { addToCart } from "../../redux/actions/ordersActions";
 import Error from "../Error";
-import { Button } from "semantic-ui-react";
+import { Button, Loader } from "semantic-ui-react";
+import { useEffect } from "react";
+import { ShoesAPI } from "../../api";
+import { useState } from "react";
 
-export class ShoeDetails extends React.Component {
-  state = {
-    selectedImage: "",
-    selectedSize: null,
+export const ShoeDetails = ({ id }) => {
+  const [shoe, setShoe] = useState();
+  const [error, setError] = useState();
+  const [selectedImage, setSelectedImage] = useState();
+  const [selectedSize, setSelectedSize] = useState();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    ShoesAPI.getShoe(id)
+      .then((response) => {
+        setShoe(response.data);
+        setSelectedImage(response.data.frontImage);
+      })
+      .catch((error) => {
+        setError(error.response);
+      });
+  }, []);
+
+  const handleClick = () => {
+    dispatch(addToCart(shoe, selectedSize));
   };
 
-  componentDidMount = () => {
-    this.props.fetchShoeDetails(this.props.id);
-  };
-
-  componentDidUpdate = () => {
-    const { shoeDetails } = this.props;
-
-    if (!this.state.selectedImage && shoeDetails) {
-      this.setState({ selectedImage: shoeDetails.frontImage });
-    }
-  };
-
-  componentWillUnmount = () => {
-    this.props.clearShoeDetails();
-  };
-
-  renderImages = (frontImage, images) => {
-    if (!this.state.selectedImage) return null;
-
-    if (!images.includes(frontImage)) images.splice(0, 0, frontImage);
-
+  if (error)
+    return <Error status={error.status} message={error.statusText}></Error>;
+  else if (!shoe) {
+    return <Loader active />;
+  } else {
     return (
-      <Images id="images" className="images">
-        <img
-          className="selected-image"
-          src={`/images/${this.state.selectedImage}`}
-          alt="Front"
-        />
-        <div className="other-images">
-          {images.map((image, index) => {
-            return (
-              <img
-                id={"image" + index}
-                onClick={(e) => this.setState({ selectedImage: image })}
-                src={`/images/${image}`}
-                alt={image}
-                key={index}
-              />
-            );
-          })}
-        </div>
-      </Images>
-    );
-  };
-
-  renderSizes = (sizes) => {
-    if (!sizes) return null;
-
-    return (
-      <Sizes length={sizes.length}>
-        <p className="size-text">Select size:</p>
-        <div className="sizes-grid" id="sizes">
-          {sizes.map((size) => {
-            return (
-              <Button
-                active={size === this.state.selectedSize ? true : false}
-                onClick={(e, selected) =>
-                  this.setState({ selectedSize: selected.value })
-                }
-                basic
-                value={size}
-                key={size}
-              >
-                {size}
-              </Button>
-            );
-          })}
-        </div>
-      </Sizes>
-    );
-  };
-
-  renderShoeDetails = (shoeDetails) => {
-    if (!shoeDetails) return null;
-
-    const {
-      brand,
-      model,
-      category,
-      frontImage,
-      description,
-      price,
-      images,
-      sizes,
-      color,
-      gender,
-    } = shoeDetails;
-
-    const handleClick = () => {
-      this.props.addToCart(shoeDetails, this.state.selectedSize);
-    };
-
-    return (
-      <StyledShoeDetails id="shoe-details">
-        <div id="top-panel" className="top-panel">
-          <span className="category">{category}</span>
-          <h2 className="shoe-name">{brand + " " + model}</h2>
-          <span className="price">{"$" + price}</span>
-        </div>
-        {this.renderImages(frontImage, images)}
-        <div id="bottom-panel" className="bottom-panel">
-          <InputPanel>
-            {this.renderSizes(sizes)}
-            <CartButton
-              id="cart-button"
-              onClick={handleClick}
-              disabled={this.state.selectedSize ? false : true}
-            >
-              {this.state.selectedSize
-                ? "Add to Cart"
-                : "Select a size to continue"}
-            </CartButton>
-          </InputPanel>
-          <Text>
-            <p className="gender">
-              <b>Gender:</b> {gender}
+      <Styled.ShoeDetails>
+        <Styled.TopPanel>
+          <span className="category">{shoe.category}</span>
+          <h2 className="shoe-name">{shoe.brand + " " + shoe.model}</h2>
+          <span className="price">{"$" + shoe.price}</span>
+        </Styled.TopPanel>
+        <Styled.ImagesContainer>
+          <Styled.SelectedImage src={`/images/${selectedImage}`} alt="Front" />
+          <Styled.OtherImagesContainer>
+            {[...shoe.images, shoe.frontImage].map((image, index) => {
+              return (
+                <Styled.Image
+                  key={index}
+                  src={`/images/${image}`}
+                  onClick={(e) => setSelectedImage(image)}
+                  alt={image}
+                />
+              );
+            })}
+          </Styled.OtherImagesContainer>
+        </Styled.ImagesContainer>
+        <Styled.BottomPanel>
+          <Styled.InputPanel>
+            <Styled.Sizes>
+              <p>Select size:</p>
+              <Styled.SizesGrid sizesCount={shoe.sizes.length}>
+                {shoe.sizes.map((size) => {
+                  return (
+                    <Button
+                      key={size}
+                      active={size === selectedSize}
+                      onClick={(e, selected) => setSelectedSize(selected.value)}
+                      value={size}
+                      basic
+                    >
+                      {size}
+                    </Button>
+                  );
+                })}
+              </Styled.SizesGrid>
+            </Styled.Sizes>
+            <Styled.CartButton onClick={handleClick} disabled={!selectedSize}>
+              {selectedSize ? "Add to Cart" : "Select a size to continue"}
+            </Styled.CartButton>
+          </Styled.InputPanel>
+          <div>
+            <p>
+              <b>Gender:</b> {shoe.gender}
             </p>
-            <p className="color">
-              <b>Color:</b> {color}
+            <p>
+              <b>Color:</b> {shoe.color}
             </p>
-            <p className="description">
-              <b>Description:</b> {description}
+            <p>
+              <b>Description:</b> {shoe.description}
             </p>
-          </Text>
-        </div>
-      </StyledShoeDetails>
+          </div>
+        </Styled.BottomPanel>
+      </Styled.ShoeDetails>
     );
-  };
-
-  render() {
-    const { shoeDetails, shoeDetailsError } = this.props;
-
-    if (shoeDetailsError)
-      return (
-        <Error
-          status={shoeDetailsError.status}
-          message={shoeDetailsError.statusText}
-        ></Error>
-      );
-    return <>{this.renderShoeDetails(shoeDetails)}</>;
   }
-}
+};
 
-export default connect(
-  ({ shoes, errors }) => ({
-    shoeDetails: shoes.shoeDetails,
-    shoeDetailsError: errors.shoes.shoeDetails,
-  }),
-  {
-    fetchShoeDetails,
-    addToCart,
-    clearShoeDetails,
-  }
-)(ShoeDetails);
+export default ShoeDetails;

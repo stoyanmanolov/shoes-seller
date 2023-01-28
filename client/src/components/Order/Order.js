@@ -1,82 +1,29 @@
-import React from "react";
-import { StyledOrder, OrderDetails } from "./Order-styles";
+import React, { useState } from "react";
+import * as Styled from "./Order.styles";
 import OrderForm from "./components/OrderForm";
 import OrderList from "./components/OrderList";
-import { connect } from "react-redux";
-import { resetCart } from "../../redux/actions/ordersActions";
 import Error from "../Error";
+import { useSelector } from "react-redux";
 
-export class Order extends React.Component {
-  state = { orderDetails: null, orderError: null };
+export const Order = () => {
+  const [orderId, setOrderId] = useState();
+  const [error, setError] = useState();
+  const cart = useSelector((state) => state.orders.cart);
 
-  getOrder = (order) => {
-    this.setState({ orderDetails: order });
-  };
-
-  getError = (error) => {
-    this.setState({ orderError: error });
-  };
-
-  componentWillUnmount = () => {
-    this.setState({ orderDetails: null, orderError: null });
-  };
-
-  render() {
-    if (this.props.cart.length === 0 && !this.state.orderDetails) {
-      return (
-        <OrderDetails id="order-cart-empty">
-          <h3>Your cart is empty</h3>
-        </OrderDetails>
-      );
-    } else if (this.state.orderDetails) {
-      return (
-        <OrderDetails id="order-successful">
-          <h3>Order succesfully made!</h3>
-          {Object.keys(this.state.orderDetails).map((key) => {
-            if (
-              key === "cart" ||
-              key === "__v" ||
-              key === "createdAt" ||
-              key === "updatedAt"
-            ) {
-              return null;
-            }
-            return (
-              <p key={key}>
-                {key.toUpperCase()}: {this.state.orderDetails[key]}
-              </p>
-            );
-          })}
-        </OrderDetails>
-      );
-    } else if (this.state.orderError) {
-      return (
-        <Error
-          id="order-error"
-          status={this.state.orderError.status}
-          message={this.state.orderError.statusText}
-        />
-      );
-    }
+  if (error) {
+    return <Error status={error.status} message={error.statusText} />;
+  } else if (orderId) {
+    return <Styled.Heading>Order {orderId} succesfully made!</Styled.Heading>;
+  } else if (cart.length === 0) {
+    return <Styled.Heading>Your cart is empty</Styled.Heading>;
+  } else {
     return (
-      <StyledOrder id="order">
-        <OrderList cart={this.props.cart} totalPrice={this.props.totalPrice} />
-        <OrderForm
-          cart={this.props.cart}
-          totalPrice={this.props.totalPrice}
-          getOrder={this.getOrder}
-          getError={this.getError}
-          resetCart={this.props.resetCart}
-        />
-      </StyledOrder>
+      <Styled.Order>
+        <OrderList />
+        <OrderForm setOrderId={setOrderId} setError={setError} />
+      </Styled.Order>
     );
   }
-}
+};
 
-export default connect(
-  ({ orders }) => ({
-    cart: orders.cart,
-    totalPrice: orders.totalPrice,
-  }),
-  { resetCart }
-)(Order);
+export default Order;

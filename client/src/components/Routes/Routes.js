@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import Home from "../../pages/Home";
 import Men from "../../pages/Men";
@@ -12,8 +12,8 @@ import Shoe from "../../pages/Shoe";
 import Cart from "../../pages/Cart";
 import Checkout from "../../pages/Checkout";
 import Orders from "../../pages/Orders";
-import AddAdmin from "../../pages/AddAdmin";
 import EditShoe from "../../pages/EditShoe";
+import DeletedShoe from "../../pages/DeletedShoe";
 
 export class Routes extends React.Component {
   render() {
@@ -21,46 +21,26 @@ export class Routes extends React.Component {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/men" component={Men} />
-          <Route exact path="/women" component={Women} />
-          <Route exact path="/kids" component={Kids} />
-          <Route exact path="/cart" component={Cart} />
-          <Route exact path="/checkout" component={Checkout} />
-          <Route exact path="/shoes/add">
-            {this.props.isLoggedIn && this.props.user.role === "admin" ? (
-              <AddShoes />
-            ) : (
-              <Redirect to="/" />
-            )}
-          </Route>
-          <Route exact path="/shoes/edit/:id">
-            {this.props.isLoggedIn && this.props.user.role === "admin" ? (
-              <EditShoe />
-            ) : (
-              <Redirect to="/" />
-            )}
-          </Route>
-          <Route exact path="/admin/add">
-            {this.props.isLoggedIn && this.props.user.role === "admin" ? (
-              <AddAdmin />
-            ) : (
-              <Redirect to="/" />
-            )}
-          </Route>
-          <Route exact path="/orders">
-            {this.props.isLoggedIn && this.props.user.role === "admin" ? (
-              <Orders />
-            ) : (
-              <Redirect to="/" />
-            )}
-          </Route>
-          <Route exact path="/shoe/:id" component={Shoe} />
-          <Route exact path="/register">
-            {this.props.isLoggedIn ? <Redirect to="/" /> : <Signup />}
-          </Route>
-          <Route exact path="/login">
-            {this.props.isLoggedIn ? <Redirect to="/" /> : <Login />}
-          </Route>
+          <Route path="/men" component={Men} />
+          <Route path="/women" component={Women} />
+          <Route path="/kids" component={Kids} />
+          <Route path="/cart" component={Cart} />
+          <Route path="/checkout" component={Checkout} />
+          <Route path="/shoe/:id" component={Shoe} />
+          {this.props.isLoggedIn && this.props.user.role === "admin" && (
+            <Switch>
+              <Route path="/shoes/add" component={AddShoes} />
+              <Route path="/shoes/edit/:id" component={EditShoe} />
+              <Route path="/shoes/deleted/:id" component={DeletedShoe} />
+              <Route path="/orders" component={Orders} />
+            </Switch>
+          )}
+          {!this.props.isLoggedIn && (
+            <Switch>
+              <Route path="/register" component={Signup} />
+              <Route path="/login" component={Login} />
+            </Switch>
+          )}
         </Switch>
       </BrowserRouter>
     );
