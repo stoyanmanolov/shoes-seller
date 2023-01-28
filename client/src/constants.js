@@ -1,1 +1,1 @@
-export const SHOES_PER_PAGE = 1;
+export const SHOES_PER_PAGE = 3;
